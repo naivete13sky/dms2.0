@@ -1,4 +1,5 @@
 from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
+from django.db.models import Q
 from django.http import HttpResponse
 from django.shortcuts import render, get_object_or_404
 from django.views.generic import ListView
@@ -49,7 +50,7 @@ class JobListView(ListView):
 
 
 
-        #默认根据历史值筛选
+        #<------------------------------开始：默认根据历史值筛选---------------------------------------------------------->
         # 料号名称筛选
         context['query_job_job_name'] = current_query_data.query_job_job_name
         if context['query_job_job_name'] == None:
@@ -86,12 +87,10 @@ class JobListView(ListView):
         # 每页显示行数
         context['query_job_paginator_page'] = current_query_data.query_job_paginator_page
 
+        # <------------------------------结束：默认根据历史值筛选---------------------------------------------------------->
 
 
-
-
-
-
+        # <-----------------------------------开始：get方法筛选---------------------------------------------------------->
         # get方式query数据
         submit_query_get = self.request.GET.get('submit_query_get', False)
         if submit_query_get:
@@ -148,17 +147,26 @@ class JobListView(ListView):
             if query_job_paginator_page != None:
                 current_query_data.query_job_paginator_page = query_job_paginator_page
                 current_query_data.save()
+        # <-----------------------------------结束：get方法筛选---------------------------------------------------------->
 
 
-
-
-        # 看一下是不是按标签在搜索的
+        # <--------------------------------------开始：tag筛选---------------------------------------------------------->
         tag_slug = self.kwargs.get('tag_slug', None)
         if tag_slug:
             print("tag_slug:", tag_slug)
             # 从MyTag对应的数据库表里查询tag
             tag = get_object_or_404(MyTag, slug=tag_slug)
             context['jobs'] = context['jobs'].filter(tags__in=[tag])
+        # <--------------------------------------结束：tag筛选---------------------------------------------------------->
+
+
+        # <--------------------------------------开始：根据料号ID精准搜索-------------------------------------------------->
+        search_by_job_id = self.request.GET.get('search_by_job_id', False)
+        if search_by_job_id:
+            print("search_by_job_id:", search_by_job_id)
+            context['jobs'] = Job.objects.filter(Q(id=search_by_job_id))
+        # <--------------------------------------开始：根据料号ID精准搜索-------------------------------------------------->
+
 
         # 料号很多时，要多页显示，但是在修改非首页内容时，比如修改某个料号，这个料号在第3页，如果不记住页数，修改完成后只能重定向到固定页。为了能记住当前页，用了下面的方法。
         if self.request.GET.__contains__("page"):
