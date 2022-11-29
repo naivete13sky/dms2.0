@@ -78,9 +78,9 @@ class Job(models.Model):
         ordering = ('-create_time',)
     # def get_absolute_url(self):
     #     return reverse('job_manage:job_detail', args=[self.publish.year, self.publish.month, self.publish.day, self.slug])
-    # def get_absolute_url(self):
-    #     return reverse('job:JobListView', args=[self.id, ])
-    #     # return reverse('job_manage:job_detail', args=[self.publish.year, self.publish.month, self.publish.day, self.slug])
+    def get_absolute_url(self):
+        return reverse('job:JobDetailViewForm', args=[self.id, ])
+        # return reverse('job_manage:job_detail', args=[self.publish.year, self.publish.month, self.publish.day, self.slug])
     def __str__(self):
         # Return a string that represents the instance
         return self.job_name

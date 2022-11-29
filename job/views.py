@@ -2,7 +2,10 @@ from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
 from django.db.models import Q
 from django.http import HttpResponse
 from django.shortcuts import render, get_object_or_404
-from django.views.generic import ListView
+from django.utils import timezone
+from django.views.generic import ListView, DetailView
+
+from .forms import JobFormsReadOnly
 from .models import Job,MyTag
 from account.models import QueryData
 
@@ -165,10 +168,12 @@ class JobListView(ListView):
         if search_by_job_id:
             print("search_by_job_id:", search_by_job_id)
             context['jobs'] = Job.objects.filter(Q(id=search_by_job_id))
-        # <--------------------------------------开始：根据料号ID精准搜索-------------------------------------------------->
+        # <--------------------------------------结束：根据料号ID精准搜索-------------------------------------------------->
 
 
-        # 料号很多时，要多页显示，但是在修改非首页内容时，比如修改某个料号，这个料号在第3页，如果不记住页数，修改完成后只能重定向到固定页。为了能记住当前页，用了下面的方法。
+
+        # 料号很多时，要多页显示，但是在修改非首页内容时，比如修改某个料号，这个料号在第3页，如果不记住页数，修改完成后只能重定向到固定页。
+        # 为了能记住当前页，用了下面的方法。
         if self.request.GET.__contains__("page"):
             current_page = self.request.GET["page"]
             print("current_page", current_page)
@@ -176,7 +181,10 @@ class JobListView(ListView):
         else:
             context['current_page'] = 1
 
-        # 分页
+
+
+
+        # <-----------------------------------------------开始：分页----------------------------------------------------->
         page = self.request.GET.get('page')
         paginator = Paginator(context['jobs'], context['query_job_paginator_page'])  # 每页显示3篇文章
         print("page:::", page)
@@ -190,6 +198,8 @@ class JobListView(ListView):
             context['jobs_page'] = paginator.page(paginator.num_pages)
         pagination_data = self.get_pagination_data(paginator, context['jobs_page'])
         context.update(pagination_data)
+        # <-----------------------------------------------结束：分页----------------------------------------------------->
+
 
         return context
 
@@ -224,8 +234,31 @@ class JobListView(ListView):
         if request.method == 'POST':
             print("POST!!!")
 
-
+            #分页跳转用
             if request.POST.__contains__("page_jump"):
                 print(request.POST.get("page_jump"))
                 return HttpResponse(request.POST.get("page_jump"))
 
+#这个方法需要自己编写模板
+class JobDetailView(DetailView):
+    model = Job
+    template_name = "JobDetailView.html"
+    context_object_name = "job"
+    pk_url_kwarg = "pk"  # pk_url_kwarg默认值就是pk，这里可以覆盖，但必须和url中的命名组参数名称一致
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['now'] = timezone.now()
+        return context
+
+#这个方法有缺陷，上一行的解释说明会跑到下一行去了
+class JobDetailViewForm(DetailView):
+    model = Job
+    template_name = "JobDetailViewForm.html"
+    context_object_name = "job"
+    pk_url_kwarg = "pk"  # pk_url_kwarg默认值就是pk，这里可以覆盖，但必须和url中的命名组参数名称一致
+    def get(self, request, *args, **kwargs):
+        # print('get url parms: ' + kwargs['pk'])
+        job = Job.objects.filter(id=kwargs['pk']).first()
+        form = JobFormsReadOnly(instance=job)
+        return self.render_to_response({'form': form})
