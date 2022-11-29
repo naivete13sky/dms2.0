@@ -73,13 +73,40 @@ class JobListView(ListView):
 
 
 
-        #默认根据历史值筛选，料号名称筛选
+        #默认根据历史值筛选
+        # 料号名称筛选
         context['query_job_job_name'] = current_query_data.query_job_job_name
         if context['query_job_job_name'] == None:
             context['query_job_job_name'] = ""
             current_query_data.query_job_job_name=""
             current_query_data.save()
         context['jobs']= Job.objects.filter(job_name__contains = context['query_job_job_name'])
+
+        # 料号负责人筛选
+        context['query_job_author'] = current_query_data.query_job_author
+        # 先把本次筛选条件存储起来
+        context['jobs'] = context['jobs'].filter(author__username__contains=context['query_job_author'])
+
+        # 料号来源-板厂
+        context['query_job_from_object_pcb_factory'] = current_query_data.query_job_from_object_pcb_factory
+        if context['query_job_from_object_pcb_factory'] == None:
+            context['query_job_from_object_pcb_factory'] = ""
+            current_query_data.query_job_from_object_pcb_factory = ""
+            current_query_data.save()
+        if context['query_job_from_object_pcb_factory'] != "":
+            context['jobs'] = context['jobs'].filter(
+                from_object_pcb_factory__name_simple__contains=context['query_job_from_object_pcb_factory'])
+
+        # 料号状态
+        context['query_job_status'] = current_query_data.query_job_status
+        # print("query_job_file_usage_type:",context['query_job_file_usage_type'])
+        if context['query_job_status'] == 'all':
+            pass
+        if context['query_job_status'] == 'draft':
+            context['jobs'] = context['jobs'].filter(status="draft")
+        if context['query_job_status'] == 'published':
+            context['jobs'] = context['jobs'].filter(status="published")
+
 
 
         # get方式query数据
