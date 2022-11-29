@@ -251,7 +251,7 @@ class JobDetailView(DetailView):
         context['now'] = timezone.now()
         return context
 
-#这个方法有缺陷，上一行的解释说明会跑到下一行去了
+
 class JobDetailViewForm(DetailView):
     model = Job
     template_name = "JobDetailViewForm.html"
