@@ -1,7 +1,7 @@
 from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
-from django.shortcuts import render
+from django.shortcuts import render, get_object_or_404
 from django.views.generic import ListView
-from .models import Job
+from .models import Job,MyTag
 
 # Create your views here.
 class JobListView(ListView):
@@ -41,18 +41,15 @@ class JobListView(ListView):
         # 很关键，必须把原方法的结果拿到
         context = super().get_context_data(**kwargs)
         context['job_field_verbose_name'] = [Job._meta.get_field('id').verbose_name,
-                                  Job._meta.get_field('job_name').verbose_name,
-                                  Job._meta.get_field('file_compressed').verbose_name,
-                                  '层别信息',
-
-                                  Job._meta.get_field('remark').verbose_name,
-                                  Job._meta.get_field('author').verbose_name,
-                                  # Job._meta.get_field('from_object').verbose_name,
-                                  Job._meta.get_field('status').verbose_name,
-                                  Job._meta.get_field('updated').verbose_name,
-                                  "标签",
-                                  "操作",
-                                  ]
+                                             Job._meta.get_field('job_name').verbose_name,
+                                             Job._meta.get_field('file_compressed').verbose_name,
+                                             Job._meta.get_field('status').verbose_name,
+                                             Job._meta.get_field('updated').verbose_name,
+                                             Job._meta.get_field('author').verbose_name,
+                                             Job._meta.get_field('remark').verbose_name,
+                                             "标签",
+                                             "操作",
+                                             ]
 
         # 分页
         print(context)
@@ -79,3 +76,35 @@ class JobListView(ListView):
 
 
 
+def job_list(request,tag_slug=None):
+    if request.POST.__contains__("page_jump"):
+        pass
+        print("post")
+        return HttpResponse("post")
+
+
+    object_list = Job.objects.all()
+    tag = None
+    if tag_slug:
+        # tag = get_object_or_404(Tag, slug=tag_slug)
+        tag = get_object_or_404(MyTag, slug=tag_slug)
+
+        object_list = Job.objects.filter(tags__in=[tag])
+    # object_list = Job.published.all()
+    paginator = Paginator(object_list, 20)  # 每页显示5篇文章
+    page = request.GET.get('page')
+
+    if page==None:
+        page=1
+
+    try:
+        jobs = paginator.page(page)
+    except PageNotAnInteger:
+        # 如果page参数不是一个整数就返回第一页
+        jobs = paginator.page(1)
+    except EmptyPage:
+        # 如果页数超出总页数就返回最后一页
+        jobs = paginator.page(paginator.num_pages)
+
+    field_verbose_name=["ID","料号名称","标签","发布人","创建时间","更新时间"]
+    return render(request, 'list.html', {'page': page, 'jobs': jobs,'tag': tag,"field_verbose_name":field_verbose_name,})
