@@ -2,6 +2,7 @@ from django import forms
 from django.db import models
 from django.core import validators
 from django.forms import widgets, fields
+from django.urls import reverse
 from django.utils import timezone
 from django.contrib.auth.models import User
 from taggit.managers import TaggableManager
@@ -72,6 +73,23 @@ class Job(models.Model):
     remark = models.CharField(max_length=100, validators=[validators.MinLengthValidator(limit_value=0)], blank=True,
                               null=True, help_text='料号的说明备注', verbose_name="备注")
 
+    class Meta:
+        db_table = 'job_job'
+        ordering = ('-create_time',)
+    # def get_absolute_url(self):
+    #     return reverse('job_manage:job_detail', args=[self.publish.year, self.publish.month, self.publish.day, self.slug])
+    # def get_absolute_url(self):
+    #     return reverse('job:JobListView', args=[self.id, ])
+    #     # return reverse('job_manage:job_detail', args=[self.publish.year, self.publish.month, self.publish.day, self.slug])
+    def __str__(self):
+        # Return a string that represents the instance
+        return self.job_name
+
+    def to_dict(self):
+        data = {}
+        for f in self._meta.concrete_fields:
+            data[f.name] = f.value_from_object(self)
+        return data
 
     # # ------------------------------------------------基础字段，主要为了导入测试用的-------------------------------------------
     # file_usage_type = models.CharField(max_length=50,

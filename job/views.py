@@ -2,11 +2,11 @@ from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
 from django.shortcuts import render, get_object_or_404
 from django.views.generic import ListView
 from .models import Job,MyTag
+from account.models import QueryData
 
 # Create your views here.
 class JobListView(ListView):
     queryset = Job.objects.all()
-    # model=models.Job
     context_object_name = 'jobs'
     paginate_by = 10
     # ordering = ['-publish']
@@ -51,11 +51,59 @@ class JobListView(ListView):
                                              "操作",
                                              ]
 
+        # 使用分类筛选
+        context['select_file_usage_type'] = [('all', '所有'), ('input_test', '导入测试'), ('customer_job', '客户资料'),
+                                             ('test', '测试'), ('else', '其它')]
+        context['select_author'] = [('all', '所有'), ('mine', '我的'), ]
+        context['select_page'] = [('5', '5'), ('10', '10'), ('20', '20'), ('50', '50'), ('100', '100'),
+                                  ('200', '200'), ]
+
+
+        # 加载当前用户的筛选条件
+        try:
+            current_query_data = QueryData.objects.get(author=self.request.user)
+            print(current_query_data)
+        except:
+            print("此用户无QueryData信息，此时要新建一下")
+            new_query_data = QueryData(author=self.request.user)
+            new_query_data.save()
+        current_query_data = QueryData.objects.get(author=self.request.user)
+
+
+
+        #默认根据历史值筛选，料号名称筛选
+        context['query_job_job_name'] = current_query_data.query_job_job_name
+        if context['query_job_job_name'] == None:
+            context['query_job_job_name'] = ""
+            current_query_data.query_job_job_name=""
+            current_query_data.save()
+        context['jobs']= Job.objects.filter(job_name__contains = context['query_job_job_name'])
+
+
+        # get方式query数据
+        submit_query_get = self.request.GET.get('submit_query_get', False)
+        if submit_query_get:
+            # 料号名称筛选
+            query_job_name = self.request.GET.get('query_job_name', False)
+            context['query_job_job_name'] = query_job_name
+            # 先把本次筛选条件存储起来
+            if query_job_name != None:
+                current_query_data.query_job_job_name = query_job_name
+                current_query_data.save()
+            context['jobs'] = Job.objects.filter(job_name__contains=context['query_job_job_name'])
+
+
+
+
+
+
+
+
+
         # 分页
-        print(context)
         page = self.request.GET.get('page')
         paginator = Paginator(context['jobs'], 3)  # 每页显示3篇文章
-        # paginator=context.get('paginator')#不能用这个paginator,因为这个是所有的jobs的。而我们需要的是筛选过的jobs。
+
         try:
             context['jobs_page'] = paginator.page(page)
         except PageNotAnInteger:

@@ -1,3 +1,4 @@
+from django.contrib.auth.models import User
 from django.db import models
 from django.conf import settings
 from django.core import validators
@@ -53,3 +54,42 @@ class Customer(models.Model):
 
     # def get_absolute_url(self):
     #     return reverse('CustomerDetailView', args=[self.id, ])
+
+
+
+
+class QueryData(models.Model):
+
+    query_job_job_name = models.CharField(blank=True,null=True,max_length=100, validators=[validators.MinLengthValidator(limit_value=0)],
+                              help_text='此用户筛选条件记录用的',verbose_name="筛选-料号名", )
+    query_job_author = models.CharField(blank=True, null=True, max_length=100,
+                                          validators=[validators.MinLengthValidator(limit_value=0)],
+                                          help_text='此用户筛选条件记录用的', verbose_name="筛选-负责人", )
+
+    query_job_from_object_pcb_factory = models.CharField(blank=True, null=True, max_length=100,
+                                             validators=[validators.MinLengthValidator(limit_value=0)],
+                                             help_text='此用户筛选条件记录用的', verbose_name="筛选-料号来源-板厂", )
+
+    query_job_paginator_page = models.IntegerField(default=10,null=True,blank=True,
+                                     validators=[validators.MaxValueValidator(1000), validators.MinValueValidator(5)],help_text="每页显示行数",verbose_name='query_job_paginator_page')
+
+
+    query_job_status = models.CharField(max_length=20, blank=True, null=True,
+                                                  choices=(
+                                                      ('all', '所有'), ('draft', '草稿'), ('published', '正式'),),
+                                                  default='all', help_text='此用户筛选条件记录用的', verbose_name='筛选-状态')
+
+
+    remark = models.CharField(max_length=20, validators=[validators.MinLengthValidator(limit_value=3)],
+                              verbose_name="备注", blank=True,null=True)
+    author = models.ForeignKey(User, on_delete=models.SET_NULL,blank=True,null=True, related_name='account_query_data_user', verbose_name="用户")
+    publish = models.DateTimeField(default=timezone.now)
+    create_time = models.DateTimeField(auto_now_add=True)
+    updated = models.DateTimeField(auto_now=True)
+    status = models.CharField(max_length=10, choices=(('draft', 'Draft'), ('published', 'Published')), default='draft')
+    objects = models.Manager()  # 默认的管理器
+
+
+    class Meta:
+        db_table = 'account_query_data'
+        ordering = ('-publish',)
