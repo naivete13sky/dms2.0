@@ -3,9 +3,8 @@ from django.db.models import Q
 from django.http import HttpResponse
 from django.shortcuts import render, get_object_or_404
 from django.utils import timezone
-from django.views.generic import ListView, DetailView
-
-from .forms import JobFormsReadOnly
+from django.views.generic import ListView, DetailView, UpdateView
+from .forms import JobFormsReadOnly,JobForm
 from .models import Job,MyTag
 from account.models import QueryData
 
@@ -275,3 +274,24 @@ class JobDetailViewForm(DetailView):
         context['form'] = self.get_form()
         context['job_id'] = self.pk
         return context
+
+
+class JobUpdateView(UpdateView):
+    """
+    该类必须要有一个pk或者slug来查询（会调用self.object = self.get_object()）
+    """
+    model = Job
+    fields = "__all__"
+    template_name = 'JobUpdateView.html'
+
+    def get(self, request, *args, **kwargs):
+
+        job_update = Job.objects.get(id=self.kwargs['pk'])
+        form=JobForm(instance=job_update)
+        self.job_id = job_update.id
+        current_page = self.kwargs['current_page']
+        print("current_page",current_page)
+        return render(request, 'JobUpdateView.html', {'form':form})
+
+    def get_success_url(self):
+        return '../../JobListView?page={}'.format(self.kwargs['current_page'])

@@ -18,3 +18,9 @@ class JobFormsReadOnly(forms.ModelForm):
             super(JobFormsReadOnly, self).__init__(*args, **kwargs)
             for name, field in self.fields.iteritems():
                 field.widget.attrs['readonly'] = 'true'
+
+
+class JobForm(forms.ModelForm):
+    class Meta:
+        model=Job
+        fields = '__all__'
