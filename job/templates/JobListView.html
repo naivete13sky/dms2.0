@@ -45,7 +45,7 @@
                 {#--------------------------------------开始--筛选--------------------------------------#}
 
                         <form action="" class="form-inline" method="get" enctype="multipart/form-data" novalidate>
-                            <i class="fa fa-edit" aria-hidden="true"></i><a href="{% url "job:JobListView" %}" style="font-size:20px;font-weight: bolder;">新增料号</a>
+                            <i class="fa fa-edit" aria-hidden="true"></i><a href="{% url "job:JobCreateView" %}" style="font-size:20px;font-weight: bolder;">新增料号</a>
 
                             {% csrf_token %}
 

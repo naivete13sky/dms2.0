@@ -15,6 +15,12 @@ urlpatterns = [
 
     path('JobUpdateView/<int:pk>/<int:current_page>', views.JobUpdateView.as_view(), name='JobUpdateView'),#类视图，用来更新料号的。
 
+    path('JobCreateView', views.JobCreateView.as_view(), name='JobCreateView'),#类视图，新增料号。
+
+    path('JobDeleteView/<int:pk>', views.JobDeleteView.as_view(),name='JobDeleteView'),#类视图，删除料号。
+
+
+
 
 ]
 

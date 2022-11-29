@@ -2,11 +2,12 @@ from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
 from django.db.models import Q
 from django.http import HttpResponse
 from django.shortcuts import render, get_object_or_404
+from django.urls import reverse_lazy
 from django.utils import timezone
-from django.views.generic import ListView, DetailView, UpdateView
+from django.views.generic import ListView, DetailView, UpdateView, CreateView, DeleteView
 from .forms import JobFormsReadOnly,JobForm
 from .models import Job,MyTag
-from account.models import QueryData
+from account.models import QueryData, Customer
 
 
 class JobListView(ListView):
@@ -295,3 +296,48 @@ class JobUpdateView(UpdateView):
 
     def get_success_url(self):
         return '../../JobListView?page={}'.format(self.kwargs['current_page'])
+
+
+class JobCreateView(CreateView):
+    model=Job
+    template_name = "JobCreateView.html"
+    fields = "__all__"
+    #设置新增料号时，自动填写上当前用户
+    def get_initial(self):
+        # Get the initial dictionary from the superclass method
+        initial = super(JobCreateView, self).get_initial()
+        # Copy the dictionary so we don't accidentally change a mutable dict
+        initial = initial.copy()
+        initial['author'] = self.request.user
+        return initial
+    success_url = 'JobListView'
+
+    def get_customer_pcb_factory(self):
+        data_customer_pcb_factory=Customer.objects.filter(customer_type='pcb_factory')
+        return data_customer_pcb_factory
+
+    def get_customer_pcb_design(self):
+        data_customer_pcb_design=Customer.objects.filter(customer_type='design_customer')
+        return data_customer_pcb_design
+
+    def get_context_data(self, **kwargs):
+        context = super(JobCreateView, self).get_context_data(**kwargs)
+        if self.request.method == 'POST':
+            pass
+
+        else:
+            pass
+
+        #暂时用不着下面的方法
+        # context['get_customer_pcb_factory']=self.get_customer_pcb_factory()
+        # context['get_customer_pcb_design'] = self.get_customer_pcb_design()
+
+        return context
+
+
+class JobDeleteView(DeleteView):
+  """
+  """
+  model = Job
+  template_name = 'JobDeleteView.html'
+  success_url = reverse_lazy('job:JobListView')
