@@ -56,6 +56,7 @@ class JobListView(ListView):
         context['select_file_usage_type'] = [('all', '所有'), ('input_test', '导入测试'), ('customer_job', '客户资料'),
                                              ('test', '测试'), ('else', '其它')]
         context['select_author'] = [('all', '所有'), ('mine', '我的'), ]
+        context['select_status'] = [('all', '所有'), ('draft', '草稿'), ('published', '正式'), ]
         context['select_page'] = [('5', '5'), ('10', '10'), ('20', '20'), ('50', '50'), ('100', '100'),
                                   ('200', '200'), ]
 
@@ -113,6 +114,24 @@ class JobListView(ListView):
             if context['query_job_from_object_pcb_factory'] != "":
                 context['jobs'] = context['jobs'].filter(
                     from_object_pcb_factory__name_simple__contains=context['query_job_from_object_pcb_factory'])
+
+            # 料号状态筛选
+            query_job_status = self.request.GET.get("query_job_status", False)
+            context['query_job_status'] = query_job_status
+            # 先把本次筛选条件存储起来
+            current_query_data = QueryData.objects.get(author=self.request.user)
+            if query_job_status:
+                current_query_data.query_job_status = query_job_status
+                current_query_data.save()
+
+            if context['query_job_status'] == 'all':
+                pass
+            if context['query_job_status'] == 'draft':
+                context['jobs'] = context['jobs'].filter(status="draft")
+            if context['query_job_status'] == 'published':
+                context['jobs'] = context['jobs'].filter(status="published")
+
+
 
 
 
