@@ -1,5 +1,7 @@
+from django import forms
 from django.db import models
 from django.core import validators
+from django.forms import widgets, fields
 from django.utils import timezone
 from django.contrib.auth.models import User
 from taggit.managers import TaggableManager
@@ -42,6 +44,11 @@ class Job(models.Model):
     file_compressed = models.FileField(upload_to='files', blank=True, null=True,
                                        help_text='原始文件,rar压缩包', verbose_name="原始文件")
 
+    # has_file_type = fields.MultipleChoiceField(choices=[],widget=widgets.CheckboxSelectMultiple,required=False,)
+    # cc = models.CharField(max_length=20,null= True,blank=True, validators=[validators.MinLengthValidator(limit_value=3)],
+    #                                                             help_text='cc', verbose_name="cc")
+
+    # has_file_type3 = forms.ModelMultipleChoiceField(queryset=User.objects.all())
     status = models.CharField(max_length=10, choices=(('draft', '草稿'), ('published', '正式')), default='draft',
                               help_text='草稿表示未经人工确认', )
 
@@ -57,6 +64,7 @@ class Job(models.Model):
     publish = models.DateTimeField(default=timezone.now, null=True, blank=True, verbose_name='发布时间')
     create_time = models.DateTimeField(auto_now_add=True,blank=True,null=True, verbose_name='创建时间')
     updated = models.DateTimeField(auto_now=True, verbose_name='更新时间')
+
 
     tags=TaggableManager()
     # 声明这个manager也是基于我们自定义的模型类
