@@ -6,7 +6,7 @@
         <ul class="pagination">
             {# 上一页 #}
             {% if page_obj.has_previous %}
-                <li><a href="{% url 'job_manage:JobListView' %}?page={{ page_obj.previous_page_number }}">上一页</a></li>
+                <li><a href="{% url 'job:JobListView' %}?page={{ page_obj.previous_page_number }}">上一页</a></li>
             {% else %}
                 <li class="disabled"><a href="javascript:void(0);">上一页</a></li>
             {% endif %}

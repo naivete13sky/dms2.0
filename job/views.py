@@ -1,41 +1,17 @@
 from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
+from django.http import HttpResponse
 from django.shortcuts import render, get_object_or_404
 from django.views.generic import ListView
 from .models import Job,MyTag
 from account.models import QueryData
 
-# Create your views here.
+
 class JobListView(ListView):
     queryset = Job.objects.all()
     context_object_name = 'jobs'
-    paginate_by = 10
+    paginate_by = 5
     # ordering = ['-publish']
-    template_name = 'JobListView.html'
-
-    def get_pagination_data(self, paginator, page_obj, around_count=2):
-        left_has_more = False
-
-        right_has_more = False
-        current_page = page_obj.number
-        if current_page <= around_count + 2:
-            left_range = range(1, current_page)
-        else:
-            left_has_more = True
-            left_range = range(current_page - around_count, current_page)
-
-        if current_page >= paginator.num_pages - around_count - 1:
-            right_range = range(current_page + 1, paginator.num_pages + 1)
-        else:
-            right_has_more = True
-            right_range = range(current_page + 1, current_page + around_count + 1)
-
-        pagination_data = {
-            'left_has_more': left_has_more,
-            'right_has_more': right_has_more,
-            'left_range': left_range,
-            'right_range': right_range
-        }
-        return pagination_data
+    template_name = 'JobListView2.html'
 
     def get_context_data(self, **kwargs):  # 重写get_context_data方法
         # 很关键，必须把原方法的结果拿到
@@ -64,7 +40,7 @@ class JobListView(ListView):
         # 加载当前用户的筛选条件
         try:
             current_query_data = QueryData.objects.get(author=self.request.user)
-            print(current_query_data)
+            # print(current_query_data)
         except:
             print("此用户无QueryData信息，此时要新建一下")
             new_query_data = QueryData(author=self.request.user)
@@ -109,6 +85,12 @@ class JobListView(ListView):
 
         # 每页显示行数
         context['query_job_paginator_page'] = current_query_data.query_job_paginator_page
+
+
+
+
+
+
 
         # get方式query数据
         submit_query_get = self.request.GET.get('submit_query_get', False)
@@ -168,10 +150,20 @@ class JobListView(ListView):
                 current_query_data.save()
 
 
+
+
+        # 料号很多时，要多页显示，但是在修改非首页内容时，比如修改某个料号，这个料号在第3页，如果不记住页数，修改完成后只能重定向到固定页。为了能记住当前页，用了下面的方法。
+        if self.request.GET.__contains__("page"):
+            current_page = self.request.GET["page"]
+            print("current_page", current_page)
+            context['current_page'] = current_page
+        else:
+            context['current_page'] = 1
+
         # 分页
         page = self.request.GET.get('page')
         paginator = Paginator(context['jobs'], context['query_job_paginator_page'])  # 每页显示3篇文章
-
+        print("page:::", page)
         try:
             context['jobs_page'] = paginator.page(page)
         except PageNotAnInteger:
@@ -183,13 +175,32 @@ class JobListView(ListView):
         pagination_data = self.get_pagination_data(paginator, context['jobs_page'])
         context.update(pagination_data)
 
-
-
-
-
-
         return context
 
+    def get_pagination_data(self, paginator, page_obj, around_count=2):
+        left_has_more = False
+
+        right_has_more = False
+        current_page = page_obj.number
+        if current_page <= around_count + 2:
+            left_range = range(1, current_page)
+        else:
+            left_has_more = True
+            left_range = range(current_page - around_count, current_page)
+
+        if current_page >= paginator.num_pages - around_count - 1:
+            right_range = range(current_page + 1, paginator.num_pages + 1)
+        else:
+            right_has_more = True
+            right_range = range(current_page + 1, current_page + around_count + 1)
+
+        pagination_data = {
+            'left_has_more': left_has_more,
+            'right_has_more': right_has_more,
+            'left_range': left_range,
+            'right_range': right_range
+        }
+        return pagination_data
 
 
 def job_list(request,tag_slug=None):

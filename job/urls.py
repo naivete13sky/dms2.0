@@ -11,13 +11,5 @@ urlpatterns = [
     path('tag/<str:tag_slug>/', views.job_list, name='job_list_by_tag'),
 
 
+]
 
-
-
-
-
-
-
-
-# ]
-]+ static(settings.MEDIA_URL,document_root=settings.MEDIA_ROOT)
