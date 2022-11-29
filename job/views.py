@@ -152,6 +152,14 @@ class JobListView(ListView):
 
 
 
+        # 看一下是不是按标签在搜索的
+        tag_slug = self.kwargs.get('tag_slug', None)
+        if tag_slug:
+            print("tag_slug:", tag_slug)
+            # 从MyTag对应的数据库表里查询tag
+            tag = get_object_or_404(MyTag, slug=tag_slug)
+            context['jobs'] = context['jobs'].filter(tags__in=[tag])
+
         # 料号很多时，要多页显示，但是在修改非首页内容时，比如修改某个料号，这个料号在第3页，如果不记住页数，修改完成后只能重定向到固定页。为了能记住当前页，用了下面的方法。
         if self.request.GET.__contains__("page"):
             current_page = self.request.GET["page"]
@@ -202,36 +210,3 @@ class JobListView(ListView):
         }
         return pagination_data
 
-
-def job_list(request,tag_slug=None):
-    if request.POST.__contains__("page_jump"):
-        pass
-        print("post")
-        return HttpResponse("post")
-
-
-    object_list = Job.objects.all()
-    tag = None
-    if tag_slug:
-        # tag = get_object_or_404(Tag, slug=tag_slug)
-        tag = get_object_or_404(MyTag, slug=tag_slug)
-
-        object_list = Job.objects.filter(tags__in=[tag])
-    # object_list = Job.published.all()
-    paginator = Paginator(object_list, 20)  # 每页显示5篇文章
-    page = request.GET.get('page')
-
-    if page==None:
-        page=1
-
-    try:
-        jobs = paginator.page(page)
-    except PageNotAnInteger:
-        # 如果page参数不是一个整数就返回第一页
-        jobs = paginator.page(1)
-    except EmptyPage:
-        # 如果页数超出总页数就返回最后一页
-        jobs = paginator.page(paginator.num_pages)
-
-    field_verbose_name=["ID","料号名称","标签","发布人","创建时间","更新时间"]
-    return render(request, 'list.html', {'page': page, 'jobs': jobs,'tag': tag,"field_verbose_name":field_verbose_name,})
