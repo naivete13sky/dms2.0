@@ -11,7 +11,7 @@ class JobListView(ListView):
     context_object_name = 'jobs'
     paginate_by = 5
     # ordering = ['-publish']
-    template_name = 'JobListView2.html'
+    template_name = 'JobListView.html'
 
     def get_context_data(self, **kwargs):  # 重写get_context_data方法
         # 很关键，必须把原方法的结果拿到
