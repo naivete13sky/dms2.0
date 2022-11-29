@@ -13,17 +13,46 @@
                 <div class="panel-content">
                     <div class="row">
                         <div class="col-md-12">
+                            <table id="basic-table" class=" table table-striped nowrap table-hover" cellspacing="0" width="100%">
+                                <thead>
+                                <tr>
+                                    <th>字段</th>
+                                    <th>内容</th>
+                                </tr>
+                            </thead>
+                                <tbody id="table_body">
+                                    <tr>
+                                        <td>料号ID</td>
+                                        <td>{{ job_id }}</td>
+                                    </tr>
 
-                            <h3>料号名称：{{ job_id }}</h3>
-                            <h3>料号名称：{{ form.job_name.value }}</h3>
-                            <br>
+                                    {% for each in form %}
+
+                                        <tr>
+
+                                            <td>{{ each.label }}</td>
+                                            <td>{{ each }}</td>
 
 
-                            {% for each in form %}
+{#                                            {% if each.name == 'file_compressed' or each.name == 'tags' %}#}
+{#                                                <td>{{ each }}</td>#}
+{#                                            {% else %}#}
+{#                                                <td>{{ each.value }}</td>#}
+{#                                            {% endif %}                      #}
+
+
+
+                                        </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+
 {#                                {{ each.name }}：{{ each.value }}：{{ each }}#}
-                                {{ each.label }}：{{ each }}
-                                <br>
-                            {% endfor %}
+
+
+
+
+
 
                             <br>
                             <p>当前日期: {{ now|date }}</p>
