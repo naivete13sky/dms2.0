@@ -51,7 +51,7 @@ class Job(models.Model):
 
     # has_file_type3 = forms.ModelMultipleChoiceField(queryset=User.objects.all())
     status = models.CharField(max_length=10, choices=(('draft', '草稿'), ('published', '正式')), default='draft',
-                              help_text='草稿表示未经人工确认', )
+                              help_text='草稿表示未经人工确认', verbose_name="状态")
 
     author = models.ForeignKey(User, on_delete=models.CASCADE, related_name='job_jobs', null=True, blank=True,
                                help_text='料号上传人', verbose_name="负责人")

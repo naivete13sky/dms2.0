@@ -92,9 +92,14 @@ class JobListView(ListView):
                 current_query_data.save()
             context['jobs'] = Job.objects.filter(job_name__contains=context['query_job_job_name'])
 
-
-
-
+            # 料号负责人筛选
+            query_job_author = self.request.GET.get('query_job_author', False)
+            context['query_job_author'] = query_job_author
+            # 先把本次筛选条件存储起来
+            if query_job_author != None:
+                current_query_data.query_job_author = query_job_author
+                current_query_data.save()
+            context['jobs'] = context['jobs'].filter(author__username__contains = query_job_author)
 
 
 

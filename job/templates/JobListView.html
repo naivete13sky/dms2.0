@@ -51,18 +51,8 @@
 
 
                             <label style="font-size:20px;">|</label>
-                            <label style="font-size:20px;">使用分类</label>
-                            <select id="query_job_file_usage_type" name="query_job_file_usage_type" class="form-control" style="width:110px;">
-                                {% for each in select_file_usage_type %}
-                                    {% if each.0 == query_job_file_usage_type  %}
-                                        <option selected="selected" value = {{ each.0 }} >{{ each.1 }}</option>
-                                    {% endif %}
-                                    {% if each.0 != query_job_file_usage_type  %}
-                                        <option value = {{ each.0 }} >{{ each.1 }}</option>
-                                    {% endif %}
 
-                                {% endfor %}
-                            </select>
+
 
                             <div class="form-group">
                                 <input type="" class="form-control" id="query_job_name" name="query_job_name" value="{{ query_job_job_name }}" placeholder="料号名" style="width:120px;">
