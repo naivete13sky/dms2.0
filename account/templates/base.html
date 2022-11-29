@@ -42,7 +42,7 @@
 
         {% if request.user.is_authenticated %}
             <ul class="menu">
-                <li {% if section == 'dashboard' %}class="selected"{% endif %}><a href="{% url 'blog:PostListView' %}">博客</a></li>
+{#                <li {% if section == 'dashboard' %}class="selected"{% endif %}><a href="{% url 'blog:PostListView' %}">博客</a></li>#}
                 <li {% if section == 'dashboard' %}class="selected"{% endif %}><a href="{% url 'dashboard' %}">我的看板</a></li>
                 <li {% if section == 'images' %}class="selected"{% endif %}><a href="#">头像</a></li>
                 <li {% if section == 'people' %}class="selected"{% endif %}><a href="#">People</a></li>

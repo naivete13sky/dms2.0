@@ -6,6 +6,7 @@ from taggit.managers import TaggableManager
 from taggit.models import TagBase,GenericTaggedItemBase
 from django.utils.text import slugify
 from django.utils.translation import gettext, gettext_lazy as _
+from account.models import Customer
 
 class MyTag(TagBase):
     # 这一步是关键，要设置allow_unicode=True，这样这个字段才能支持中文
@@ -46,6 +47,13 @@ class Job(models.Model):
 
     author = models.ForeignKey(User, on_delete=models.CASCADE, related_name='job_jobs', null=True, blank=True,
                                help_text='料号上传人', verbose_name="负责人")
+    from_object_pcb_factory = models.ForeignKey(Customer, on_delete=models.CASCADE,
+                                                related_name='job_job_account_customer_pcb_factory', null=True,
+                                                blank=True,
+                                                                               help_text='料号来源-板厂', verbose_name="料号来源-板厂")
+    from_object_pcb_design = models.ForeignKey(Customer, on_delete=models.CASCADE,
+                                        related_name='job_job_account_customer_pcb_design', null=True, blank=True,
+                                        help_text='料号来源-设计端', verbose_name="料号来源-设计端")
     publish = models.DateTimeField(default=timezone.now, null=True, blank=True, verbose_name='发布时间')
     create_time = models.DateTimeField(auto_now_add=True,blank=True,null=True, verbose_name='创建时间')
     updated = models.DateTimeField(auto_now=True, verbose_name='更新时间')
