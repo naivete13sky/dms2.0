@@ -257,8 +257,20 @@ class JobDetailViewForm(DetailView):
     template_name = "JobDetailViewForm.html"
     context_object_name = "job"
     pk_url_kwarg = "pk"  # pk_url_kwarg默认值就是pk，这里可以覆盖，但必须和url中的命名组参数名称一致
-    def get(self, request, *args, **kwargs):
-        # print('get url parms: ' + kwargs['pk'])
-        job = Job.objects.filter(id=kwargs['pk']).first()
-        form = JobFormsReadOnly(instance=job)
-        return self.render_to_response({'form': form})
+    # def get(self, request, *args, **kwargs):
+    #     # print('get url parms: ' + kwargs['pk'])
+    #     job = Job.objects.filter(id=kwargs['pk']).first()
+    #     form = JobFormsReadOnly(instance=job)
+    #     return self.render_to_response({'form': form})
+
+    def get_form(self):
+        pk = self.kwargs['pk']
+        # print("pk:",pk)
+        job = Job.objects.filter(id=pk).first()
+        return JobFormsReadOnly(instance=job)
+
+    def get_context_data(self,*args, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['now'] = timezone.now()
+        context['form'] = self.get_form()
+        return context
