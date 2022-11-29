@@ -264,13 +264,14 @@ class JobDetailViewForm(DetailView):
     #     return self.render_to_response({'form': form})
 
     def get_form(self):
-        pk = self.kwargs['pk']
+        self.pk = self.kwargs['pk']
         # print("pk:",pk)
-        job = Job.objects.filter(id=pk).first()
+        job = Job.objects.filter(id=self.pk).first()
         return JobFormsReadOnly(instance=job)
 
     def get_context_data(self,*args, **kwargs):
         context = super().get_context_data(**kwargs)
         context['now'] = timezone.now()
         context['form'] = self.get_form()
+        context['job_id'] = self.pk
         return context
