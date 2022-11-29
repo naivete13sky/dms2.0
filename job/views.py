@@ -107,7 +107,8 @@ class JobListView(ListView):
         if context['query_job_status'] == 'published':
             context['jobs'] = context['jobs'].filter(status="published")
 
-
+        # 每页显示行数
+        context['query_job_paginator_page'] = current_query_data.query_job_paginator_page
 
         # get方式query数据
         submit_query_get = self.request.GET.get('submit_query_get', False)
@@ -158,13 +159,18 @@ class JobListView(ListView):
             if context['query_job_status'] == 'published':
                 context['jobs'] = context['jobs'].filter(status="published")
 
-
-
+            #每页显示行数
+            query_job_paginator_page = self.request.GET.get('query_job_paginator_page', False)
+            context['query_job_paginator_page'] = query_job_paginator_page
+            # 把每页显示多少行存储起来
+            if query_job_paginator_page != None:
+                current_query_data.query_job_paginator_page = query_job_paginator_page
+                current_query_data.save()
 
 
         # 分页
         page = self.request.GET.get('page')
-        paginator = Paginator(context['jobs'], 3)  # 每页显示3篇文章
+        paginator = Paginator(context['jobs'], context['query_job_paginator_page'])  # 每页显示3篇文章
 
         try:
             context['jobs_page'] = paginator.page(page)
