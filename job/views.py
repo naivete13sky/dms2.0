@@ -210,3 +210,14 @@ class JobListView(ListView):
         }
         return pagination_data
 
+
+    def post(self, request):  # ***** this method required! ******
+        self.object_list = self.get_queryset()
+        if request.method == 'POST':
+            print("POST!!!")
+
+
+            if request.POST.__contains__("page_jump"):
+                print(request.POST.get("page_jump"))
+                return HttpResponse(request.POST.get("page_jump"))
+
