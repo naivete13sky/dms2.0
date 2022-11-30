@@ -10,6 +10,7 @@ from taggit.models import TagBase,GenericTaggedItemBase
 from django.utils.text import slugify
 from django.utils.translation import gettext, gettext_lazy as _
 from account.models import Customer
+from multiselectfield import MultiSelectField
 
 class MyTag(TagBase):
     # 这一步是关键，要设置allow_unicode=True，这样这个字段才能支持中文
@@ -45,11 +46,11 @@ class Job(models.Model):
     file_compressed = models.FileField(upload_to='files', blank=True, null=True,
                                        help_text='原始文件,rar压缩包', verbose_name="原始文件")
 
-    # has_file_type = fields.MultipleChoiceField(choices=[],widget=widgets.CheckboxSelectMultiple,required=False,)
-    # cc = models.CharField(max_length=20,null= True,blank=True, validators=[validators.MinLengthValidator(limit_value=3)],
-    #                                                             help_text='cc', verbose_name="cc")
+    has_file_type = MultiSelectField(choices=(('gerber274x', 'Gerber274X'), ('dxf', 'DXF'),
+                                                ('dwg', 'DWG'), ('odb', 'ODB'), ('pcb', 'PCB')),
+                                     blank=True,null=True, max_choices=20, max_length=200,
+                                     verbose_name="包含文件类型")
 
-    # has_file_type3 = forms.ModelMultipleChoiceField(queryset=User.objects.all())
     status = models.CharField(max_length=10, choices=(('draft', '草稿'), ('published', '正式')), default='draft',
                               help_text='草稿表示未经人工确认', verbose_name="状态")
 
@@ -91,61 +92,9 @@ class Job(models.Model):
             data[f.name] = f.value_from_object(self)
         return data
 
-    # # ------------------------------------------------基础字段，主要为了导入测试用的-------------------------------------------
-    # file_usage_type = models.CharField(max_length=50,
-    #                                    choices=(('input_test', '导入测试'), ('customer_job', '客户资料'),
-    #                                             ('test', '测试'), ('else', '其它')), default='else', help_text='料号使用类型',
-    #                                    verbose_name="料号使用类型")
-    # 当我们想设置最小长度的时候，但是在字段中没有的话，可以借助自定义验证器MinLengthValidator
-    # FileField 为文件上传功能upload_to:对应的files创建的文件夹目录
-#     file_compressed = models.FileField(upload_to='files', blank=True, null=True,
-#                                        help_text='整理过的原始文件.若是导入测试类型,则是rar压缩包,压缩包中只有一层文件夹.也可以是.tgz|.eps', verbose_name="整理过的原始文件")
-#     job_name = models.CharField(max_length=20, validators=[validators.MinLengthValidator(limit_value=3)],
-#                                 help_text='料号名称,有可能有重复名字', verbose_name="料号名称")
-#     file_odb_g = models.FileField(upload_to='files', blank=True, null=True, help_text='G软件转图的结果,导入测试类型需要填写此字段',
-#                                   verbose_name="G-ODB++")
-#     file_compressed_org = models.FileField(upload_to='files', blank=True, null=True, help_text='未整理的原始文件,rar压缩包',verbose_name="原始文件")
-#     file_org_type = models.CharField(max_length=10,
-#                                      choices=(('gerber274X', 'Gerber274-X'), ('gerber274D', 'Gerber274-D'),
-#                                               ('odb++', 'ODB++'), ('eps', 'EPS'),('else', '其它')), default='else',
-#                                      help_text='原始文件类型', verbose_name="原始文件类型")
-#     from_object = models.CharField(max_length=20, validators=[validators.MinLengthValidator(limit_value=2)], null=True,
-#                                    blank=True, help_text='料号从哪来的', verbose_name="料号来源")
-#     from_object_pcb_factory = models.ForeignKey(Customer, on_delete=models.CASCADE, related_name='job_manage_job_account_customer_pcb_factory', null=True, blank=True,
-#                                help_text='料号来源-板厂', verbose_name="料号来源-板厂")
-#     from_object_pcb_design = models.ForeignKey(Customer, on_delete=models.CASCADE,
-#                                         related_name='job_manage_job_account_customer_pcb_design', null=True, blank=True,
-#                                         help_text='料号来源-设计端', verbose_name="料号来源-设计端")
-#     status = models.CharField(max_length=10, choices=(('draft', '草稿'), ('published', '正式')), default='draft',
-#                               help_text='草稿表示未经人工确认', )
-#     # tags=TaggableManager()
-#     # 声明这个manager也是基于我们自定义的模型类
-#     tags = TaggableManager(through=TaggedWhatever,help_text='必填')
-
-#
-#     file_odb_current = models.FileField(upload_to='files', blank=True, null=True, help_text='最新一次的悦谱转图结果,不需要手工录入,可在线自动生成',verbose_name="最新-EP-ODB++")
-#     vs_result_ep=models.CharField(max_length=10, choices=(('passed', '成功'), ('failed', '失败'), ('none', '未比对')), default='none',help_text='导入测试管理员负责填写',verbose_name="悦谱比图结果")
-#     vs_result_g = models.CharField(max_length=10, choices=(('passed', '成功'), ('failed', '失败'), ('none', '未比对')),
-#                                     default='none',help_text='导入测试管理员负责填写',verbose_name="G软件比图结果")
-#     bug_info = models.CharField(max_length=20, validators=[validators.MinLengthValidator(limit_value=0)],blank=True, null=True,help_text='Bug信息',verbose_name="Bug信息")
-#     bool_layer_info = models.CharField(max_length=10, choices=(('true', 'true'), ('false', 'false')), default='false',
-#                                        null=True, blank=True, help_text='不需要人工填写,系统用', verbose_name="是否有层别信息")
-#     author = models.ForeignKey(User, on_delete=models.CASCADE, related_name='job_manage_jobs', null=True, blank=True,
-#                                help_text='料号上传人', verbose_name="负责人")
-#     publish = models.DateTimeField(default=timezone.now, null=True, blank=True, verbose_name='发布时间')
-#     create_time = models.DateTimeField(auto_now_add=True, verbose_name='创建时间')
-#     updated = models.DateTimeField(auto_now=True, verbose_name='更新时间')
-#     vs_time_ep = models.CharField(max_length=10, validators=[validators.MinLengthValidator(limit_value=0)],
-#                                   null=True, blank=True, help_text='系统生成', verbose_name="悦谱比对时间戳")
-#     vs_time_g = models.CharField(max_length=10, validators=[validators.MinLengthValidator(limit_value=0)],
-#                                  null=True, blank=True, help_text='系统生成', verbose_name="G比对时间戳")
-#
-#     objects = models.Manager()  # 默认的管理器
-#     published = JobManager()  # 自定义管理器
-#
-#
-#
-#
+# class JobInfoForDevTest(models.Model):
+#     job = models.ForeignKey(to="job.Job", on_delete=models.CASCADE, null=True, blank=True,
+#                             related_name='job_job_job_info_for_dev_test', verbose_name="料号名称")
 #
 #     # ------------------------------------------------整理好的料号信息-------------------------------------------
 #     file_odb = models.FileField(upload_to='files', blank=True, null=True, help_text='整理好的ODB++资料,确认过是对的',
@@ -256,42 +205,90 @@ class Job(models.Model):
 #                                    help_text="孔阶数，HDI介数", verbose_name='孔阶数')
 #
 #
-#
-#
-#
-#
-#
-#
 #     # ------------------------------------------------梅需要的其它字段-------------------------------------------
 #     usage=models.CharField(null=True,blank=True,max_length=200, validators=[validators.MinLengthValidator(limit_value=0)],help_text="料号用途",verbose_name='用途')
-#     job_url=models.URLField(null=True,blank=True,verbose_name="料号url")
-#     origStepName=models.CharField(null=True,blank=True,max_length=50, validators=[validators.MinLengthValidator(limit_value=0)],help_text="原稿step名称",verbose_name='orig_step')
-#     prepareStepName=models.CharField(null=True,blank=True,max_length=50, validators=[validators.MinLengthValidator(limit_value=0)],help_text="前处理完成的step名称",verbose_name='pre_step')
-#     pcsStepName=models.CharField(null=True,blank=True,max_length=50, validators=[validators.MinLengthValidator(limit_value=0)],help_text="已经完成pcs处理的step名",verbose_name='pcs_step')
-#     setStepName=models.CharField(null=True,blank=True,max_length=50, validators=[validators.MinLengthValidator(limit_value=0)],help_text="set拼板完成的step名",verbose_name='set_step')
-#     panelStepName=models.CharField(null=True,blank=True,max_length=50, validators=[validators.MinLengthValidator(limit_value=0)],help_text="panel拼板完成的step名",verbose_name='panel_step')
 #     impCouponStepName=models.CharField(null=True,blank=True,max_length=50, validators=[validators.MinLengthValidator(limit_value=0)],help_text="阻抗测试条的step名",verbose_name='阻抗step')
 #     routLayerName=models.CharField(null=True,blank=True,max_length=50, validators=[validators.MinLengthValidator(limit_value=0)],help_text="rout层的名字",verbose_name='Rout层')
 #     panelSize=models.FloatField(null=True,blank=True,help_text='panel的profile线外接正矩形的对角线长度(单位:inch)',verbose_name='panel对角线尺寸')
-#     customerCode=models.CharField(null=True,blank=True,max_length=50, validators=[validators.MinLengthValidator(limit_value=0)],help_text="客户(代码)",verbose_name='客户(代码)')
 #
-#
-#
+#     # <------------------------------------------------------常用字段--------------------------------------------------->
+#     publish = models.DateTimeField(default=timezone.now, null=True, blank=True, verbose_name='发布时间')
+#     create_time = models.DateTimeField(auto_now_add=True, blank=True, null=True, verbose_name='创建时间')
+#     updated = models.DateTimeField(auto_now=True, verbose_name='更新时间')
+#     remark = models.CharField(max_length=100, validators=[validators.MinLengthValidator(limit_value=0)], blank=True,
+#                               null=True, help_text='料号的说明备注', verbose_name="备注")
 #
 #     class Meta:
-#         db_table = 'job'
+#         db_table = 'job_job_info_for_dev_test'
 #         ordering = ('-create_time',)
+#
+#
 #     # def get_absolute_url(self):
-#     #     return reverse('job_manage:job_detail', args=[self.publish.year, self.publish.month, self.publish.day, self.slug])
-#     def get_absolute_url(self):
-#         return reverse('job_manage:JobFormView', args=[self.id, ])
-#         # return reverse('job_manage:job_detail', args=[self.publish.year, self.publish.month, self.publish.day, self.slug])
+#     #     return reverse('job:JobDetailViewForm', args=[self.id, ])
+#
+#
 #     def __str__(self):
 #         # Return a string that represents the instance
-#         return self.job_name
+#         return self.job
+
+
+
+
+
+
+
+    # # ------------------------------------------------基础字段，主要为了导入测试用的-------------------------------------------
+    # file_usage_type = models.CharField(max_length=50,
+    #                                    choices=(('input_test', '导入测试'), ('customer_job', '客户资料'),
+    #                                             ('test', '测试'), ('else', '其它')), default='else', help_text='料号使用类型',
+    #                                    verbose_name="料号使用类型")
+
+    # # ------------------------------------------------基础字段，主要为了导入测试用的-------------------------------------------
+    # file_usage_type = models.CharField(max_length=50,
+    #                                    choices=(('input_test', '导入测试'), ('customer_job', '客户资料'),
+    #                                             ('test', '测试'), ('else', '其它')), default='else', help_text='料号使用类型',
+    #                                    verbose_name="料号使用类型")
+    # 当我们想设置最小长度的时候，但是在字段中没有的话，可以借助自定义验证器MinLengthValidator
+    # FileField 为文件上传功能upload_to:对应的files创建的文件夹目录
+#     file_compressed = models.FileField(upload_to='files', blank=True, null=True,
+#                                        help_text='整理过的原始文件.若是导入测试类型,则是rar压缩包,压缩包中只有一层文件夹.也可以是.tgz|.eps', verbose_name="整理过的原始文件")
+#     job_name = models.CharField(max_length=20, validators=[validators.MinLengthValidator(limit_value=3)],
+#                                 help_text='料号名称,有可能有重复名字', verbose_name="料号名称")
+#     file_odb_g = models.FileField(upload_to='files', blank=True, null=True, help_text='G软件转图的结果,导入测试类型需要填写此字段',
+#                                   verbose_name="G-ODB++")
+#     file_compressed_org = models.FileField(upload_to='files', blank=True, null=True, help_text='未整理的原始文件,rar压缩包',verbose_name="原始文件")
+#     file_org_type = models.CharField(max_length=10,
+#                                      choices=(('gerber274X', 'Gerber274-X'), ('gerber274D', 'Gerber274-D'),
+#                                               ('odb++', 'ODB++'), ('eps', 'EPS'),('else', '其它')), default='else',
+#                                      help_text='原始文件类型', verbose_name="原始文件类型")
+#     from_object = models.CharField(max_length=20, validators=[validators.MinLengthValidator(limit_value=2)], null=True,
+#                                    blank=True, help_text='料号从哪来的', verbose_name="料号来源")
+#     from_object_pcb_factory = models.ForeignKey(Customer, on_delete=models.CASCADE, related_name='job_manage_job_account_customer_pcb_factory', null=True, blank=True,
+#                                help_text='料号来源-板厂', verbose_name="料号来源-板厂")
+#     from_object_pcb_design = models.ForeignKey(Customer, on_delete=models.CASCADE,
+#                                         related_name='job_manage_job_account_customer_pcb_design', null=True, blank=True,
+#                                         help_text='料号来源-设计端', verbose_name="料号来源-设计端")
+#     status = models.CharField(max_length=10, choices=(('draft', '草稿'), ('published', '正式')), default='draft',
+#                               help_text='草稿表示未经人工确认', )
+#     # tags=TaggableManager()
+#     # 声明这个manager也是基于我们自定义的模型类
+#     tags = TaggableManager(through=TaggedWhatever,help_text='必填')
+
 #
-#     def to_dict(self):
-#         data = {}
-#         for f in self._meta.concrete_fields:
-#             data[f.name] = f.value_from_object(self)
-#         return data
+#     file_odb_current = models.FileField(upload_to='files', blank=True, null=True, help_text='最新一次的悦谱转图结果,不需要手工录入,可在线自动生成',verbose_name="最新-EP-ODB++")
+#     vs_result_ep=models.CharField(max_length=10, choices=(('passed', '成功'), ('failed', '失败'), ('none', '未比对')), default='none',help_text='导入测试管理员负责填写',verbose_name="悦谱比图结果")
+#     vs_result_g = models.CharField(max_length=10, choices=(('passed', '成功'), ('failed', '失败'), ('none', '未比对')),
+#                                     default='none',help_text='导入测试管理员负责填写',verbose_name="G软件比图结果")
+#     bug_info = models.CharField(max_length=20, validators=[validators.MinLengthValidator(limit_value=0)],blank=True, null=True,help_text='Bug信息',verbose_name="Bug信息")
+#     bool_layer_info = models.CharField(max_length=10, choices=(('true', 'true'), ('false', 'false')), default='false',
+#                                        null=True, blank=True, help_text='不需要人工填写,系统用', verbose_name="是否有层别信息")
+#     author = models.ForeignKey(User, on_delete=models.CASCADE, related_name='job_manage_jobs', null=True, blank=True,
+#                                help_text='料号上传人', verbose_name="负责人")
+#     publish = models.DateTimeField(default=timezone.now, null=True, blank=True, verbose_name='发布时间')
+#     create_time = models.DateTimeField(auto_now_add=True, verbose_name='创建时间')
+#     updated = models.DateTimeField(auto_now=True, verbose_name='更新时间')
+#     vs_time_ep = models.CharField(max_length=10, validators=[validators.MinLengthValidator(limit_value=0)],
+#                                   null=True, blank=True, help_text='系统生成', verbose_name="悦谱比对时间戳")
+#     vs_time_g = models.CharField(max_length=10, validators=[validators.MinLengthValidator(limit_value=0)],
+#                                  null=True, blank=True, help_text='系统生成', verbose_name="G比对时间戳")
+

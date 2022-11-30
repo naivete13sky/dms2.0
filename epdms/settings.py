@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     'back_stage.apps.BackStageConfig',
     'taggit',
     'job.apps.JobConfig',
+    'multiselectfield',
 
 ]
 

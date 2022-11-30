@@ -23,6 +23,7 @@ class JobListView(ListView):
         context['job_field_verbose_name'] = [Job._meta.get_field('id').verbose_name,
                                              Job._meta.get_field('job_name').verbose_name,
                                              Job._meta.get_field('file_compressed').verbose_name,
+                                             Job._meta.get_field('has_file_type').verbose_name,
                                              Job._meta.get_field('from_object_pcb_factory').verbose_name,
                                              Job._meta.get_field('status').verbose_name,
                                              Job._meta.get_field('updated').verbose_name,
