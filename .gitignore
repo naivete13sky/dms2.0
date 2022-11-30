@@ -132,3 +132,11 @@ dmypy.json
 #cc
 media/
 /upload/
+migrations/
+/account/migrations/
+/blog/migrations/
+/job/migrations/
+/back_stage/migrations/
+/eptest/migrations/
+
+
