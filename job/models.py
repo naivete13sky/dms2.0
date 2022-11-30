@@ -92,137 +92,128 @@ class Job(models.Model):
             data[f.name] = f.value_from_object(self)
         return data
 
-# class JobInfoForDevTest(models.Model):
-#     job = models.ForeignKey(to="job.Job", on_delete=models.CASCADE, null=True, blank=True,
-#                             related_name='job_job_job_info_for_dev_test', verbose_name="料号名称")
-#
-#     # ------------------------------------------------整理好的料号信息-------------------------------------------
-#     file_odb = models.FileField(upload_to='files', blank=True, null=True, help_text='整理好的ODB++资料,确认过是对的',
-#                                 verbose_name="整理好的ODB++资料")
-#
-#     hasOrig = models.CharField(max_length=10, choices=(('yes', '是'), ('no', '否'), ('none', 'None')), default='none',
-#                                   help_text="是否有orig?", verbose_name="是否有orig")
-#     hasNet = models.CharField(max_length=10, choices=(('yes', '是'), ('no', '否'), ('none', 'None')), default='none',
-#                                help_text="是否有net?", verbose_name="是否有net")
-#     hasPre = models.CharField(max_length=10, choices=(('yes', '是'), ('no', '否'), ('none', 'None')), default='none',
-#                                help_text="是否有pre?", verbose_name="是否有pre")
-#     hasPcs = models.CharField(max_length=10, choices=(('yes', '是'), ('no', '否'), ('none', 'None')), default='none',
-#                                help_text="是否有pcs?", verbose_name="是否有pcs")
-#     hasSet = models.CharField(max_length=10, choices=(('yes', '是'), ('no', '否'), ('none', 'None')), default='none',
-#                                help_text="是否有set?", verbose_name="是否有set")
-#     hasPanel = models.CharField(max_length=10, choices=(('yes', '是'), ('no', '否'), ('none', 'None')), default='none',
-#                                help_text="是否有panel?", verbose_name="是否有panel")
-#
-#
-#
-#
-#
-#     #------------------------------------------------所有层相关的-------------------------------------------
-#     job_type = models.CharField(max_length=10, choices=(('common', '普通板'), ('hdi', 'HDI'), ('led', 'LED板'), ('car', '汽车板'), ('flex', '软板'),
-#                                                          ('rigid_flex', '软硬结合板'),('carrier', '载板'), ('else', '其它')), default='common',
-#                                 help_text='料号的类型',verbose_name="料号类型")
-#     job_type_1 = models.CharField(max_length=20, choices=(('through_hole', '通孔板'), ('non_through_hole', '非通孔板'), ('else', '其它')), default='else',
-#                                 blank=True,null=True,help_text='料号的类型-维度1', verbose_name="料号类型-维度1")
-#     job_type_2 = models.CharField(max_length=20,
-#                                   choices=(('rigid', '硬板'), ('flex', '软板'),('rigid_flex', '软硬结合板'), ('else', '其它')),
-#                                   default='else',
-#                                   blank=True, null=True, help_text='料号的类型-维度2', verbose_name="料号类型-维度2")
-#     job_type_3 = models.CharField(max_length=20,
-#                                   choices=(('ic', 'IC载板'), ('led', 'LED灯板'), ('car', '汽车板'), ('server', '服务器板'), ('else', '其它')),
-#                                   default='else',
-#                                   blank=True, null=True, help_text='料号的类型-维度3', verbose_name="料号类型-维度3")
-#     pcsSize = models.FloatField(null=True, blank=True, help_text='pcs的profile线外接正矩形的对角线长度(单位:inch)',
-#                                 verbose_name='pcs对角线尺寸')
-#     matrixRowNum = models.IntegerField(null=True, blank=True,
-#                                        validators=[validators.MaxValueValidator(1000), validators.MinValueValidator(0)],
-#                                        help_text="所有层数(包括任意层)", verbose_name='所有层数')
-#     totalFeatureNum = models.IntegerField(null=True, blank=True,
-#                                           validators=[validators.MaxValueValidator(100000000),
-#                                                       validators.MinValueValidator(0)], help_text="总物件数",
-#                                           verbose_name='总物件数')
-#
-#     # ------------------------------------------------线路层相关的-------------------------------------------
-#     copperLayerNum = models.IntegerField(null=True, blank=True,validators=[validators.MaxValueValidator(1000),validators.MinValueValidator(0)],
-#                                          help_text="信号层数量(含地电层)",verbose_name='信号层数')
-#     pgLayerNum = models.IntegerField(null=True, blank=True, validators=[validators.MaxValueValidator(1000),
-#                                                                             validators.MinValueValidator(0)],
-#                                          help_text="地电层数量", verbose_name='地电层数')
-#     hasPGlayer = models.CharField(max_length=10, choices=(('yes', '是'), ('no', '否'), ('none', 'None')), default='none',
-#                                   help_text="是否有地电层(负片层)", verbose_name="是否有地电层(负片层)")
-#     linedCopper = models.CharField(max_length=10, choices=(('yes', '是'), ('no', '否'), ('none', 'None')), default='none',
-#                                    help_text="线路层是否为线铜", verbose_name="线路层是否为线铜")
-#
-#     bgaNumTop = models.IntegerField(null=True, blank=True,
-#                                  validators=[validators.MaxValueValidator(100000000), validators.MinValueValidator(0)],
-#                                  help_text="正面BGA总数", verbose_name='正面BGA总数')
-#
-#     bgaNumBottom = models.IntegerField(null=True, blank=True,
-#                                  validators=[validators.MaxValueValidator(100000000), validators.MinValueValidator(0)],
-#                                  help_text="背面BGA总数", verbose_name='背面BGA总数')
-#
-#
-#     bgaNum = models.IntegerField(null=True, blank=True,
-#                                  validators=[validators.MaxValueValidator(100000000), validators.MinValueValidator(0)],
-#                                  help_text="BGA总数", verbose_name='BGA总数')
-#     impLineNum = models.IntegerField(null=True, blank=True,
-#                                      validators=[validators.MaxValueValidator(100000), validators.MinValueValidator(0)],
-#                                      help_text="阻抗线数", verbose_name='阻抗线数')
-#
-#     minLineWidth4outerTop = models.FloatField(null=True, blank=True, help_text='正面外层的最小线宽(单位:mil)', verbose_name='正面外层最小线宽')
-#     minLineSpace4outerTop = models.FloatField(null=True, blank=True, help_text='正面外层的最小线距(单位:mil)', verbose_name='正面外层最小线距')
-#
-#     minLineWidth4outerBottom = models.FloatField(null=True, blank=True, help_text='背面外层的最小线宽(单位:mil)', verbose_name='背面外层最小线宽')
-#     minLineSpace4outerBottom = models.FloatField(null=True, blank=True, help_text='背面外层的最小线距(单位:mil)', verbose_name='背面外层最小线距')
-#
-#
-#     minLineWidth4outer = models.FloatField(null=True, blank=True, help_text='外层的最小线宽(单位:mil)', verbose_name='外层最小线宽')
-#     minLineSpace4outer = models.FloatField(null=True, blank=True, help_text='外层的最小线距(单位:mil)', verbose_name='外层最小线距')
-#
-#     # ------------------------------------------------防焊层相关的-------------------------------------------
-#     solderWindowNumTop = models.IntegerField(null=True, blank=True,
-#                                                         validators=[validators.MaxValueValidator(100000000),
-#                                                                     validators.MinValueValidator(0)],
-#                                                         help_text="正面防焊层物件数,如果有多层，填写总数）", verbose_name='正面防焊层物件数（总数）')
-#     solderWindowNumBottom = models.IntegerField(null=True, blank=True,
-#                                              validators=[validators.MaxValueValidator(100000000),
-#                                                          validators.MinValueValidator(0)],
-#                                              help_text="底面防焊层物件数,如果有多层，填写总数）", verbose_name='底面防焊层物件数（总数）')
-#     solderMaxWindowNum4singleSide = models.IntegerField(null=True, blank=True,
-#                                                         validators=[validators.MaxValueValidator(100000000),
-#                                                                     validators.MinValueValidator(0)],
-#                                                         help_text="单面最多防焊开窗数量", verbose_name='单面最多防焊开窗数量')
-#     hasSMlayer = models.CharField(max_length=10, choices=(('yes', '是'), ('no', '否'), ('none', 'None')), default='none',
-#                                   help_text="是否有防焊层?", verbose_name="是否有防焊层")
-#
-#     # ------------------------------------------------孔层相关的-------------------------------------------
-#     pcsDrlNum = models.IntegerField(null=True, blank=True,
-#                                     validators=[validators.MaxValueValidator(100000000),
-#                                                 validators.MinValueValidator(0)], help_text="所有孔层的所有孔数量(包括槽孔,镭射孔等)",
-#                                     verbose_name='pcs所有孔数')
-#
-#     hdiLevel = models.IntegerField(null=True, blank=True,
-#                                    validators=[validators.MaxValueValidator(99), validators.MinValueValidator(0)],
-#                                    help_text="孔阶数，HDI介数", verbose_name='孔阶数')
-#
-#
-#     # ------------------------------------------------梅需要的其它字段-------------------------------------------
-#     usage=models.CharField(null=True,blank=True,max_length=200, validators=[validators.MinLengthValidator(limit_value=0)],help_text="料号用途",verbose_name='用途')
-#     impCouponStepName=models.CharField(null=True,blank=True,max_length=50, validators=[validators.MinLengthValidator(limit_value=0)],help_text="阻抗测试条的step名",verbose_name='阻抗step')
-#     routLayerName=models.CharField(null=True,blank=True,max_length=50, validators=[validators.MinLengthValidator(limit_value=0)],help_text="rout层的名字",verbose_name='Rout层')
-#     panelSize=models.FloatField(null=True,blank=True,help_text='panel的profile线外接正矩形的对角线长度(单位:inch)',verbose_name='panel对角线尺寸')
-#
-#     # <------------------------------------------------------常用字段--------------------------------------------------->
-#     publish = models.DateTimeField(default=timezone.now, null=True, blank=True, verbose_name='发布时间')
-#     create_time = models.DateTimeField(auto_now_add=True, blank=True, null=True, verbose_name='创建时间')
-#     updated = models.DateTimeField(auto_now=True, verbose_name='更新时间')
-#     remark = models.CharField(max_length=100, validators=[validators.MinLengthValidator(limit_value=0)], blank=True,
-#                               null=True, help_text='料号的说明备注', verbose_name="备注")
-#
-#     class Meta:
-#         db_table = 'job_job_info_for_dev_test'
-#         ordering = ('-create_time',)
-#
-#
+class JobInfoForDevTest(models.Model):
+    job = models.ForeignKey(to="job.Job", on_delete=models.CASCADE, null=True, blank=True,
+                            related_name='job_job_job_info_for_dev_test', verbose_name="料号名称")
+    status = models.CharField(max_length=10, choices=(('draft', '草稿'), ('published', '正式')), default='draft',
+                              help_text='草稿表示未经人工确认', verbose_name="状态")
+
+    author = models.ForeignKey(User, on_delete=models.CASCADE, related_name='job_job_info_for_dev_test_user', null=True, blank=True,
+                               help_text='负责人', verbose_name="负责人")
+    # ------------------------------------------------整理好的料号信息-------------------------------------------
+    file_odb = models.FileField(upload_to='files', blank=True, null=True, help_text='整理好的ODB++资料,确认过是对的',
+                                verbose_name="整理好的ODB++资料")
+    has_step_multi = MultiSelectField(choices=(('orig', 'orig'), ('net', 'net'),('pre', 'pre'), ('pcs', 'pcs'),
+                                               ('set', 'set'),('panel', 'panel')),
+                                      blank=True,null=True, max_choices=20, max_length=200,verbose_name="包含step")
+
+
+
+    #------------------------------------------------所有层相关的-------------------------------------------
+    job_type_1 = models.CharField(max_length=20, choices=(('through_hole', '通孔板'), ('non_through_hole', '非通孔板'), ('else', '其它')), default='else',
+                                blank=True,null=True,help_text='料号的类型-维度1', verbose_name="料号类型-维度1")
+    job_type_2 = models.CharField(max_length=20,
+                                  choices=(('rigid', '硬板'), ('flex', '软板'),('rigid_flex', '软硬结合板'), ('else', '其它')),
+                                  default='else',
+                                  blank=True, null=True, help_text='料号的类型-维度2', verbose_name="料号类型-维度2")
+    job_type_3 = models.CharField(max_length=20,
+                                  choices=(('ic', 'IC载板'), ('led', 'LED灯板'), ('car', '汽车板'), ('server', '服务器板'), ('else', '其它')),
+                                  default='else',
+                                  blank=True, null=True, help_text='料号的类型-维度3', verbose_name="料号类型-维度3")
+    pcsSize = models.FloatField(null=True, blank=True, help_text='pcs的profile线外接正矩形的对角线长度(单位:inch)',
+                                verbose_name='pcs对角线尺寸')
+    matrixRowNum = models.IntegerField(null=True, blank=True,
+                                       validators=[validators.MaxValueValidator(1000), validators.MinValueValidator(0)],
+                                       help_text="所有层数(包括任意层)", verbose_name='所有层数')
+    totalFeatureNum = models.IntegerField(null=True, blank=True,
+                                          validators=[validators.MaxValueValidator(100000000),
+                                                      validators.MinValueValidator(0)], help_text="总物件数",
+                                          verbose_name='总物件数')
+
+    # ------------------------------------------------线路层相关的-------------------------------------------
+    copperLayerNum = models.IntegerField(null=True, blank=True,validators=[validators.MaxValueValidator(1000),validators.MinValueValidator(0)],
+                                         help_text="信号层数量(含地电层)",verbose_name='信号层数')
+    pgLayerNum = models.IntegerField(null=True, blank=True, validators=[validators.MaxValueValidator(1000),
+                                                                            validators.MinValueValidator(0)],
+                                         help_text="地电层数量", verbose_name='地电层数')
+    hasPGlayer = models.CharField(max_length=10, choices=(('yes', '是'), ('no', '否'), ('none', 'None')), default='none',
+                                  help_text="是否有地电层(负片层)", verbose_name="是否有地电层(负片层)")
+    linedCopper = models.CharField(max_length=10, choices=(('yes', '是'), ('no', '否'), ('none', 'None')), default='none',
+                                   help_text="线路层是否为线铜", verbose_name="线路层是否为线铜")
+
+    bgaNumTop = models.IntegerField(null=True, blank=True,
+                                 validators=[validators.MaxValueValidator(100000000), validators.MinValueValidator(0)],
+                                 help_text="正面BGA总数", verbose_name='正面BGA总数')
+
+    bgaNumBottom = models.IntegerField(null=True, blank=True,
+                                 validators=[validators.MaxValueValidator(100000000), validators.MinValueValidator(0)],
+                                 help_text="背面BGA总数", verbose_name='背面BGA总数')
+
+
+    bgaNum = models.IntegerField(null=True, blank=True,
+                                 validators=[validators.MaxValueValidator(100000000), validators.MinValueValidator(0)],
+                                 help_text="BGA总数", verbose_name='BGA总数')
+    impLineNum = models.IntegerField(null=True, blank=True,
+                                     validators=[validators.MaxValueValidator(100000), validators.MinValueValidator(0)],
+                                     help_text="阻抗线数", verbose_name='阻抗线数')
+
+    minLineWidth4outerTop = models.FloatField(null=True, blank=True, help_text='正面外层的最小线宽(单位:mil)', verbose_name='正面外层最小线宽')
+    minLineSpace4outerTop = models.FloatField(null=True, blank=True, help_text='正面外层的最小线距(单位:mil)', verbose_name='正面外层最小线距')
+
+    minLineWidth4outerBottom = models.FloatField(null=True, blank=True, help_text='背面外层的最小线宽(单位:mil)', verbose_name='背面外层最小线宽')
+    minLineSpace4outerBottom = models.FloatField(null=True, blank=True, help_text='背面外层的最小线距(单位:mil)', verbose_name='背面外层最小线距')
+
+
+    minLineWidth4outer = models.FloatField(null=True, blank=True, help_text='外层的最小线宽(单位:mil)', verbose_name='外层最小线宽')
+    minLineSpace4outer = models.FloatField(null=True, blank=True, help_text='外层的最小线距(单位:mil)', verbose_name='外层最小线距')
+
+    # ------------------------------------------------防焊层相关的-------------------------------------------
+    solderWindowNumTop = models.IntegerField(null=True, blank=True,
+                                                        validators=[validators.MaxValueValidator(100000000),
+                                                                    validators.MinValueValidator(0)],
+                                                        help_text="正面防焊层物件数,如果有多层，填写总数）", verbose_name='正面防焊层物件数（总数）')
+    solderWindowNumBottom = models.IntegerField(null=True, blank=True,
+                                             validators=[validators.MaxValueValidator(100000000),
+                                                         validators.MinValueValidator(0)],
+                                             help_text="底面防焊层物件数,如果有多层，填写总数）", verbose_name='底面防焊层物件数（总数）')
+    solderMaxWindowNum4singleSide = models.IntegerField(null=True, blank=True,
+                                                        validators=[validators.MaxValueValidator(100000000),
+                                                                    validators.MinValueValidator(0)],
+                                                        help_text="单面最多防焊开窗数量", verbose_name='单面最多防焊开窗数量')
+    hasSMlayer = models.CharField(max_length=10, choices=(('yes', '是'), ('no', '否'), ('none', 'None')), default='none',
+                                  help_text="是否有防焊层?", verbose_name="是否有防焊层")
+
+    # ------------------------------------------------孔层相关的-------------------------------------------
+    pcsDrlNum = models.IntegerField(null=True, blank=True,
+                                    validators=[validators.MaxValueValidator(100000000),
+                                                validators.MinValueValidator(0)], help_text="所有孔层的所有孔数量(包括槽孔,镭射孔等)",
+                                    verbose_name='pcs所有孔数')
+
+    hdiLevel = models.IntegerField(null=True, blank=True,
+                                   validators=[validators.MaxValueValidator(99), validators.MinValueValidator(0)],
+                                   help_text="孔阶数，HDI介数", verbose_name='孔阶数')
+
+
+    # ------------------------------------------------梅需要的其它字段-------------------------------------------
+    usage=models.CharField(null=True,blank=True,max_length=200, validators=[validators.MinLengthValidator(limit_value=0)],help_text="料号用途",verbose_name='用途')
+    impCouponStepName=models.CharField(null=True,blank=True,max_length=50, validators=[validators.MinLengthValidator(limit_value=0)],help_text="阻抗测试条的step名",verbose_name='阻抗step')
+    routLayerName=models.CharField(null=True,blank=True,max_length=50, validators=[validators.MinLengthValidator(limit_value=0)],help_text="rout层的名字",verbose_name='Rout层')
+    panelSize=models.FloatField(null=True,blank=True,help_text='panel的profile线外接正矩形的对角线长度(单位:inch)',verbose_name='panel对角线尺寸')
+
+
+
+    # <------------------------------------------------------常用字段--------------------------------------------------->
+    publish = models.DateTimeField(default=timezone.now, null=True, blank=True, verbose_name='发布时间')
+    create_time = models.DateTimeField(auto_now_add=True, blank=True, null=True, verbose_name='创建时间')
+    updated = models.DateTimeField(auto_now=True, verbose_name='更新时间')
+    remark = models.CharField(max_length=100, validators=[validators.MinLengthValidator(limit_value=0)], blank=True,
+                              null=True, help_text='料号的说明备注', verbose_name="备注")
+
+    class Meta:
+        db_table = 'job_job_info_for_dev_test'
+        ordering = ('-create_time',)
+
+
 #     # def get_absolute_url(self):
 #     #     return reverse('job:JobDetailViewForm', args=[self.id, ])
 #
