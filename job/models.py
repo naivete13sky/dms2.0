@@ -92,6 +92,39 @@ class Job(models.Model):
             data[f.name] = f.value_from_object(self)
         return data
 
+
+
+
+
+
+
+class MyTagForJobInfoForDevTest(TagBase):
+    # 这一步是关键，要设置allow_unicode=True，这样这个字段才能支持中文
+    slug = models.SlugField(verbose_name=_("slug"), unique=True, max_length=100, allow_unicode=True)
+
+    # 这个方法也是要覆盖的，它是用来计算slug的，也是添加allow_unicode=True参数
+    def slugify(self, tag, i=None):
+        slug = slugify(tag, allow_unicode=True)
+        if i is not None:
+            slug += "_%d" % i
+        return slug
+
+    class Meta:
+        verbose_name = _("tag")
+        verbose_name_plural = _("tags")
+        app_label = "taggit"
+
+
+class TaggedWhateverForJobInfoForDevTest(GenericTaggedItemBase):
+    # 把我们自定义的模型类传进来，它就能知道如何处理
+    tag = models.ForeignKey(
+        MyTagForJobInfoForDevTest,
+        on_delete=models.CASCADE,
+        related_name="%(app_label)s_%(class)s_items",
+    )
+
+
+
 class JobInfoForDevTest(models.Model):
     job = models.ForeignKey(to="job.Job", on_delete=models.CASCADE, null=True, blank=True,
                             related_name='job_job_job_info_for_dev_test', verbose_name="料号名称")
@@ -206,6 +239,7 @@ class JobInfoForDevTest(models.Model):
     publish = models.DateTimeField(default=timezone.now, null=True, blank=True, verbose_name='发布时间')
     create_time = models.DateTimeField(auto_now_add=True, blank=True, null=True, verbose_name='创建时间')
     updated = models.DateTimeField(auto_now=True, verbose_name='更新时间')
+    tags = TaggableManager(through=TaggedWhateverForJobInfoForDevTest, help_text='必填')
     remark = models.CharField(max_length=100, validators=[validators.MinLengthValidator(limit_value=0)], blank=True,
                               null=True, help_text='料号的说明备注', verbose_name="备注")
 
