@@ -42,6 +42,8 @@ INSTALLED_APPS = [
     'taggit',
     'job.apps.JobConfig',
     'multiselectfield',
+    'mptt',
+    'eptest.apps.EptestConfig',
 
 ]
 
