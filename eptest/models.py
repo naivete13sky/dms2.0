@@ -12,6 +12,7 @@ from django.utils.translation import gettext, gettext_lazy as _
 from account.models import Customer
 from multiselectfield import MultiSelectField
 from job.models import Job
+from mptt.models import MPTTModel, TreeForeignKey
 
 class MyTagForEptest(TagBase):
     # 这一步是关键，要设置allow_unicode=True，这样这个字段才能支持中文
@@ -84,3 +85,16 @@ class JobForTest(models.Model):
     #     for f in self._meta.concrete_fields:
     #         data[f.name] = f.value_from_object(self)
     #     return data
+
+
+
+
+class EpcamModule(MPTTModel):
+    name = models.CharField(max_length=50, unique=True)
+    parent = TreeForeignKey('self', on_delete=models.CASCADE, null=True, blank=True, related_name='children')
+
+    class MPTTMeta:
+        order_insertion_by = ['name']
+
+    class Meta:
+        db_table = 'eptest_epcam_module'

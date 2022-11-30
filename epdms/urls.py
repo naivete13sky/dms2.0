@@ -31,6 +31,8 @@ urlpatterns = [
     path('job/', include('job.urls')),
     # path('ueditor/',include('DjangoUeditor.urls')),
 
+    path('eptest/', include('eptest.urls')),
+
 
 ]
 
