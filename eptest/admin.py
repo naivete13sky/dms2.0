@@ -4,7 +4,7 @@ from .models import JobForTest,EpcamModule
 
 @admin.register(JobForTest)
 class JobForTestAdmin(admin.ModelAdmin):
-    list_display = ('job','file','status','author','publish','create_time','tags','remark')
+    list_display = ('job','file','test_usage_for_epcam_module','status','author','publish','create_time','tags','remark')
 
     search_fields = ('job','author__username','tags',)
     prepopulated_fields = {'remark': ('job',)}

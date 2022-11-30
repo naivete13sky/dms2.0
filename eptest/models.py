@@ -51,7 +51,8 @@ class JobForTest(models.Model):
     #                                  blank=True,null=True, max_choices=20, max_length=200,
     #                                  verbose_name="包含文件类型")
 
-
+    test_usage_for_epcam_module = TreeForeignKey(to='eptest.EpcamModule',on_delete=models.CASCADE, null=True, blank=True,
+                            related_name='eptest_job_for_test_epcam_module', verbose_name="模块名称")
 
 
 
@@ -90,7 +91,8 @@ class JobForTest(models.Model):
 
 
 class EpcamModule(MPTTModel):
-    name = models.CharField(max_length=50, unique=True)
+    # name = models.CharField(max_length=50, unique=True)
+    name = models.CharField(max_length=50, unique=False)
     parent = TreeForeignKey('self', on_delete=models.CASCADE, null=True, blank=True, related_name='children')
 
     class MPTTMeta:
@@ -98,3 +100,8 @@ class EpcamModule(MPTTModel):
 
     class Meta:
         db_table = 'eptest_epcam_module'
+        ordering = ('id',)
+
+    def __str__(self):
+        # Return a string that represents the instance
+        return self.name
