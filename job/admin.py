@@ -20,7 +20,7 @@ class JobInfoForDevTestAdmin(admin.ModelAdmin):
 
     search_fields = ('job','status','author','has_step_multi',)
     prepopulated_fields = {'remark': ('job',)}
-    raw_id_fields = ('author',)
+    raw_id_fields = ('author','job')
     date_hierarchy = 'publish'
     # ordering = ('recipe_status', 'receive_date',)
     list_per_page = 10

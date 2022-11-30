@@ -45,6 +45,11 @@ class JobForTest(models.Model):
                             related_name='eptest_job_for_test_job_job', verbose_name="料号名称")
     file = models.FileField(upload_to='files', blank=True, null=True,
                                        help_text='整理过的测试料号，包括：Gerber为rar压缩包；ODB++为tgz压缩包；DXF为单个文件；PCB为单个文件；', verbose_name="测试料号")
+    file_type = models.CharField(max_length=10,
+                                 choices=(('gerber274x', 'Gerber274X'), ('dxf', 'DXF'),('dwg', 'DWG'), ('odb', 'ODB'),
+                                          ('pcb', 'PCB'), ('none', 'none')),default='none',
+                                 help_text='料号文件类型', verbose_name="料号文件类型")
+
 
     test_usage_for_epcam_module = TreeForeignKey(to='eptest.EpcamModule',on_delete=models.CASCADE, null=True, blank=True,
                             related_name='eptest_job_for_test_epcam_module', verbose_name="模块名称")

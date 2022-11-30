@@ -4,11 +4,11 @@ from mptt.admin import MPTTModelAdmin
 
 @admin.register(JobForTest)
 class JobForTestAdmin(admin.ModelAdmin):
-    list_display = ('job','file','test_usage_for_epcam_module','standard_odb','vs_result_ep','vs_result_g','bug_info','status','author','publish','create_time','tag_list','remark')
+    list_display = ('job','file','file_type','test_usage_for_epcam_module','standard_odb','vs_result_ep','vs_result_g','bug_info','status','author','publish','create_time','tag_list','remark')
     list_filter = ('tags',)
     search_fields = ('job','author__username','vs_result_ep','vs_result_g',)
     prepopulated_fields = {'remark': ('job',)}
-    raw_id_fields = ('author',)
+    raw_id_fields = ('author','job',)
     date_hierarchy = 'publish'
     # ordering = ('recipe_status', 'receive_date',)
     list_per_page = 10
