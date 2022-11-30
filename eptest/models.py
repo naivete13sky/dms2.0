@@ -46,16 +46,26 @@ class JobForTest(models.Model):
     file = models.FileField(upload_to='files', blank=True, null=True,
                                        help_text='整理过的测试料号，包括：Gerber为rar压缩包；ODB++为tgz压缩包；DXF为单个文件；PCB为单个文件；', verbose_name="测试料号")
 
-    # test_type_multi = MultiSelectField(choices=(('input_test', '导入测试'), ('dxf', 'DXF'),
-    #                                             ('dwg', 'DWG'), ('odb', 'ODB'), ('pcb', 'PCB'),('else', '其它')),default='else',help_text='料号使用类型',
-    #                                  blank=True,null=True, max_choices=20, max_length=200,
-    #                                  verbose_name="包含文件类型")
-
     test_usage_for_epcam_module = TreeForeignKey(to='eptest.EpcamModule',on_delete=models.CASCADE, null=True, blank=True,
                             related_name='eptest_job_for_test_epcam_module', verbose_name="模块名称")
 
+    standard_odb = models.FileField(upload_to='files', blank=True, null=True,help_text='标准料号，用来测试比对用的',verbose_name="标准料号")
 
+    vs_result_ep = models.CharField(max_length=10, choices=(('passed', '成功'), ('failed', '失败'), ('none', '未比对')),
+                                    default='none', help_text='导入测试管理员负责填写', verbose_name="悦谱比图结果")
+    vs_result_g = models.CharField(max_length=10, choices=(('passed', '成功'), ('failed', '失败'), ('none', '未比对')),
+                                   default='none', help_text='导入测试管理员负责填写', verbose_name="G软件比图结果")
+    bug_info = models.CharField(max_length=20, validators=[validators.MinLengthValidator(limit_value=0)], blank=True,
+                                null=True, help_text='Bug信息', verbose_name="Bug信息")
 
+    bool_layer_info = models.CharField(max_length=10, choices=(('true', 'true'), ('false', 'false')), default='false',
+                                       null=True, blank=True, help_text='不需要人工填写,系统用',
+                                       verbose_name="是否有层别信息")
+
+    vs_time_ep = models.CharField(max_length=10, validators=[validators.MinLengthValidator(limit_value=0)],
+                                  null=True, blank=True, help_text='系统生成', verbose_name="悦谱比对时间戳")
+    vs_time_g = models.CharField(max_length=10, validators=[validators.MinLengthValidator(limit_value=0)],
+                                 null=True, blank=True, help_text='系统生成', verbose_name="G比对时间戳")
 
 
     status = models.CharField(max_length=10, choices=(('draft', '草稿'), ('published', '正式')), default='draft',
