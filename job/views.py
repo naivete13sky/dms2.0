@@ -51,7 +51,7 @@ class JobListView(ListView):
             new_query_data = QueryData(author=self.request.user)
             new_query_data.save()
         current_query_data = QueryData.objects.get(author=self.request.user)
-
+        print("current_query_data:",current_query_data)
 
 
         #<------------------------------开始：默认根据历史值筛选---------------------------------------------------------->
@@ -64,7 +64,12 @@ class JobListView(ListView):
         context['jobs']= Job.objects.filter(job_name__contains = context['query_job_job_name'])
 
         # 料号负责人筛选
-        context['query_job_author'] = current_query_data.query_job_author
+        if current_query_data.query_job_author == None:
+            context['query_job_author'] = ''
+        else:
+            context['query_job_author'] = current_query_data.query_job_author
+        print("context['query_job_author']:",context['query_job_author'])
+
         # 先把本次筛选条件存储起来
         context['jobs'] = context['jobs'].filter(author__username__contains=context['query_job_author'])
 
