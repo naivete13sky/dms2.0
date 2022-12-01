@@ -8,7 +8,7 @@
     </li>
 
     <li>
-        <a href={% url "job:JobListView" %}>测试料号列表</a>
+        <a href={% url "eptest:JobForTestListView" %}>测试料号列表</a>
     </li>
 <script>$("#basic-table").DataTable({retrieve: true,});</script>
 {% endblock %}
@@ -300,7 +300,7 @@
 
 
                         <div id="pagination">
-                            {% include 'pagination_job_view.html' with page=jobs_page %}
+                            {% include 'pagination_job_for_test_view.html' with page=jobs_page %}
                         </div>
 
 
