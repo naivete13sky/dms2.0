@@ -189,7 +189,7 @@
                                 <td>{{ job.id }}</td>
 
                                 <td>
-                                    <a href="{{ job.get_absolute_url }}" title="查看{{ job.job_parent }}详细信息">
+                                    <a href="../job/JobDetailViewForm/{{ job.job_parent_id }}" title="查看{{ job.job_parent_id }}详细信息">
                                         {{ job.job_parent|slice:"20" }}
                                     </a>
 
