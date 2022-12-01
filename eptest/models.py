@@ -41,8 +41,11 @@ class TaggedWhateverForEptest(GenericTaggedItemBase):
 
 
 class JobForTest(models.Model):
-    job = models.ForeignKey(Job, on_delete=models.CASCADE, null=True, blank=True,
-                            related_name='eptest_job_for_test_job_job', verbose_name="料号名称")
+    job_parent = models.ForeignKey(Job, on_delete=models.CASCADE, null=True, blank=True,
+                            related_name='eptest_job_for_test_job_job', verbose_name="父料号名称")
+    job_name = models.CharField(max_length=20, null=True, blank=True,validators=[validators.MinLengthValidator(limit_value=3)],
+                                help_text='料号名称,有可能有重复名字', verbose_name="料号名称")
+
     file = models.FileField(upload_to='files', blank=True, null=True,
                                        help_text='整理过的测试料号，包括：Gerber为rar压缩包；ODB++为tgz压缩包；DXF为单个文件；PCB为单个文件；', verbose_name="测试料号")
     file_type = models.CharField(max_length=10,
@@ -94,7 +97,7 @@ class JobForTest(models.Model):
 
     def __str__(self):
         # Return a string that represents the instance
-        return self.job.job_name
+        return self.job_name
 
     # def to_dict(self):
     #     data = {}

@@ -12,13 +12,12 @@ urlpatterns = [
 
     path('tag/<str:tag_slug>/',  views.JobForTestListView.as_view(), name='job_list_by_tag'), # 这里的参数类型不要写slug，否则又会忽视中文，写str就行了
 
-
     path('JobForTestDetailViewForm/<int:pk>', views.JobForTestDetailViewForm.as_view(), name='JobForTestDetailViewForm'),#点击标签调用的。
 
-    # path('JobUpdateView/<int:pk>/<int:current_page>', views.JobUpdateView.as_view(), name='JobUpdateView'),#类视图，用来更新料号的。
-    #
-    # path('JobCreateView', views.JobCreateView.as_view(), name='JobCreateView'),#类视图，新增料号。
-    #
+    path('JobForTestUpdateView/<int:pk>/<int:current_page>', views.JobForTestUpdateView.as_view(), name='JobForTestUpdateView'),#类视图，用来更新料号的。
+
+    path('JobForTestCreateView', views.JobForTestCreateView.as_view(), name='JobForTestCreateView'),#类视图，新增料号。
+
     # path('JobDeleteView/<int:pk>', views.JobDeleteView.as_view(),name='JobDeleteView'),#类视图，删除料号。
 
 

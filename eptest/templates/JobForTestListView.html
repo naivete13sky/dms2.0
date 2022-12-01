@@ -45,7 +45,7 @@
                 {#--------------------------------------开始--筛选--------------------------------------#}
 
                         <form action="" class="form-inline" method="get" enctype="multipart/form-data" novalidate>
-                            <i class="fa fa-edit" aria-hidden="true"></i><a href="{% url "job:JobCreateView" %}" style="font-size:20px;font-weight: bolder;">新增测试料号</a>
+                            <i class="fa fa-edit" aria-hidden="true"></i><a href="{% url "eptest:JobForTestCreateView" %}" style="font-size:20px;font-weight: bolder;">新增测试料号</a>
 
                             {% csrf_token %}
 
@@ -189,8 +189,16 @@
                                 <td>{{ job.id }}</td>
 
                                 <td>
+                                    <a href="{{ job.get_absolute_url }}" title="查看{{ job.job_parent }}详细信息">
+                                        {{ job.job_parent|slice:"20" }}
+                                    </a>
+
+
+                                </td>
+
+                                <td>
                                     <a href="{{ job.get_absolute_url }}" title="查看{{ job.job_name }}详细信息">
-                                        {{ job.job|slice:"20" }}
+                                        {{ job.job_name|slice:"20" }}
                                     </a>
 
 
@@ -266,10 +274,10 @@
 
                                 <td>
                                     <div class="btn-group btn-group-xs">
-                                        <button class="btn btn-transparent" title="编辑" onclick="window.location.href='JobUpdateView/{{ job.id }}/{{ current_page }}';"><i class="fa fa-pencil"></i>
+                                        <button class="btn btn-transparent" title="编辑" onclick="window.location.href='JobForTestUpdateView/{{ job.id }}/{{ current_page }}';"><i class="fa fa-pencil"></i>
                                         </button>
 
-                                        <button class="btn btn-transparent" title="删除" onclick="window.location.href='JobDeleteView/{{ job.id }}';"><i class="fa fa-times"></i>
+                                        <button class="btn btn-transparent" title="删除" onclick="window.location.href='JobForTestDeleteView/{{ job.id }}';"><i class="fa fa-times"></i>
                                         </button>
 
                                     </div>

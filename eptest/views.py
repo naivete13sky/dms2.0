@@ -7,7 +7,7 @@ from django.shortcuts import render, get_object_or_404
 from django.urls import reverse_lazy
 from django.utils import timezone
 from django.views.generic import ListView, DetailView, UpdateView, CreateView, DeleteView
-from .forms import JobForTestFormsReadOnly
+from .forms import JobForTestFormsReadOnly,JobForTestForm
 from .models import JobForTest,MyTagForEptest
 from account.models import QueryData, Customer
 
@@ -26,7 +26,8 @@ class JobForTestListView(ListView):
         # 很关键，必须把原方法的结果拿到
         context = super().get_context_data(**kwargs)
         context['job_field_verbose_name'] = [JobForTest._meta.get_field('id').verbose_name,
-                                             JobForTest._meta.get_field('job').verbose_name,
+                                             JobForTest._meta.get_field('job_parent').verbose_name,
+                                             JobForTest._meta.get_field('job_name').verbose_name,
                                              JobForTest._meta.get_field('file').verbose_name,
                                              JobForTest._meta.get_field('file_type').verbose_name,
                                              JobForTest._meta.get_field('test_usage_for_epcam_module').verbose_name,
@@ -55,6 +56,8 @@ class JobForTestListView(ListView):
         context['select_page'] = [('5', '5'), ('10', '10'), ('20', '20'), ('50', '50'), ('100', '100'),
                                   ('200', '200'), ]
 
+        # print("len of objects-no filter:", len(context['jobfortest']))
+
 
         # 加载当前用户的筛选条件
         try:
@@ -75,7 +78,8 @@ class JobForTestListView(ListView):
             context['query_job_job_name'] = ""
             current_query_data.query_job_job_name=""
             current_query_data.save()
-        context['jobfortest']= JobForTest.objects.filter(job__job_name__contains = context['query_job_job_name'])
+        context['jobfortest']= JobForTest.objects.filter(job_name__contains = context['query_job_job_name'])
+        print("len of objects-filter by job:", len(context['jobfortest']))
 
         # 料号负责人筛选
         if current_query_data.query_job_author == None:
@@ -124,7 +128,7 @@ class JobForTestListView(ListView):
             if query_job_name != None:
                 current_query_data.query_job_job_name = query_job_name
                 current_query_data.save()
-            context['jobfortest'] = JobForTest.objects.filter(job__job_name__contains=context['query_job_job_name'])
+            context['jobfortest'] = JobForTest.objects.filter(job_name__contains=context['query_job_job_name'])
 
             # 料号负责人筛选
             query_job_author = self.request.GET.get('query_job_author', False)
@@ -282,3 +286,63 @@ class JobForTestDetailViewForm(DetailView):
         context['form'] = self.get_form()
         context['job_id'] = self.pk
         return context
+
+
+class JobForTestUpdateView(UpdateView):
+    """
+    该类必须要有一个pk或者slug来查询（会调用self.object = self.get_object()）
+    """
+    model = JobForTest
+    fields = "__all__"
+    template_name = 'JobForTestUpdateView.html'
+
+    def get(self, request, *args, **kwargs):
+
+        job_update = JobForTest.objects.get(id=self.kwargs['pk'])
+        form=JobForTestForm(instance=job_update)
+        self.job_id = job_update.id
+        current_page = self.kwargs['current_page']
+        print("current_page",current_page)
+        return render(request, 'JobForTestUpdateView.html', {'form':form})
+
+    def get_success_url(self):
+        return '../../JobForTestListView?page={}'.format(self.kwargs['current_page'])
+
+
+class JobForTestCreateView(CreateView):
+    model=JobForTest
+    template_name = "JobForTestCreateView.html"
+    fields = "__all__"
+    #设置新增料号时，自动填写上当前用户
+    def get_initial(self):
+        # Get the initial dictionary from the superclass method
+        initial = super(JobForTestCreateView, self).get_initial()
+        # Copy the dictionary so we don't accidentally change a mutable dict
+        initial = initial.copy()
+        initial['author'] = self.request.user
+        return initial
+    success_url = 'JobForTestListView'
+
+
+
+    def get_context_data(self, **kwargs):
+        context = super(JobForTestCreateView, self).get_context_data(**kwargs)
+        if self.request.method == 'POST':
+            pass
+
+        else:
+            pass
+
+        #暂时用不着下面的方法
+        # context['get_customer_pcb_factory']=self.get_customer_pcb_factory()
+        # context['get_customer_pcb_design'] = self.get_customer_pcb_design()
+
+        return context
+
+
+class JobForTestDeleteView(DeleteView):
+  """
+  """
+  model = JobForTest
+  template_name = 'JobForTestDeleteView.html'
+  success_url = reverse_lazy('eptest:JobForTestListView')
