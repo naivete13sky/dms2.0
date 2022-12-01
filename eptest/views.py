@@ -301,8 +301,13 @@ class JobForTestUpdateView(UpdateView):
         job_update = JobForTest.objects.get(id=self.kwargs['pk'])
         form=JobForTestForm(instance=job_update)
         self.job_id = job_update.id
-        self.job_parent_id = Job.objects.get(id = job_update.job_parent_id).id
-        self.job_parent = job_update.job_parent
+        print("ccabc:", len(Job.objects.filter(id=job_update.job_parent_id)))
+        if len(Job.objects.filter(id=job_update.job_parent_id)):
+            self.job_parent_id = Job.objects.filter(id = job_update.job_parent_id)[0].id
+            self.job_parent = job_update.job_parent
+        else:
+            self.job_parent_id = None
+            self.job_parent = None
 
         current_page = self.kwargs['current_page']
         print("current_page",current_page)
