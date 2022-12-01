@@ -3,10 +3,13 @@
 {% load static  %}
 {% block title %}悦谱数据管理系统{% endblock %}
 {% block content_header_child %}
-    <li><i class="fa fa-home" aria-hidden="true"></i><a href={% url "job:JobListView" %}>料号管理</a></li>
+    <li><i class="fa fa-home" aria-hidden="true"></i><a href={% url "eptest:JobForTestListView" %}>测试料号管理</a></li>
 
     <li><a>编辑料号</a></li>
 {% endblock %}
+
+
+
 {% block main_content %}
     <script src={% static "javascripts/jquery.min.js" %}></script>
     <div class="row animated fadeInUp">
@@ -16,12 +19,37 @@
                     <div class="row">
                         <div class="col-md-12">
 
+
+
+
                             <form action="" method="post" novalidate enctype="multipart/form-data">
                                 {% csrf_token %}
                                 {{ form.as_p }}
                                 <input type="submit" value="Save">
                             </form>
 
+                            {#-----------------------------重要说明--开始：这里通过调用js替换网页内容，实现了把admmin里好用的功能拿了过来-----------------------------#}
+
+                            <link rel="stylesheet" type="text/css" href="/static/admin/css/forms.css">
+                            <script src="/static/admin/js/vendor/jquery/jquery.js"></script>
+                            <script src="/static/admin/js/jquery.init.js"></script>
+                            <script src="/static/admin/js/admin/RelatedObjectLookups.js"></script>
+                            <script>
+                                $(document).ready(function(){
+
+                                    var html_to_be_job_parent="";
+                                    html_to_be_job_parent=`
+                                                <input type="text" name="job_parent" id="id_job_parent" class="vForeignKeyRawIdAdminField">
+                                                <a href="/admin/job/job/?_to_field=id" class="related-lookup" id="lookup_id_job_parent" title="查询"></a>
+                                               `;
+                                    document.getElementById("id_job_parent").outerHTML=html_to_be_job_parent;
+
+
+                                });
+                                {#alert("abc")#}
+                            </script>
+
+                            {#-----------------------------重要说明--结束：这里-----------------------------#}
 
 
                         </div>
