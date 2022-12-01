@@ -66,6 +66,20 @@
                                 <input type="" class="form-control" id="query_job_from_object_pcb_factory" name="query_job_from_object_pcb_factory" value="{{ query_job_from_object_pcb_factory }}" placeholder="来源-板厂" style="width:100px;">
                             </div>
 
+                            <label style="font-size:20px;">文件类型</label>
+                            <select id="query_eptest_job_for_test_file_type" name="query_eptest_job_for_test_file_type" class="form-control">
+                                {% for each in select_eptest_job_for_test_file_type %}
+                                    {% if each.0 == query_eptest_job_for_test_file_type  %}
+                                        <option selected="selected" value = {{ each.0 }} >{{ each.1 }}</option>
+                                    {% endif %}
+                                    {% if each.0 != query_eptest_job_for_test_file_type  %}
+                                        <option value = {{ each.0 }} >{{ each.1 }}</option>
+                                    {% endif %}
+
+                                {% endfor %}
+                            </select>
+
+
                             <label style="font-size:20px;">状态</label>
                             <select id="query_job_status" name="query_job_status" class="form-control">
                                 {% for each in select_status %}
@@ -189,7 +203,7 @@
                                 <td>{{ job.id }}</td>
 
                                 <td>
-                                    <a href="../job/JobDetailViewForm/{{ job.job_parent_id }}" title="查看{{ job.job_parent_id }}详细信息">
+                                    <a href="../job/JobDetailViewForm/{{ job.job_parent_id }}" title="查看{{ job.job_parent }}详细信息">
                                         {{ job.job_parent|slice:"20" }}
                                     </a>
 

@@ -52,6 +52,8 @@ class JobForTestListView(ListView):
         context['select_file_usage_type'] = [('all', '所有'), ('input_test', '导入测试'), ('customer_job', '客户资料'),
                                              ('test', '测试'), ('else', '其它')]
         context['select_author'] = [('all', '所有'), ('mine', '我的'), ]
+        context['select_eptest_job_for_test_file_type'] = [ ('all', '所有'),('gerber274x', 'Gerber274X'), ('dxf', 'DXF'),('dwg', 'DWG'), ('odb', 'ODB'),
+                                          ('pcb', 'PCB'), ('none', 'none'), ]
         context['select_status'] = [('all', '所有'), ('draft', '草稿'), ('published', '正式'), ]
         context['select_page'] = [('5', '5'), ('10', '10'), ('20', '20'), ('50', '50'), ('100', '100'),
                                   ('200', '200'), ]
@@ -100,6 +102,15 @@ class JobForTestListView(ListView):
         # if context['query_job_from_object_pcb_factory'] != "":
         #     context['jobs'] = context['jobs'].filter(
         #         from_object_pcb_factory__name_simple__contains=context['query_job_from_object_pcb_factory'])
+
+        # 文件类型
+        context['query_eptest_job_for_test_file_type'] = current_query_data.query_eptest_job_for_test_file_type
+        if context['query_eptest_job_for_test_file_type'] == 'all':
+            pass
+        else:
+            context['jobfortest'] = context['jobfortest'].filter(file_type=context['query_eptest_job_for_test_file_type'])
+
+
 
         # 料号状态
         context['query_job_status'] = current_query_data.query_job_status
@@ -151,6 +162,22 @@ class JobForTestListView(ListView):
             #     context['jobs'] = context['jobs'].filter(
             #         from_object_pcb_factory__name_simple__contains=context['query_job_from_object_pcb_factory'])
 
+            # 文件类型筛选
+            query_eptest_job_for_test_file_type = self.request.GET.get("query_eptest_job_for_test_file_type", False)
+            context['query_eptest_job_for_test_file_type'] = query_eptest_job_for_test_file_type
+            # 先把本次筛选条件存储起来
+            current_query_data = QueryData.objects.get(author=self.request.user)
+            if query_eptest_job_for_test_file_type:
+                current_query_data.query_eptest_job_for_test_file_type = query_eptest_job_for_test_file_type
+                current_query_data.save()
+            if context['query_eptest_job_for_test_file_type'] == 'all':
+                pass
+            else:
+                context['jobfortest'] = context['jobfortest'].filter(file_type=context['query_eptest_job_for_test_file_type'])
+
+
+
+
             # 料号状态筛选
             query_job_status = self.request.GET.get("query_job_status", False)
             context['query_job_status'] = query_job_status
@@ -159,7 +186,6 @@ class JobForTestListView(ListView):
             if query_job_status:
                 current_query_data.query_job_status = query_job_status
                 current_query_data.save()
-
             if context['query_job_status'] == 'all':
                 pass
             if context['query_job_status'] == 'draft':

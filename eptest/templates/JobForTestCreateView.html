@@ -31,6 +31,35 @@
                             <script src="/static/admin/js/vendor/jquery/jquery.js"></script>
                             <script src="/static/admin/js/jquery.init.js"></script>
                             <script src="/static/admin/js/admin/RelatedObjectLookups.js"></script>
+
+                            <script>
+                                $(document).ready(function(){
+                                    var html_to_be_job_parent="";
+
+                                    {% if job_parent_id != None %}
+                                        html_to_be_job_parent=`
+                                                <input type="text" name="job_parent" value={{job_parent_id}} id="id_job_parent" class="vForeignKeyRawIdAdminField">
+                                                <a href="/admin/job/job/?_to_field=id" class="related-lookup" id="lookup_id_job_parent" title="查询"></a>
+                                                <strong><a href="/admin/job/job/{{job_parent_id}}/change/">{{ job_parent }}</a></strong>
+                                               `;
+                                    {% else %}
+                                        html_to_be_job_parent=`
+                                                <input type="text" name="job_parent" id="id_job_parent" class="vForeignKeyRawIdAdminField">
+                                                <a href="/admin/job/job/?_to_field=id" class="related-lookup" id="lookup_id_job_parent" title="查询"></a>
+                                               `;
+
+                                    {% endif %}
+
+
+
+
+                                    document.getElementById("id_job_parent").outerHTML=html_to_be_job_parent;
+
+
+                                });
+                                {#alert("abc")#}
+                            </script>
+
                             <script>
                                 $(document).ready(function(){
 
