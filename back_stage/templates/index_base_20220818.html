@@ -411,8 +411,9 @@
     <script src={% static "index_base_20220818/js/charts.js" %}></script>
     <script src={% static "index_base_20220818/js/jquery.slimscroll.min.js" %}></script>
 
-    <script type="text/javascript" src="{%static 'echarts-masterecharts/dist/echarts.min.js'%}"></script>
-    <script type="text/javascript" src="{%static 'static_test.js'%}"></script>
+{#    echarts.min.js不知道为什么就是找不到，返回404。所以复制一份并改为了echarts.mincc.js#}
+    <script type="text/javascript" src="{%static 'echarts-masterecharts/dist/echarts.mincc.js'%}"></script>
+{#    <script type="text/javascript" src="{%static 'static_test.js'%}"></script>#}
 
     <script>
         //knob
