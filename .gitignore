@@ -138,5 +138,5 @@ migrations/
 /job/migrations/
 /back_stage/migrations/
 /eptest/migrations/
-
+!/common_static/echarts-master/dist/
 
