@@ -85,6 +85,11 @@ class QueryData(models.Model):
                                                       ('odb', 'ODB'),('pcb', 'PCB'), ('none', 'none'),),
                                                   default='all', help_text='此用户筛选条件记录用的', verbose_name='筛选-文件类型')
 
+    query_eptest_job_for_test_test_usage_for_epcam_module = models.CharField(blank=True, null=True, max_length=100,
+                                          validators=[validators.MinLengthValidator(limit_value=0)],
+                                          help_text='此用户筛选条件记录用的', verbose_name="筛选-模块名称", )
+
+
 
     remark = models.CharField(max_length=20, validators=[validators.MinLengthValidator(limit_value=3)],
                               verbose_name="备注", blank=True,null=True)
