@@ -89,8 +89,8 @@ class JobForTest(models.Model):
         db_table = 'eptest_job_for_test'
         ordering = ('-create_time',)
 
-    # def get_absolute_url(self):
-    #     return reverse('job:JobDetailViewForm', args=[self.id, ])
+    def get_absolute_url(self):
+        return reverse('eptest:JobForTestDetailViewForm', args=[self.id, ])
 
     def __str__(self):
         # Return a string that represents the instance

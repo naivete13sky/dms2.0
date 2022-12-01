@@ -198,7 +198,7 @@
 
                                 <td>
                                     {% if job.file %}
-                                        <button class="btn btn-transparent" title="附件下载：{{ job.file_compressed }}" onclick="window.location.href='/media/{{ job.file_compressed }}';">  <i class="fa fa-download"> </i>  </button>
+                                        <button class="btn btn-transparent" title="附件下载：{{ job.file }}" onclick="window.location.href='/media/{{ job.file }}';">  <i class="fa fa-download"> </i>  </button>
                                     {% endif %}
 
                                 </td>
@@ -207,7 +207,13 @@
 
                                 <td>{{ job.test_usage_for_epcam_module }}</td>
 
-                                <td>{{ job.standard_odb }}</td>
+
+                                <td>
+                                    {% if job.file %}
+                                        <button class="btn btn-transparent" title="附件下载：{{ job.standard_odb }}" onclick="window.location.href='/media/{{ job.standard_odb }}';">  <i class="fa fa-download"> </i>  </button>
+                                    {% endif %}
+
+                                </td>
 
 
                                 <td>{{ job.vs_result_ep }}</td>

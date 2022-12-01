@@ -7,7 +7,7 @@ from django.shortcuts import render, get_object_or_404
 from django.urls import reverse_lazy
 from django.utils import timezone
 from django.views.generic import ListView, DetailView, UpdateView, CreateView, DeleteView
-# from .forms import JobFormsReadOnly,JobForm
+from .forms import JobForTestFormsReadOnly
 from .models import JobForTest,MyTagForEptest
 from account.models import QueryData, Customer
 
@@ -263,3 +263,22 @@ class JobForTestListView(ListView):
                 return HttpResponse(request.POST.get("page_jump"))
 
 
+class JobForTestDetailViewForm(DetailView):
+    model = JobForTest
+    template_name = "JobForTestDetailViewForm.html"
+    context_object_name = "job_for_test"
+    pk_url_kwarg = "pk"  # pk_url_kwarg默认值就是pk，这里可以覆盖，但必须和url中的命名组参数名称一致
+
+
+    def get_form(self):
+        self.pk = self.kwargs['pk']
+        # print("pk:",pk)
+        job = JobForTest.objects.filter(id=self.pk).first()
+        return JobForTestFormsReadOnly(instance=job)
+
+    def get_context_data(self,*args, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['now'] = timezone.now()
+        context['form'] = self.get_form()
+        context['job_id'] = self.pk
+        return context

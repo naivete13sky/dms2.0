@@ -163,12 +163,41 @@
                         <ul class="sub">
                             <li><a class="" href="{% url "job:JobListView" %}">料号查询</a></li>
 
-                            <li><a class="" href="{% url "job:JobListView" %}">导入测试</a></li>
 
-                            <li><a class="" href="{% url "job:JobListView" %}">料号信息-CAM专用</a></li>
+
+
+
+
+
+
+
+                            <ul class="nav child-nav level-1">
+                                <li class="has-child-item close-item">
+                                    <li><a href="{% url "job:JobListView" %}">配置</a></li>
+
+                                </li>
+
+
+                            </ul>
+
+
+
+                        </ul>
+                    </li>
+
+                    <li class="sub-menu">
+                        <a href="javascript:;" class="">
+                                  <i class="icon_document_alt"></i>
+                                  <span>测试</span>
+                                  <span class="menu-arrow arrow_carrot-right"></span>
+                              </a>
+                        <ul class="sub">
+                            <li><a class="" href="{% url "eptest:JobForTestListView" %}">测试料号查询</a></li>
+
+
 
                             <li><a class="" href={% url "job:JobListView" %}>层别信息</a></li>
-                            <li><a class="" href={% url "job:JobListView" %}>层别信息--孔参数修改</a></li>
+
 
                             <ul class="nav child-nav level-1">
                                 <li class="has-child-item close-item">
@@ -203,8 +232,6 @@
 
                         </ul>
                     </li>
-
-
 
                     <li class="sub-menu">
                         <a href="javascript:;" class="">
