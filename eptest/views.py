@@ -35,8 +35,8 @@ class JobForTestListView(ListView):
                                              JobForTest._meta.get_field('vs_result_g').verbose_name,
                                              JobForTest._meta.get_field('bug_info').verbose_name,
                                              JobForTest._meta.get_field('bool_layer_info').verbose_name,
-                                             JobForTest._meta.get_field('vs_time_ep').verbose_name,
-                                             JobForTest._meta.get_field('vs_time_g').verbose_name,
+                                             # JobForTest._meta.get_field('vs_time_ep').verbose_name,
+                                             # JobForTest._meta.get_field('vs_time_g').verbose_name,
                                              JobForTest._meta.get_field('status').verbose_name,
                                              JobForTest._meta.get_field('updated').verbose_name,
                                              JobForTest._meta.get_field('author').verbose_name,
@@ -261,3 +261,5 @@ class JobForTestListView(ListView):
             if request.POST.__contains__("page_jump"):
                 print(request.POST.get("page_jump"))
                 return HttpResponse(request.POST.get("page_jump"))
+
+

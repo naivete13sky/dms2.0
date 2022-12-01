@@ -219,9 +219,9 @@
 
                                 <td>{{ job.bool_layer_info }}</td>
 
-                                <td>{{ job.vs_time_ep }}</td>
-
-                                <td>{{ job.vs_time_g }}</td>
+{#                                <td>{{ job.vs_time_ep }}</td>#}
+{##}
+{#                                <td>{{ job.vs_time_g }}</td>#}
 
 
 
@@ -250,7 +250,7 @@
 
                                 <td>
                                     {% for tag in job.tags.all %}
-                                        <a href="{% url "job:job_list_by_tag" tag.slug %}">{{ tag.name }}</a>
+                                        <a href="{% url "eptest:job_list_by_tag" tag.slug %}">{{ tag.name }}</a>
                                         {% if not forloop.last %}, {% endif %}
                                     {% endfor %}
                                     {% if tag %}

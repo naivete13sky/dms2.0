@@ -120,3 +120,81 @@ class EpcamModule(MPTTModel):
     def __str__(self):
         # Return a string that represents the instance
         return self.name
+
+
+
+class Layer(models.Model):
+    job = models.ForeignKey(to="eptest.JobForTest", on_delete=models.CASCADE,null=True,blank=True, related_name='eptest_job_for_test_layer',verbose_name="料号名称")
+
+    layer=models.CharField(max_length=100, validators=[validators.MinLengthValidator(limit_value=1)],
+                            verbose_name="层名称")
+    layer_org=models.CharField(max_length=100, validators=[validators.MinLengthValidator(limit_value=1)],null=True,blank=True,
+                            verbose_name="原始层名称")
+    vs_result_manual = models.CharField(max_length=10, choices=(('passed', '通过'), ('failed', '失败'), ('none', '未比对')),
+                                    default='none', null=True, blank=True, verbose_name="人工比对结果")
+    vs_result_ep = models.CharField(max_length=10, choices=(('passed', '通过'), ('failed', '失败'), ('none', '未比对')),
+                                 default='none', null=True, blank=True, verbose_name="悦谱比对结果")
+    vs_result_g = models.CharField(max_length=10, choices=(('passed', '通过'), ('failed', '失败'), ('none', '未比对')),
+                                    default='none', null=True, blank=True, verbose_name="G软件比对结果")
+
+    layer_file_type=models.CharField(max_length=100, choices=(('gerber274X', 'Gerber274-X'), ('gerber274D', 'Gerber274-D'), ('excellon2', 'Excellon2'),
+                                                         ('excellon1', 'Excellon1'),('dxf', 'DXF'),
+                                                             ('else', '其它')), default='else',verbose_name="层文件类型")
+
+    layer_type = models.CharField(max_length=100, choices=(('signal_outter', '外层'),  ('signal_inner', '内层'),('solder', '防焊'),('silk', '丝印'),('paste', '锡膏'),
+    ('drill', '孔层'), ('rout', 'Rout'), ('slot', '槽孔'), ('else', '其它')), default='else', verbose_name="层类型")
+    features_count=models.IntegerField(default=0,null=True,blank=True,
+                                     validators=[validators.MaxValueValidator(100000000), validators.MinValueValidator(0)],verbose_name="物件数")
+
+
+    units = models.CharField(max_length=10, choices=(('Inch', 'Inch'), ('MM', 'MM'), ('none', '未记录')), default='none',
+                                             verbose_name="units")
+
+    coordinates = models.CharField(max_length=20, choices=(('Absolute', 'Absolute'), ('Incremental', 'Incremental'), ('none', '未记录')),
+                                default='none',
+                                verbose_name="coordinates")
+
+    zeroes_omitted = models.CharField(max_length=10, choices=(
+    ('Leading', 'Leading'), ('Trailing', 'Trailing'), ('none', '未记录')), default='none', verbose_name="省零")
+    number_format_A = models.CharField(max_length=10, choices=(
+    ('0', '0'), ('1', '1'), ('2', '2'), ('3', '3'), ('4', '4'), ('5', '5'), ('6', '6'), ('7', '7'), ('8', '8'), ('none', '未记录')),
+                                                       default='none', verbose_name="整数")
+    number_format_B = models.CharField(max_length=10, choices=(
+        ('0', '0'), ('1', '1'), ('2', '2'), ('3', '3'), ('4', '4'), ('5', '5'), ('6', '6'), ('7', '7'), ('8', '8'), ('none', '未记录')),
+                                                       default='none', verbose_name="小数")
+    tool_units_ep = models.CharField(max_length=10,
+                                                  choices=(('Inch', 'Inch'), ('MM', 'MM'), ('Mils', 'Mils'), ('none', '未记录')),
+                                                  default='none',
+                                                  verbose_name="Tool_units_EP")
+
+    tool_units_g = models.CharField(max_length=10,
+                                     choices=(('Inch', 'Inch'), ('MM', 'MM'), ('Mils', 'Mils'), ('none', '未记录')),
+                                     default='none',
+                                     verbose_name="Tool_units_G")
+
+    author = models.ForeignKey(User, on_delete=models.CASCADE, related_name='job_manage_layer_user', null=True, blank=True,
+                               verbose_name="负责人")
+    STATUS_CHOICES = (('draft', '草稿'), ('published', '正式'))
+    status = models.CharField(max_length=10, choices=STATUS_CHOICES, default='draft')
+    vs_time_ep = models.CharField(max_length=10, validators=[validators.MinLengthValidator(limit_value=0)],
+                               null=True, blank=True, verbose_name="悦谱比对时间戳")
+    vs_time_g = models.CharField(max_length=10, validators=[validators.MinLengthValidator(limit_value=0)],
+                                  null=True, blank=True, verbose_name="G比对时间戳")
+    remark = models.CharField(max_length=100, validators=[validators.MinLengthValidator(limit_value=0)],
+                              verbose_name="备注", blank=True, null=True)
+    create_time = models.DateTimeField(auto_now_add=True, verbose_name='创建时间')
+    updated = models.DateTimeField(auto_now=True, verbose_name='更新时间')
+
+
+
+    class Meta:
+        db_table = 'eptest_layer'
+        ordering = ('-create_time',)
+
+
+    # def get_absolute_url(self):
+    #     return reverse('job_manage:LayerFormView', args=[self.id, ])
+
+    def __str__(self):
+        # Return a string that represents the instance
+        return self.layer
