@@ -139,4 +139,4 @@ migrations/
 /back_stage/migrations/
 /eptest/migrations/
 !/common_static/echarts-master/dist/
-
+!/collected_static/echarts-master/dist/
