@@ -89,6 +89,11 @@ class QueryData(models.Model):
                                           validators=[validators.MinLengthValidator(limit_value=0)],
                                           help_text='此用户筛选条件记录用的', verbose_name="筛选-模块名称", )
 
+    query_eptest_job_for_test_vs_result_g = models.CharField(max_length=20, blank=True, null=True,
+                                             choices=(
+                                                 ('all', '所有'), ('passed', '成功'), ('failed', '失败'), ('none', '未比对')),
+                                             default='all', help_text='此用户筛选条件记录用的', verbose_name='筛选-G软件比图结果')
+
 
 
     remark = models.CharField(max_length=20, validators=[validators.MinLengthValidator(limit_value=3)],

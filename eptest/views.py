@@ -55,6 +55,7 @@ class JobForTestListView(ListView):
         context['select_eptest_job_for_test_file_type'] = [ ('all', '所有'),('gerber274x', 'Gerber274X'), ('dxf', 'DXF'),('dwg', 'DWG'), ('odb', 'ODB'),
                                           ('pcb', 'PCB'), ('none', 'none'), ]
         context['select_status'] = [('all', '所有'), ('draft', '草稿'), ('published', '正式'), ]
+        context['select_eptest_job_for_test_vs_result_g'] = [('all', '所有'), ('passed', '成功'), ('failed', '失败'), ('none', '未比对'), ]
         context['select_page'] = [('5', '5'), ('10', '10'), ('20', '20'), ('50', '50'), ('100', '100'),
                                   ('200', '200'), ]
 
@@ -117,6 +118,18 @@ class JobForTestListView(ListView):
             context['jobfortest'] = context['jobfortest'].filter(status="draft")
         if context['query_job_status'] == 'published':
             context['jobfortest'] = context['jobfortest'].filter(status="published")
+
+        # G软件比图结果
+        context['query_eptest_job_for_test_vs_result_g'] = current_query_data.query_eptest_job_for_test_vs_result_g
+        if context['query_eptest_job_for_test_vs_result_g'] == 'all':
+            pass
+        if context['query_eptest_job_for_test_vs_result_g'] != "all":
+            context['jobfortest'] = context['jobfortest'].filter(
+                vs_result_g__contains=context['query_eptest_job_for_test_vs_result_g'])
+
+
+
+
 
         # 每页显示行数
         context['query_job_paginator_page'] = current_query_data.query_job_paginator_page
@@ -186,6 +199,20 @@ class JobForTestListView(ListView):
             if context['query_job_status'] == 'published':
                 context['jobfortest'] = context['jobfortest'].filter(status="published")
 
+            # G软件比图结果
+            query_eptest_job_for_test_vs_result_g = self.request.GET.get("query_eptest_job_for_test_vs_result_g", False)
+            context['query_eptest_job_for_test_vs_result_g'] = query_eptest_job_for_test_vs_result_g
+            # 先把本次筛选条件存储起来
+            current_query_data = QueryData.objects.get(author=self.request.user)
+            if query_eptest_job_for_test_vs_result_g:
+                current_query_data.query_eptest_job_for_test_vs_result_g = query_eptest_job_for_test_vs_result_g
+                current_query_data.save()
+
+            if context['query_eptest_job_for_test_vs_result_g'] == 'all':
+                pass
+            if context['query_eptest_job_for_test_vs_result_g'] != "all":
+                context['jobfortest'] = context['jobfortest'].filter(
+                    vs_result_g__contains=context['query_eptest_job_for_test_vs_result_g'])
 
 
             #每页显示行数

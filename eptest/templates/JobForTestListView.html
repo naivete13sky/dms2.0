@@ -95,6 +95,23 @@
                                 {% endfor %}
                             </select>
 
+
+                            <label style="font-size:20px;">G软件比图结果</label>
+                            <select id="query_eptest_job_for_test_vs_result_g" name="query_eptest_job_for_test_vs_result_g" class="form-control">
+                                {% for each in select_eptest_job_for_test_vs_result_g %}
+                                    {% if each.0 == query_eptest_job_for_test_vs_result_g  %}
+                                        <option selected="selected" value = {{ each.0 }} >{{ each.1 }}</option>
+                                    {% endif %}
+                                    {% if each.0 != query_eptest_job_for_test_vs_result_g  %}
+                                        <option value = {{ each.0 }} >{{ each.1 }}</option>
+                                    {% endif %}
+
+                                {% endfor %}
+                            </select>
+
+
+
+
                             <label style="font-size:20px;">每页显示行数</label>
                             <select id="query_job_paginator_page" name="query_job_paginator_page" class="form-control">
                                 {% for each in select_page %}
