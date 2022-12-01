@@ -18,7 +18,7 @@ urlpatterns = [
 
     path('JobForTestCreateView', views.JobForTestCreateView.as_view(), name='JobForTestCreateView'),#类视图，新增料号。
 
-    # path('JobDeleteView/<int:pk>', views.JobDeleteView.as_view(),name='JobDeleteView'),#类视图，删除料号。
+    path('JobForTestDeleteView/<int:pk>', views.JobForTestDeleteView.as_view(),name='JobForTestDeleteView'),#类视图，删除料号。
 
 
 
