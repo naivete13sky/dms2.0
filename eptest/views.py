@@ -10,7 +10,7 @@ from django.views.generic import ListView, DetailView, UpdateView, CreateView, D
 from .forms import JobForTestFormsReadOnly,JobForTestForm
 from .models import JobForTest,MyTagForEptest
 from account.models import QueryData, Customer
-
+from job.models import Job
 
 def show_genres(request):
     return render(request, "EpcamModule.html", {'epcam_module': EpcamModule.objects.all()})
@@ -301,9 +301,12 @@ class JobForTestUpdateView(UpdateView):
         job_update = JobForTest.objects.get(id=self.kwargs['pk'])
         form=JobForTestForm(instance=job_update)
         self.job_id = job_update.id
+        self.job_parent_id = Job.objects.get(id = job_update.job_parent_id).id
+        self.job_parent = job_update.job_parent
+
         current_page = self.kwargs['current_page']
         print("current_page",current_page)
-        return render(request, 'JobForTestUpdateView.html', {'form':form})
+        return render(request, 'JobForTestUpdateView.html', {'form':form,'job_parent_id':self.job_parent_id,'job_parent':self.job_parent})
 
     def get_success_url(self):
         return '../../JobForTestListView?page={}'.format(self.kwargs['current_page'])
