@@ -32,6 +32,7 @@ ALLOWED_HOSTS = ['*']
 # Application definition
 
 INSTALLED_APPS = [
+    'simpleui',
     'account.apps.AccountConfig',
     'django.contrib.admin',
     'django.contrib.auth',
@@ -194,3 +195,16 @@ LOGOUT_URL = 'logout'
 # 由于我们要允许用户上传图片，必须配置Django让其提供媒体文件服务，在settings.py中加入下列内容：
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+
+# <------------------------simpleui------------------>
+# 隐藏simpleui主页信息
+SIMPLEUI_HOME_INFO = False
+
+# simpleui修改logo
+# 如果需要使用本地图片，需要在Lib/site-packages/simpleui/static/admin/simpleui-x/img中把原来的logo.png替换掉（图片名称不要改变）。
+# SIMPLEUI_LOGO = '图片URL'
+
+# 设置默认主题
+SIMPLEUI_DEFAULT_THEME = 'admin.lte.css'
+
+# <------------------------simpleui------------------>
