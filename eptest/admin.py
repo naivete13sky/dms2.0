@@ -6,7 +6,7 @@ from django.utils.safestring import mark_safe
 @admin.register(JobForTest)
 class JobForTestAdmin(admin.ModelAdmin):
     list_display = ('job_parent_link','job_name','file','file_type','test_usage_for_epcam_module','standard_odb','vs_result_ep','vs_result_g','bug_info','status','author','publish','create_time','tag_list','remark')
-    list_filter = ('tags',)
+    list_filter = ('tags','file_type','author','test_usage_for_epcam_module',)
     search_fields = ('job_parent','job_name','author__username','vs_result_ep','vs_result_g',)
     prepopulated_fields = {'remark': ('job_name',)}
     raw_id_fields = ('author','job_parent',)
