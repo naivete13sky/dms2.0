@@ -1,11 +1,20 @@
+import os
+import shutil
+import time
+
+import rarfile
+from django.conf import settings
 from django.contrib import admin
+from django.http import HttpResponse
+
+from cc.cc_method import CCMethod
 from .models import JobForTest,EpcamModule,Layer
 from mptt.admin import MPTTModelAdmin
 from django.utils.safestring import mark_safe
 
 @admin.register(JobForTest)
 class JobForTestAdmin(admin.ModelAdmin):
-    list_display = ('job_parent_link','job_name','file','file_type','test_usage_for_epcam_module','standard_odb','vs_result_ep','vs_result_g','bug_info','status','author','publish','create_time','tag_list','remark')
+    list_display = ('job_parent_link','job_name','get_layer_info_link','file','file_type','test_usage_for_epcam_module','standard_odb','vs_result_ep','vs_result_g','bug_info','status','author','publish','create_time','tag_list','remark')
     list_filter = ('tags','file_type','author','test_usage_for_epcam_module',)
     search_fields = ('job_parent','job_name','author__username','vs_result_ep','vs_result_g',)
     prepopulated_fields = {'remark': ('job_name',)}
@@ -24,6 +33,12 @@ class JobForTestAdmin(admin.ModelAdmin):
     def job_parent_link(self, obj):
         return mark_safe(f'<a href="../../job/job/{obj.job_parent_id}/change/">{obj.job_parent} </a>')
     job_parent_link.short_description = '父料号'
+
+    def get_layer_info_link(self, obj):
+        return mark_safe(f'<a href="../../../../eptest/get_layer_name_from_org/{obj.id}/">生成</a>')
+    get_layer_info_link.short_description = '生成层别'
+
+
 
 class EpcamModuleAdmin(MPTTModelAdmin):
     list_display = ('name','lft','rght','tree_id','level','parent_id',)
