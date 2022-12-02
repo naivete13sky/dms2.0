@@ -196,7 +196,7 @@ LOGOUT_URL = 'logout'
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
-# <------------------------simpleui------------------>
+# <---------------------------------------------------simpleui--------------------------------------------------------->
 # 隐藏simpleui主页信息
 SIMPLEUI_HOME_INFO = False
 
@@ -207,4 +207,17 @@ SIMPLEUI_HOME_INFO = False
 # 设置默认主题
 SIMPLEUI_DEFAULT_THEME = 'admin.lte.css'
 
-# <------------------------simpleui------------------>
+# 修改默认首页
+SIMPLEUI_HOME_PAGE = 'http://127.0.0.1:8000/back_stage/'
+SIMPLEUI_HOME_TITLE = '看板'
+SIMPLEUI_HOME_ICON = 'fa-solid fa-gauge'
+
+
+# 设置simpleui 点击首页图标跳转的地址；首页顶部首页图标默认跳转地址为/，即根目录；
+# SIMPLEUI_INDEX = 'https://www.88cto.com'
+
+
+# 自定义SIMPLEUI的Logo
+SIMPLEUI_LOGO = 'https://avatars2.githubusercontent.com/u/13655483?s=60&v=4'
+
+# <---------------------------------------------------simpleui--------------------------------------------------------->
