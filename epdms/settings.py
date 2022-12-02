@@ -242,7 +242,7 @@ SIMPLEUI_CONFIG = {
         [
             {
                 'app': 'job',
-                'name': '料号',
+                'name': '料号管理',
                 'icon': 'fa-solid fa-list',
                 'models': [
                     {
@@ -264,7 +264,7 @@ SIMPLEUI_CONFIG = {
                 'icon': 'fa-solid fa-microscope',
                 'models': [
                     {
-                        'name': '料号管理',
+                        'name': '测试料号管理',
                         'icon': 'fa-solid fa-list',
                         'url': '/admin/eptest/jobfortest/'
                     },
