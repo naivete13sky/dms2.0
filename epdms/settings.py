@@ -223,7 +223,7 @@ SIMPLEUI_LOGO = 'https://avatars2.githubusercontent.com/u/13655483?s=60&v=4'
 SIMPLEUI_CONFIG = {
     'system_keep': False, # 关闭系统菜单
     # 'system_keep': True, # 关闭系统菜单
-    'menu_display': ['料号','任务管理', '测试', '权限认证'],
+    'menu_display': ['料号','测试','用户信息','任务管理', '权限认证'],
     'dynamic': True,    # 设置是否开启动态菜单, 默认为False. 如果开启, 则会在每次用户登陆时动态展示菜单内容
 
     'menus': [
@@ -241,6 +241,50 @@ SIMPLEUI_CONFIG = {
                     'name': '研发测试料号',
                     'icon': 'fa fa-user',
                     'url': '/admin/job/jobinfofordevtest/'
+                }
+            ]
+        },
+        {
+            'app': 'eptest',
+            'name': '测试',
+            'icon': 'fas fa-user-shield',
+            'models': [
+                {
+                    'name': '料号管理',
+                    'icon': 'fa fa-user',
+                    'url': '/admin/eptest/jobfortest/'
+                },
+                {
+                    'name': '层别管理',
+                    'icon': 'fa fa-user',
+                    'url': '/admin/eptest/layer/'
+                },
+                {
+                    'name': '模块管理',
+                    'icon': 'fa fa-user',
+                    'url': '/admin/eptest/epcammodule/'
+                }
+            ]
+        },
+        {
+            'app': 'account',
+            'name': '用户信息',
+            'icon': 'fas fa-user-shield',
+            'models': [
+                {
+                    'name': '用户信息',
+                    'icon': 'fa fa-user',
+                    'url': '/admin/account/profile/'
+                },
+                {
+                    'name': '层别管理',
+                    'icon': 'fa fa-user',
+                    'url': '/admin/eptest/layer/'
+                },
+                {
+                    'name': '模块管理',
+                    'icon': 'fa fa-user',
+                    'url': '/admin/eptest/epcammodule/'
                 }
             ]
         },
@@ -264,22 +308,7 @@ SIMPLEUI_CONFIG = {
                 'url': 'auth/user/'
             }]
         },
-        {
-            'name': '测试',
-            'icon': 'fa fa-file',
-            'models': [
-                {
-                    'name': 'Baidu',
-                    'url': 'http://baidu.com',
-                    'icon': 'far fa-surprise'
-                },
-                {
-                    'name': '内网穿透',
-                    'url': 'https://www.wezoz.com',
-                    'icon': 'fab fa-github'
-                }
-            ]
-        }
+
     ]
 }
 
