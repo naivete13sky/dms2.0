@@ -19,7 +19,7 @@ class JobForTestAdmin(admin.ModelAdmin):
     search_fields = ('job_parent','job_name','author__username','vs_result_ep','vs_result_g',)
     prepopulated_fields = {'remark': ('job_name',)}
     raw_id_fields = ('author','job_parent',)
-    date_hierarchy = 'publish'
+    # date_hierarchy = 'publish'
     # ordering = ('recipe_status', 'receive_date',)
     list_per_page = 10
     list_display_links = ('job_name',)

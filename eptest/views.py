@@ -472,5 +472,6 @@ def get_layer_name_from_org(request,job_id):
     job.bool_layer_info='true'
     job.save()
     # return redirect('job_manage:JobListViewVs')
-    return redirect('../../../../../admin/#/admin/eptest/jobfortest/')
-    # return HttpResponse("finish!")
+    # return redirect('../../../../../admin/#/admin/eptest/jobfortest/')
+    # return HttpResponse("已完成！请F5刷新页面！")
+    return render(request,r'get_layer_info.html')
