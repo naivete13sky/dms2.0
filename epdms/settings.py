@@ -192,17 +192,24 @@ LOGIN_URL = 'login'
 # 用户需要登出的时候被重定向到的URL地址
 LOGOUT_URL = 'logout'
 
+
+
 # 由于我们要允许用户上传图片，必须配置Django让其提供媒体文件服务，在settings.py中加入下列内容：
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+
+
+
 
 # <---------------------------------------------------simpleui--------------------------------------------------------->
 # 隐藏simpleui主页信息
 SIMPLEUI_HOME_INFO = False
 
+# 自定义SIMPLEUI的Logo
+# SIMPLEUI_LOGO = 'https://avatars2.githubusercontent.com/u/13655483?s=60&v=4'
 # simpleui修改logo
 # 如果需要使用本地图片，需要在Lib/site-packages/simpleui/static/admin/simpleui-x/img中把原来的logo.png替换掉（图片名称不要改变）。
-# SIMPLEUI_LOGO = '图片URL'
+
 
 # 设置默认主题
 SIMPLEUI_DEFAULT_THEME = 'admin.lte.css'
@@ -223,8 +230,7 @@ SIMPLEUI_HOME_ICON = 'fa-solid fa-gauge'
 # SIMPLEUI_INDEX = 'https://www.88cto.com'
 
 
-# 自定义SIMPLEUI的Logo
-SIMPLEUI_LOGO = 'https://avatars2.githubusercontent.com/u/13655483?s=60&v=4'
+
 # 'http://127.0.0.1:8000/admin/#/admin/job/job/'
 SIMPLEUI_CONFIG = {
     'system_keep': False, # 关闭系统菜单
