@@ -12,6 +12,14 @@ from .models import JobForTest,EpcamModule,Layer
 from mptt.admin import MPTTModelAdmin
 from django.utils.safestring import mark_safe
 
+
+# 更改管理后台名称
+admin.site.site_header = '料号管理系统'
+admin.site.site_title = '料号管理系统'
+# admin.site.index_title = '3'
+
+
+
 @admin.register(JobForTest)
 class JobForTestAdmin(admin.ModelAdmin):
     list_display = ('job_parent_link','job_name','get_layer_info_link','file','file_type','test_usage_for_epcam_module','standard_odb','vs_result_ep','vs_result_g','bug_info','status','author','publish','create_time','tag_list','remark')

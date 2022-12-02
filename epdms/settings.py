@@ -207,6 +207,12 @@ SIMPLEUI_HOME_INFO = False
 # 设置默认主题
 SIMPLEUI_DEFAULT_THEME = 'admin.lte.css'
 
+
+
+
+
+
+
 # 修改默认首页
 SIMPLEUI_HOME_PAGE = 'http://127.0.0.1:8000/back_stage/'
 SIMPLEUI_HOME_TITLE = '看板'
@@ -219,7 +225,7 @@ SIMPLEUI_HOME_ICON = 'fa-solid fa-gauge'
 
 # 自定义SIMPLEUI的Logo
 SIMPLEUI_LOGO = 'https://avatars2.githubusercontent.com/u/13655483?s=60&v=4'
-'http://127.0.0.1:8000/admin/#/admin/job/job/'
+# 'http://127.0.0.1:8000/admin/#/admin/job/job/'
 SIMPLEUI_CONFIG = {
     'system_keep': False, # 关闭系统菜单
     # 'system_keep': True, # 关闭系统菜单
