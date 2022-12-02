@@ -223,93 +223,85 @@ SIMPLEUI_LOGO = 'https://avatars2.githubusercontent.com/u/13655483?s=60&v=4'
 SIMPLEUI_CONFIG = {
     'system_keep': False, # 关闭系统菜单
     # 'system_keep': True, # 关闭系统菜单
-    'menu_display': ['料号','测试','用户信息','任务管理', '权限认证'],
+    'menu_display': ['料号','测试','用户信息', '权限认证'],
     'dynamic': True,    # 设置是否开启动态菜单, 默认为False. 如果开启, 则会在每次用户登陆时动态展示菜单内容
 
-    'menus': [
-        {
-            'app': 'job',
-            'name': '料号',
-            'icon': 'fas fa-user-shield',
-            'models': [
-                {
-                    'name': '料号管理',
-                    'icon': 'fa fa-user',
-                    'url': '/admin/job/job/'
-                },
-                {
-                    'name': '研发测试料号',
-                    'icon': 'fa fa-user',
-                    'url': '/admin/job/jobinfofordevtest/'
-                }
-            ]
-        },
-        {
-            'app': 'eptest',
-            'name': '测试',
-            'icon': 'fas fa-user-shield',
-            'models': [
-                {
-                    'name': '料号管理',
-                    'icon': 'fa fa-user',
-                    'url': '/admin/eptest/jobfortest/'
-                },
-                {
-                    'name': '层别管理',
-                    'icon': 'fa fa-user',
-                    'url': '/admin/eptest/layer/'
-                },
-                {
-                    'name': '模块管理',
-                    'icon': 'fa fa-user',
-                    'url': '/admin/eptest/epcammodule/'
-                }
-            ]
-        },
-        {
-            'app': 'account',
-            'name': '用户信息',
-            'icon': 'fas fa-user-shield',
-            'models': [
-                {
-                    'name': '用户信息',
-                    'icon': 'fa fa-user',
-                    'url': '/admin/account/profile/'
-                },
-                {
-                    'name': '层别管理',
-                    'icon': 'fa fa-user',
-                    'url': '/admin/eptest/layer/'
-                },
-                {
-                    'name': '模块管理',
-                    'icon': 'fa fa-user',
-                    'url': '/admin/eptest/epcammodule/'
-                }
-            ]
-        },
-        {
-            'app': 'myapp',
-            'name': '任务管理',
-            'icon': 'fas fa-user-shield',
-            'models': [{
-                'name': '任务管理1',
-                'icon': 'fa fa-user',
-                'url': 'job_detail/'
-            }]
-        },
-        {
-            'app': 'auth',
-            'name': '权限认证',
-            'icon': 'fas fa-user-shield',
-            'models': [{
-                'name': '用户',
-                'icon': 'fa fa-user',
-                'url': 'auth/user/'
-            }]
-        },
+    'menus':
+        [
+            {
+                'app': 'job',
+                'name': '料号',
+                'icon': 'fa-solid fa-list',
+                'models': [
+                    {
+                        'name': '料号管理',
+                        'icon': 'fa-solid fa-list',
+                        'url': '/admin/job/job/'
+                    },
+                    {
+                        'name': '研发测试料号',
+                        'icon': 'fa-solid fa-laptop-code',
+                        'url': '/admin/job/jobinfofordevtest/'
+                    }
+                ]
+            },
 
-    ]
+            {
+                'app': 'eptest',
+                'name': '测试',
+                'icon': 'fa-solid fa-microscope',
+                'models': [
+                    {
+                        'name': '料号管理',
+                        'icon': 'fa-solid fa-list',
+                        'url': '/admin/eptest/jobfortest/'
+                    },
+                    {
+                        'name': '层别管理',
+                        'icon': 'fa-thin fa-layer-group',
+                        'url': '/admin/eptest/layer/'
+                    },
+                    {
+                        'name': '模块管理',
+                        'icon': 'fa-light fa-landmark',
+                        'url': '/admin/eptest/epcammodule/'
+                    }
+                ]
+            },
+
+            {
+                'app': 'account',
+                'name': '用户信息',
+                'icon': 'fa-regular fa-user',
+                'models': [
+                    {
+                        'name': '用户信息',
+                        'icon': 'fa fa-user',
+                        'url': '/admin/account/profile/'
+                    },
+                    {
+                        'name': '客户管理',
+                        'icon': 'fa fa-user',
+                        'url': '/admin/account/customer/'
+                    },
+
+                ]
+            },
+
+
+
+            {
+                'app': 'auth',
+                'name': '权限认证',
+                'icon': 'fas fa-user-shield',
+                'models': [{
+                    'name': '用户',
+                    'icon': 'fa fa-user',
+                    'url': 'auth/user/'
+                }]
+            },
+
+        ]
 }
 
 
