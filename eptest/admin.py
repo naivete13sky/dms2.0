@@ -37,10 +37,16 @@ admin.site.register(EpcamModule, EpcamModuleAdmin)
 
 @admin.register(Layer)
 class LayerAdmin(admin.ModelAdmin):
-    list_display = ('job','layer','layer_org','vs_result_manual','vs_result_ep','vs_result_g','layer_file_type','layer_type','units','zeroes_omitted',
+    list_display = ('job_link','job','layer','layer_org','vs_result_manual','vs_result_ep','vs_result_g','layer_file_type','layer_type','units','zeroes_omitted',
                     'number_format_A','number_format_B','tool_units_ep','tool_units_g',)
 
+    list_filter = ('job','layer', 'layer_org', 'layer_file_type','layer_type',)
     search_fields = ('job','layer','layer_file_type','layer_type')
     prepopulated_fields = {'remark': ('layer',)}
     # ordering = ('recipe_status', 'receive_date',)
     list_per_page = 10
+
+
+    def job_link(self, obj):
+        return mark_safe(f'<a href="../../eptest/jobfortest/{obj.job_id}/change/">打开</a>')
+    job_link.short_description = '所属料号'
