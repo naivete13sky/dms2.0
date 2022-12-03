@@ -127,7 +127,11 @@ class TaggedWhateverForJobInfoForDevTest(GenericTaggedItemBase):
 
 class JobInfoForDevTest(models.Model):
     job = models.ForeignKey(to="job.Job", on_delete=models.CASCADE, null=True, blank=True,
-                            related_name='job_job_job_info_for_dev_test', verbose_name="料号名称")
+                            related_name='job_job_job_info_for_dev_test', verbose_name="父料号名称")
+
+    job_name = models.CharField(null=True, blank=True,max_length=20, validators=[validators.MinLengthValidator(limit_value=3)],
+                                help_text='料号名称,有可能有重复名字', verbose_name="料号名称")
+
     status = models.CharField(max_length=10, choices=(('draft', '草稿'), ('published', '正式')), default='draft',
                               help_text='草稿表示未经人工确认', verbose_name="状态")
 
