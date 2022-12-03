@@ -24,7 +24,7 @@ admin.site.site_title = '料号管理系统'
 class JobForTestAdmin(admin.ModelAdmin):
     list_display = ('job_parent_link','job_name','get_layer_info_link','file','file_type','test_usage_for_epcam_module','standard_odb','vs_result_ep','vs_result_g','bug_info','status','author','publish','create_time','tag_list','remark')
     list_filter = ('tags','file_type','author','test_usage_for_epcam_module',)
-    search_fields = ('job_parent','job_name','author__username','vs_result_ep','vs_result_g',)
+    search_fields = ('job_parent__job_name','job_name','author__username','vs_result_ep','vs_result_g',)
     prepopulated_fields = {'remark': ('job_name',)}
     raw_id_fields = ('author','job_parent',)
     # date_hierarchy = 'publish'
@@ -65,7 +65,7 @@ class LayerAdmin(admin.ModelAdmin):
 
     list_display_links = ('layer',)
     list_filter = ( 'layer_file_type','layer_type',)
-    search_fields = ('job','layer','layer_file_type','layer_type')
+    search_fields = ('job__job_name','layer',)
     prepopulated_fields = {'remark': ('layer',)}
     # ordering = ('recipe_status', 'receive_date',)
 
