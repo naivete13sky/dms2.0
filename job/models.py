@@ -134,8 +134,13 @@ class JobInfoForDevTest(models.Model):
     author = models.ForeignKey(User, on_delete=models.CASCADE, related_name='job_job_info_for_dev_test_user', null=True, blank=True,
                                help_text='负责人', verbose_name="负责人")
     # ------------------------------------------------整理好的料号信息-------------------------------------------
-    file_odb = models.FileField(upload_to='files', blank=True, null=True, help_text='整理好的ODB++资料,确认过是对的',
-                                verbose_name="整理好的ODB++资料")
+    file = models.FileField(upload_to='files', blank=True, null=True, help_text='整理好的资料,确认过是对的',
+                                verbose_name="整理好的资料")
+
+    file_type = models.CharField(max_length=10,
+                                 choices=(('odb', 'ODB'),('eps', 'EPS'),('pcb', 'PCB'), ('else', 'Else')), default='else',
+                                 help_text='料号文件类型', verbose_name="料号文件类型")
+
     has_step_multi = MultiSelectField(choices=(('orig', 'orig'), ('net', 'net'),('pre', 'pre'), ('pcs', 'pcs'),
                                                ('set', 'set'),('panel', 'panel')),
                                       blank=True,null=True, max_choices=20, max_length=200,verbose_name="包含step")

@@ -17,7 +17,7 @@ class JobAdmin(admin.ModelAdmin):
 
 @admin.register(JobInfoForDevTest)
 class JobInfoForDevTestAdmin(admin.ModelAdmin):
-    list_display = ('job','status','author','file_odb','has_step_multi','job_type_1','job_type_2','job_type_3','publish','updated','remark')
+    list_display = ('job','status','author','file','has_step_multi','job_type_1','job_type_2','job_type_3','publish','updated','remark')
 
     search_fields = ('job','status','author','has_step_multi',)
     list_filter = ('job', 'status', 'author',  'job_type_1', 'job_type_2', 'job_type_3')
