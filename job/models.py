@@ -238,9 +238,41 @@ class JobInfoForDevTest(models.Model):
 
     # ------------------------------------------------梅需要的其它字段-------------------------------------------
     usage=models.CharField(null=True,blank=True,max_length=200, validators=[validators.MinLengthValidator(limit_value=0)],help_text="料号用途",verbose_name='用途')
+
+    origStepName = models.CharField(null=True, blank=True, max_length=50,
+                                    validators=[validators.MinLengthValidator(limit_value=0)], help_text="原稿step名称",
+                                    verbose_name='orig_step')
+    prepareStepName = models.CharField(null=True, blank=True, max_length=50,
+                                       validators=[validators.MinLengthValidator(limit_value=0)],
+                                       help_text="前处理完成的step名称", verbose_name='pre_step')
+    pcsStepName = models.CharField(null=True, blank=True, max_length=50,
+                                   validators=[validators.MinLengthValidator(limit_value=0)],
+                                   help_text="已经完成pcs处理的step名", verbose_name='pcs_step')
+    setStepName = models.CharField(null=True, blank=True, max_length=50,
+                                   validators=[validators.MinLengthValidator(limit_value=0)], help_text="set拼板完成的step名",
+                                   verbose_name='set_step')
+    panelStepName = models.CharField(null=True, blank=True, max_length=50,
+                                     validators=[validators.MinLengthValidator(limit_value=0)],
+                                     help_text="panel拼板完成的step名", verbose_name='panel_step')
+
+
+
+
+
+
+
     impCouponStepName=models.CharField(null=True,blank=True,max_length=50, validators=[validators.MinLengthValidator(limit_value=0)],help_text="阻抗测试条的step名",verbose_name='阻抗step')
     routLayerName=models.CharField(null=True,blank=True,max_length=50, validators=[validators.MinLengthValidator(limit_value=0)],help_text="rout层的名字",verbose_name='Rout层')
     panelSize=models.FloatField(null=True,blank=True,help_text='panel的profile线外接正矩形的对角线长度(单位:inch)',verbose_name='panel对角线尺寸')
+
+
+
+
+
+
+
+
+
 
 
 
