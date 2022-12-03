@@ -64,7 +64,7 @@ class LayerAdmin(admin.ModelAdmin):
                     'number_format_A','number_format_B','tool_units_ep','tool_units_g',)
 
     list_display_links = ('layer',)
-    list_filter = ('job','layer', 'layer_org', 'layer_file_type','layer_type',)
+    list_filter = ( 'layer_file_type','layer_type',)
     search_fields = ('job','layer','layer_file_type','layer_type')
     prepopulated_fields = {'remark': ('layer',)}
     # ordering = ('recipe_status', 'receive_date',)
