@@ -22,9 +22,9 @@ admin.site.site_title = '料号管理系统'
 
 @admin.register(JobForTest)
 class JobForTestAdmin(admin.ModelAdmin):
-    list_display = ('job_parent_link','job_name','get_layer_info_link','file','file_type','test_usage_for_epcam_module','standard_odb','vs_result_ep','vs_result_g','bug_info','status','author','publish','create_time','tag_list','remark')
+    list_display = ('id','job_parent_link','job_name','get_layer_info_link','file','file_type','test_usage_for_epcam_module','standard_odb','vs_result_ep','vs_result_g','bug_info','status','author','publish','create_time','tag_list','remark')
     list_filter = ('tags','file_type','author','test_usage_for_epcam_module',)
-    search_fields = ('job_parent__job_name','job_name','author__username','vs_result_ep','vs_result_g',)
+    search_fields = ('id','job_parent__job_name','job_name','author__username','vs_result_ep','vs_result_g',)
     prepopulated_fields = {'remark': ('job_name',)}
     raw_id_fields = ('author','job_parent',)
     # date_hierarchy = 'publish'
@@ -60,12 +60,12 @@ admin.site.register(EpcamModule, EpcamModuleAdmin)
 
 @admin.register(Layer)
 class LayerAdmin(admin.ModelAdmin):
-    list_display = ('job_link','job','layer','layer_org','vs_result_manual','vs_result_ep','vs_result_g','layer_file_type','layer_type','units','zeroes_omitted',
+    list_display = ('id','job_link','job','layer','layer_org','vs_result_manual','vs_result_ep','vs_result_g','layer_file_type','layer_type','units','zeroes_omitted',
                     'number_format_A','number_format_B','tool_units_ep','tool_units_g',)
 
     list_display_links = ('layer',)
     list_filter = ( 'layer_file_type','layer_type',)
-    search_fields = ('job__job_name','layer',)
+    search_fields = ('id','job__job_name','layer',)
     prepopulated_fields = {'remark': ('layer',)}
     # ordering = ('recipe_status', 'receive_date',)
 
