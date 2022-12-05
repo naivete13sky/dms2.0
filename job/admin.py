@@ -19,7 +19,7 @@ class JobAdmin(admin.ModelAdmin):
 class JobInfoForDevTestAdmin(admin.ModelAdmin):
     list_display = ('id','job','status','author','file','has_step_multi','job_type_1','job_type_2','job_type_3','publish','updated','remark')
 
-    search_fields = ('id','job','status','author','has_step_multi',)
+    search_fields = ('id','job__job_name','status','author','has_step_multi',)
     list_filter = ( 'status', 'author',  'job_type_1', 'job_type_2', 'job_type_3')
     prepopulated_fields = {'remark': ('job',)}
     raw_id_fields = ('author','job')
