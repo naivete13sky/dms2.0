@@ -27,7 +27,7 @@ urlpatterns = [
 
     path('send_vs_g_local_result', views.send_vs_g_local_result,name='send_vs_g_local_result'),#开发时测试用的。
 
-
+    path('view_vs_g/<int:job_id>/', views.view_vs_g,name='view_vs_g'),#查看G比图的列表
 
 ]
 

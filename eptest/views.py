@@ -562,3 +562,32 @@ def send_vs_g_local_result(request):
         return HttpResponse("提交完成！！！")
 
     return render(request,"send_vs_g_local_result.html")
+
+
+def view_vs_g(request,job_id):
+    pass
+    #找到job对象
+    job=JobForTest.objects.get(id=job_id)
+    print(job.job_name,job.file)
+    vs = Vs.objects.filter(job=job,vs_time_g=job.vs_time_g)
+
+    field_verbose_name = [Vs._meta.get_field('job').verbose_name,
+                          Vs._meta.get_field('layer').verbose_name,
+                          Vs._meta.get_field('layer_org').verbose_name,
+                          Vs._meta.get_field('vs_result').verbose_name,
+                          Vs._meta.get_field('vs_result_detail').verbose_name,
+                          Vs._meta.get_field('vs_method').verbose_name,
+                          Vs._meta.get_field('layer_file_type').verbose_name,
+                          Vs._meta.get_field('layer_type').verbose_name,
+                          Vs._meta.get_field('features_count').verbose_name,
+                          Vs._meta.get_field('status').verbose_name,
+                          Vs._meta.get_field('vs_time_ep').verbose_name,
+                          Vs._meta.get_field('vs_time_g').verbose_name,
+                          Vs._meta.get_field('create_time').verbose_name,
+                          Vs._meta.get_field('updated').verbose_name,
+                          "标签",
+                          "操作",
+                          ]
+
+    # return redirect('job_manage:LayerListView')
+    return render(request, 'VsListViewOneJob.html', {'field_verbose_name': field_verbose_name, 'vs': vs,'job':job})
