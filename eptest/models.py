@@ -201,3 +201,45 @@ class Layer(models.Model):
     def __str__(self):
         # Return a string that represents the instance
         return self.layer
+
+
+
+class Bug(models.Model):
+    job = models.ForeignKey(to="eptest.JobForTest", on_delete=models.CASCADE,null=True,blank=True, related_name='eptest_job_for_test_bug',verbose_name="料号名称")
+    bug=models.CharField(max_length=200, validators=[validators.MinLengthValidator(limit_value=1)],null=True,blank=True,
+                            verbose_name="Bug名称")
+    bug_zentao_id=models.CharField(max_length=10, validators=[validators.MinLengthValidator(limit_value=1)],
+                            verbose_name="禅道ID")
+    bug_zentao_pri = models.CharField(max_length=10, choices=(('1', '1'), ('2', '2'), ('3', '3'), ('4', '4'), ('none', 'none')),
+                                    default='none', null=True, blank=True, verbose_name="优先级")
+    bug_zentao_status = models.CharField(max_length=10, choices=(('active', '激活'), ('closed', '已关闭'), ('resloved', '已解决'), ('none', 'none')),
+                                      default='none', null=True, blank=True, verbose_name="禅道状态")
+    bug_creator = models.CharField(max_length=100, validators=[validators.MinLengthValidator(limit_value=1)],null=True,blank=True,
+                           verbose_name="创建者")
+    bug_create_date = models.DateTimeField(null=True,blank=True,verbose_name='禅道创建时间')
+    bug_assigned_to = models.CharField(max_length=100, validators=[validators.MinLengthValidator(limit_value=1)],null=True,blank=True,
+                                   verbose_name="指派给")
+
+    author = models.ForeignKey(User, on_delete=models.CASCADE, related_name='eptest_job_for_test_bug_user', null=True, blank=True,
+                               verbose_name="负责人")
+    status = models.CharField(max_length=10, choices=(('draft', '草稿'), ('published', '正式')), default='draft',null=True,blank=True,verbose_name="发布状态")
+    refresh_time = models.CharField(max_length=10, validators=[validators.MinLengthValidator(limit_value=0)],
+                               null=True, blank=True, verbose_name="刷新时间戳")
+    remark = models.CharField(max_length=100, validators=[validators.MinLengthValidator(limit_value=0)],
+                              verbose_name="备注", blank=True, null=True)
+    create_time = models.DateTimeField(auto_now_add=True, verbose_name='创建时间')
+    updated = models.DateTimeField(auto_now=True, verbose_name='更新时间')
+
+
+    class Meta:
+        db_table = 'eptest_bug'
+        ordering = ('-create_time',)
+
+    # def get_absolute_url(self):
+    #     return reverse('job_manage:BugFormView', args=[self.id, ])
+
+    def __str__(self):
+        # Return a string that represents the instance
+        return self.bug_zentao_id
+
+

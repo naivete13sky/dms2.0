@@ -274,6 +274,11 @@ SIMPLEUI_CONFIG = {
                         'url': '/admin/eptest/layer/'
                     },
                     {
+                        'name': 'Bug管理',
+                        'icon': 'fa-solid fa-bug',
+                        'url': '/admin/eptest/bug/'
+                    },
+                    {
                         'name': '模块管理',
                         'icon': 'fa-light fa-landmark',
                         'url': '/admin/eptest/epcammodule/'

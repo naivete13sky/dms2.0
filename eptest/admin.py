@@ -8,7 +8,7 @@ from django.contrib import admin
 from django.http import HttpResponse
 
 from cc.cc_method import CCMethod
-from .models import JobForTest,EpcamModule,Layer
+from .models import JobForTest,EpcamModule,Layer,Bug
 from mptt.admin import MPTTModelAdmin
 from django.utils.safestring import mark_safe
 
@@ -75,3 +75,15 @@ class LayerAdmin(admin.ModelAdmin):
     def job_link(self, obj):
         return mark_safe(f'<a href="../../eptest/jobfortest/{obj.job_id}/change/">打开</a>')
     job_link.short_description = '所属料号'
+
+
+
+@admin.register(Bug)
+class BugAdmin(admin.ModelAdmin):
+    list_display = ('job','bug','bug_zentao_id','bug_zentao_pri','bug_zentao_status','bug_creator','bug_create_date','bug_assigned_to',
+                    'author','status','refresh_time','remark','create_time','updated',)
+
+    search_fields = ('job','bug','bug_zentao_pri','status')
+    prepopulated_fields = {'remark': ('bug',)}
+    # ordering = ('recipe_status', 'receive_date',)
+    list_per_page = 10
