@@ -243,3 +243,50 @@ class Bug(models.Model):
         return self.bug_zentao_id
 
 
+class Vs(models.Model):
+    job = models.ForeignKey(to="eptest.JobForTest", on_delete=models.CASCADE,null=True,blank=True, related_name='eptest_job_for_test_vs',verbose_name="料号名称")
+
+    layer=models.CharField(max_length=100, validators=[validators.MinLengthValidator(limit_value=1)],
+                            verbose_name="层名称")
+    layer_org=models.CharField(max_length=100, validators=[validators.MinLengthValidator(limit_value=1)],null=True,blank=True,
+                            verbose_name="原始层名称")
+    vs_result=models.CharField(max_length=10, choices=(('passed', '通过'), ('failed', '失败'), ('none', '未比对')), default='none',null=True,blank=True,verbose_name="比对结果")
+    vs_result_detail=models.CharField(max_length=1000000, validators=[validators.MinLengthValidator(limit_value=0)],
+                            null=True,blank=True,verbose_name="比对详细信息")
+
+    vs_method = models.CharField(max_length=10, choices=(('ep', '悦谱'), ('g', 'G软件'), ('none', 'none')),
+                                    default='none', null=True, blank=True, verbose_name="比对方法")
+    layer_file_type=models.CharField(max_length=100, choices=(('gerber274X', 'Gerber274-X'), ('gerber274D', 'Gerber274-D'), ('excellon2', 'Excellon2'),
+                                                         ('excellon1', 'Excellon1'),('dxf', 'DXF'),
+                                                             ('else', '其它')), default='else',verbose_name="层文件类型")
+
+    layer_type = models.CharField(max_length=100, choices=(('signal_outter', '外层'),  ('signal_inner', '内层'),('solder', '防焊'),('silk', '丝印'),('paste', '锡膏'),
+    ('drill', '孔层'), ('rout', 'Rout'), ('slot', '槽孔'), ('else', '其它')), default='else', verbose_name="层类型")
+    features_count=models.IntegerField(default=0,null=True,blank=True,
+                                     validators=[validators.MaxValueValidator(100000000), validators.MinValueValidator(0)],verbose_name="物件数")
+
+
+
+    author = models.ForeignKey(User, on_delete=models.CASCADE, related_name='eptest_job_for_test_vs_user', null=True, blank=True,
+                               verbose_name="负责人")
+    STATUS_CHOICES = (('draft', '草稿'), ('published', '正式'))
+    status = models.CharField(max_length=10, choices=STATUS_CHOICES, default='draft')
+    vs_time_ep=models.CharField(max_length=10, validators=[validators.MinLengthValidator(limit_value=0)],
+                            null=True, blank=True,verbose_name="悦谱比对时间戳")
+    vs_time_g = models.CharField(max_length=10, validators=[validators.MinLengthValidator(limit_value=0)],
+                                  null=True, blank=True, verbose_name="G比对时间戳")
+
+    remark = models.CharField(max_length=100, validators=[validators.MinLengthValidator(limit_value=0)],
+                              verbose_name="备注", blank=True, null=True)
+    create_time = models.DateTimeField(auto_now_add=True, verbose_name='创建时间')
+    updated = models.DateTimeField(auto_now=True, verbose_name='更新时间')
+    class Meta:
+        db_table = 'vs'
+        ordering = ('-create_time',)
+    # def get_absolute_url(self):
+    #     return reverse('job_manage:JobFormView', args=[self.id, ])
+    def __str__(self):
+        # Return a string that represents the instance
+        return self.layer
+
+

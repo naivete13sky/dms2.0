@@ -8,7 +8,7 @@ from django.contrib import admin
 from django.http import HttpResponse
 
 from cc.cc_method import CCMethod
-from .models import JobForTest,EpcamModule,Layer,Bug
+from .models import JobForTest,EpcamModule,Layer,Bug,Vs
 from mptt.admin import MPTTModelAdmin
 from django.utils.safestring import mark_safe
 
@@ -85,5 +85,15 @@ class BugAdmin(admin.ModelAdmin):
 
     search_fields = ('job','bug','bug_zentao_pri','status')
     prepopulated_fields = {'remark': ('bug',)}
+    # ordering = ('recipe_status', 'receive_date',)
+    list_per_page = 10
+
+
+@admin.register(Vs)
+class VsAdmin(admin.ModelAdmin):
+    list_display = ('job','layer','layer_org','vs_result','vs_result_detail','vs_method','layer_file_type','layer_type',)
+
+    search_fields = ('job','layer','layer_file_type','layer_type')
+    prepopulated_fields = {'remark': ('layer',)}
     # ordering = ('recipe_status', 'receive_date',)
     list_per_page = 10

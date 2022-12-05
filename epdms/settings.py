@@ -274,6 +274,11 @@ SIMPLEUI_CONFIG = {
                         'url': '/admin/eptest/layer/'
                     },
                     {
+                        'name': 'VS管理',
+                        'icon': 'fa-solid fa-code-compare',
+                        'url': '/admin/eptest/vs/'
+                    },
+                    {
                         'name': 'Bug管理',
                         'icon': 'fa-solid fa-bug',
                         'url': '/admin/eptest/bug/'
