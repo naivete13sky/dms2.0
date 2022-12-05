@@ -23,8 +23,9 @@ urlpatterns = [
 
     # 根据整理过的gerber压缩包，生成层别信息。
     path('get_layer_name_from_org/<int:job_id>/', views.get_layer_name_from_org, name='get_layer_name_from_org'),
-    # 打开生成层别名称的入口开关。之前有过这样，对于已有层别信息的料，隐藏生成层别信息的的入口，防止新生成的把原来的老信息都边覆盖了。
-    # path('get_file_name_from_org_on/<int:job_id>/', views.get_file_name_from_org_on, name='get_file_name_from_org_on'),
+
+
+    path('send_vs_g_local_result', views.send_vs_g_local_result,name='send_vs_g_local_result'),#开发时测试用的。
 
 
 

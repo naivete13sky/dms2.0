@@ -1,9 +1,12 @@
+import json
 import os
 import shutil
 import time
 import rarfile
 from django.conf import settings
 from django.shortcuts import render, redirect
+from django.views.decorators.csrf import csrf_exempt
+
 from .models import EpcamModule
 from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
 from django.db.models import Q
@@ -13,7 +16,7 @@ from django.urls import reverse_lazy
 from django.utils import timezone
 from django.views.generic import ListView, DetailView, UpdateView, CreateView, DeleteView
 from .forms import JobForTestFormsReadOnly,JobForTestForm
-from .models import JobForTest,MyTagForEptest,Layer
+from .models import JobForTest,MyTagForEptest,Layer,Vs
 from account.models import QueryData, Customer
 from job.models import Job
 from cc.cc_method import CCMethod
@@ -475,3 +478,87 @@ def get_layer_name_from_org(request,job_id):
     # return redirect('../../../../../admin/#/admin/eptest/jobfortest/')
     # return HttpResponse("已完成！请F5刷新页面！")
     return render(request,r'get_layer_info.html')
+
+
+
+@csrf_exempt
+def send_vs_g_local_result(request):
+    if request.method == 'POST':
+        print("post")
+        # print(request.body)
+        print(request.POST)
+        body=json.loads(request.body)
+        print(body,type(body))
+        body_dict=json.loads(body)
+        print(body_dict,type(body_dict))
+        job_id = body_dict["job_id"]
+        job = JobForTest.objects.get(id=job_id)
+        print(job)
+        vs_time_g=body_dict["vs_time_g"]
+        g_vs_total_result_flag=True
+
+        if len(body_dict["all_result_g"]) == 0:
+            g_vs_total_result_flag = False
+
+
+        # 原始层文件信息，最全的
+        all_layer_from_org = Layer.objects.filter(job=job)
+        for item in body_dict["all_result_g"].items():
+            print(item[0],item[1])
+            for each in all_layer_from_org:
+                # print("layer:",layer,"str(each.layer_org).lower():",str(each.layer_org).lower().replace(" ","-").replace("(","-").replace(")","-"))
+                if item[0] == str(each.layer_org).lower().replace(" ", "-").replace("(", "-").replace(")", "-"):
+                    print("I find it!!!!!!!!!!!!!!")
+                    new_vs = Vs()
+                    new_vs.job = job
+                    new_vs.layer = each.layer
+                    new_vs.layer_org = each.layer_org
+                    new_vs.vs_result_detail = str(item[1])
+                    new_vs.vs_method = 'g'
+                    new_vs.layer_file_type = each.layer_file_type
+                    new_vs.layer_type = each.layer_type
+                    new_vs.vs_time_g = vs_time_g
+                    try:
+                        if item[1] == '正常':
+                            each.vs_result_g = 'passed'
+                            new_vs.vs_result = 'passed'
+                        elif item[1] == '错误':
+                            each.vs_result_g = 'failed'
+                            new_vs.vs_result = 'failed'
+                            g_vs_total_result_flag = False
+                        elif item[1] == '未比对':
+                            each.vs_result_g = 'none'
+                            new_vs.vs_result = 'none'
+                            g_vs_total_result_flag = False
+                        else:
+                            each.vs_result_g = 'failed'
+                            new_vs.vs_result = 'failed'
+                            g_vs_total_result_flag = False
+                            print("异常，状态异常！！！")
+
+                    except:
+                        pass
+                        print("异常！")
+                    each.vs_time_g = vs_time_g
+                    # print("each:",each)
+                    each.save()
+                    # print("new_vs:",new_vs)
+                    new_vs.save()
+
+        if g_vs_total_result_flag == True:
+            pass
+            job.vs_result_g = 'passed'
+        if g_vs_total_result_flag == False:
+            pass
+            job.vs_result_g = 'failed'
+        job.vs_time_g = vs_time_g
+        job.save()
+
+        temp_path=r"C:\cc\share\temp"
+        # 删除temp_path
+        if os.path.exists(temp_path):
+            shutil.rmtree(temp_path)
+
+        return HttpResponse("提交完成！！！")
+
+    return render(request,"send_vs_g_local_result.html")
