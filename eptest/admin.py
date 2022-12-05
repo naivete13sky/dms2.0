@@ -22,7 +22,7 @@ admin.site.site_title = '料号管理系统'
 
 @admin.register(JobForTest)
 class JobForTestAdmin(admin.ModelAdmin):
-    list_display = ('id','job_parent_link','job_name','get_layer_info_link','file','file_type','test_usage_for_epcam_module','standard_odb','vs_result_ep','vs_result_g','bug_info','status','author','publish','create_time','tag_list','remark')
+    list_display = ('id','job_parent_link','job_name','get_layer_info_link','file','file_type','test_usage_for_epcam_module','standard_odb','vs_result_ep','get_vs_info_g_link','bug_info','status','author','publish','create_time','tag_list','remark')
     list_filter = ('tags','file_type','author','test_usage_for_epcam_module',)
     search_fields = ('id','job_parent__job_name','job_name','author__username','vs_result_ep','vs_result_g',)
     prepopulated_fields = {'remark': ('job_name',)}
@@ -38,6 +38,7 @@ class JobForTestAdmin(admin.ModelAdmin):
     def tag_list(self, obj):
         return ",".join(o.name for o in obj.tags.all())
 
+
     def job_parent_link(self, obj):
         return mark_safe(f'<a href="../../job/job/{obj.job_parent_id}/change/">{obj.job_parent} </a>')
     job_parent_link.short_description = '父料号'
@@ -46,6 +47,15 @@ class JobForTestAdmin(admin.ModelAdmin):
         return mark_safe(f'<a href="../../../../eptest/get_layer_name_from_org/{obj.id}/">生成</a>')
     get_layer_info_link.short_description = '生成层别'
 
+
+    def get_vs_info_g_link(self, obj):
+        if obj.vs_result_g == 'passed':
+            return mark_safe(f'<a href="../../../../eptest/view_vs_g/{obj.id}/">通过</a>')
+        elif obj.vs_result_g == 'failed':
+            return mark_safe(f'<a href="../../../../eptest/view_vs_g/{obj.id}/">失败</a>')
+        else:
+            return mark_safe(f'<a href="../../../../eptest/view_vs_g/{obj.id}/">未比对</a>')
+    get_vs_info_g_link.short_description = 'G软件VS详情'
 
 
 class EpcamModuleAdmin(MPTTModelAdmin):
