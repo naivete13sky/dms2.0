@@ -46,7 +46,7 @@ class JobForTestAdmin(admin.ModelAdmin):
 
     def get_layer_info_link(self, obj):
         if obj.bool_layer_info == 'true':
-            return mark_safe(f'<a href="../../../../eptest/layer/?q=one_job_layer/{obj.id}/">查看</a>')
+            return mark_safe(f'<a href="../../../../admin/eptest/layer/?q=one_job_layer/{obj.id}/">查看</a>')
         else:
             return mark_safe(f'<a href="../../../../eptest/get_layer_name_from_org/{obj.id}/">生成</a>')
     get_layer_info_link.short_description = '层别'
