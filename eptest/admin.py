@@ -36,7 +36,6 @@ class JobForTestAdmin(admin.ModelAdmin):
 
     def get_queryset(self, request):
         return super().get_queryset(request).prefetch_related('tags')
-
     def tag_list(self, obj):
         return ",".join(o.name for o in obj.tags.all())
 
@@ -46,8 +45,11 @@ class JobForTestAdmin(admin.ModelAdmin):
     job_parent_link.short_description = '父料号'
 
     def get_layer_info_link(self, obj):
-        return mark_safe(f'<a href="../../../../eptest/get_layer_name_from_org/{obj.id}/">生成</a>')
-    get_layer_info_link.short_description = '生成层别'
+        if obj.bool_layer_info == 'true':
+            pass
+        else:
+            return mark_safe(f'<a href="../../../../eptest/get_layer_name_from_org/{obj.id}/">生成</a>')
+    get_layer_info_link.short_description = '层别'
 
 
     def get_vs_info_g_link(self, obj):
@@ -76,6 +78,8 @@ class JobForTestAdmin(admin.ModelAdmin):
         if obj.standard_odb:
             return mark_safe(f'<a href="../../../../media/{obj.standard_odb}/" title=" {obj.standard_odb} ">下载</a>')
     get_standard_odb_link.short_description = '标准料号'
+
+
 
 
 class EpcamModuleAdmin(MPTTModelAdmin):
