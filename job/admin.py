@@ -14,6 +14,15 @@ class JobAdmin(admin.ModelAdmin):
     # ordering = ('recipe_status', 'receive_date',)
     list_per_page = 10
 
+    exclude = ('author','publish')
+
+    '''保存时自动设置author为当前登录用户'''
+    def save_model(self, request, obj, form, change):
+        # If creating new article, associate request.user with author.
+        if not change:
+            obj.author = request.user
+        super().save_model(request, obj, form, change)
+
 
 @admin.register(JobInfoForDevTest)
 class JobInfoForDevTestAdmin(admin.ModelAdmin):
@@ -26,3 +35,11 @@ class JobInfoForDevTestAdmin(admin.ModelAdmin):
     date_hierarchy = 'publish'
     # ordering = ('recipe_status', 'receive_date',)
     list_per_page = 10
+    exclude = ('author', 'publish')
+
+    '''保存时自动设置author为当前登录用户'''
+    def save_model(self, request, obj, form, change):
+        # If creating new article, associate request.user with author.
+        if not change:
+            obj.author = request.user
+        super().save_model(request, obj, form, change)

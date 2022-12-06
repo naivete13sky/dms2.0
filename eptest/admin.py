@@ -32,6 +32,8 @@ class JobForTestAdmin(admin.ModelAdmin):
     list_per_page = 10
     list_display_links = ('job_name',)
 
+    exclude = ('author', 'publish')
+
     def get_queryset(self, request):
         return super().get_queryset(request).prefetch_related('tags')
 
@@ -56,6 +58,15 @@ class JobForTestAdmin(admin.ModelAdmin):
         else:
             return mark_safe(f'<a href="../../../../eptest/view_vs_g/{obj.id}/">未比对</a>')
     get_vs_info_g_link.short_description = 'G软件VS详情'
+
+    '''保存时自动设置author为当前登录用户'''
+    def save_model(self, request, obj, form, change):
+        # If creating new article, associate request.user with author.
+        if not change:
+            obj.author = request.user
+        super().save_model(request, obj, form, change)
+
+
 
 
 class EpcamModuleAdmin(MPTTModelAdmin):
