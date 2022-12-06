@@ -4,7 +4,7 @@ from .models import Job,JobInfoForDevTest
 
 @admin.register(Job)
 class JobAdmin(admin.ModelAdmin):
-    list_display = ('id','job_name','file_compressed','has_file_type','status','author','from_object_pcb_factory','from_object_pcb_design','publish','create_time','tags')
+    list_display = ('id','job_name','file_compressed','has_file_type','status','author','from_object_pcb_factory','from_object_pcb_design','publish','create_time','tag_list')
 
     search_fields = ('id','job_name',)
     list_filter = ('has_file_type', 'status', 'author__username','from_object_pcb_factory','from_object_pcb_design','tags')
@@ -15,6 +15,12 @@ class JobAdmin(admin.ModelAdmin):
     list_per_page = 10
 
     exclude = ('author','publish')
+
+    def get_queryset(self, request):
+        return super().get_queryset(request).prefetch_related('tags')
+
+    def tag_list(self, obj):
+        return ",".join(o.name for o in obj.tags.all())
 
     '''保存时自动设置author为当前登录用户'''
     def save_model(self, request, obj, form, change):
@@ -36,6 +42,10 @@ class JobInfoForDevTestAdmin(admin.ModelAdmin):
     # ordering = ('recipe_status', 'receive_date',)
     list_per_page = 10
     exclude = ('author', 'publish')
+
+
+
+
 
     '''保存时自动设置author为当前登录用户'''
     def save_model(self, request, obj, form, change):
