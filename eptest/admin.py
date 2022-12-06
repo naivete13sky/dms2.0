@@ -22,7 +22,7 @@ admin.site.site_title = '料号管理系统'
 
 @admin.register(JobForTest)
 class JobForTestAdmin(admin.ModelAdmin):
-    list_display = ('id','job_parent_link','job_name','get_layer_info_link','file','file_type','test_usage_for_epcam_module','standard_odb','vs_result_ep','get_vs_info_g_link','bug_info','status','author','publish','create_time','tag_list','remark')
+    list_display = ('id','job_parent_link','job_name','get_layer_info_link','get_test_file_link','file_type','test_usage_for_epcam_module','get_standard_odb_link','vs_result_ep','get_vs_info_g_link','bug_info','status','author','updated','tag_list','remark')
     list_filter = ('tags','file_type','author','test_usage_for_epcam_module',)
     search_fields = ('id','job_parent__job_name','job_name','author__username','vs_result_ep','vs_result_g',)
     prepopulated_fields = {'remark': ('job_name',)}
@@ -59,6 +59,7 @@ class JobForTestAdmin(admin.ModelAdmin):
             return mark_safe(f'<a href="../../../../eptest/view_vs_g/{obj.id}/">未比对</a>')
     get_vs_info_g_link.short_description = 'G软件VS详情'
 
+
     '''保存时自动设置author为当前登录用户'''
     def save_model(self, request, obj, form, change):
         # If creating new article, associate request.user with author.
@@ -66,7 +67,15 @@ class JobForTestAdmin(admin.ModelAdmin):
             obj.author = request.user
         super().save_model(request, obj, form, change)
 
+    def get_test_file_link(self, obj):
+        if obj.file:
+            return mark_safe(f'<a href="../../../../media/{obj.file}/" title=" {obj.file} ">下载</a>')
+    get_test_file_link.short_description = '测试料号'
 
+    def get_standard_odb_link(self, obj):
+        if obj.standard_odb:
+            return mark_safe(f'<a href="../../../../media/{obj.standard_odb}/" title=" {obj.standard_odb} ">下载</a>')
+    get_standard_odb_link.short_description = '标准料号'
 
 
 class EpcamModuleAdmin(MPTTModelAdmin):
