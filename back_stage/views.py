@@ -126,6 +126,8 @@ class DashBoardView(TemplateView):
 
         #Nightingale Chart
         print("context['statics_author_list']:",context['statics_author_list'])
+        #转成json。js才能调用，我也没搞清楚原因。
+        context['statics_author_list_json'] = json.dumps(context['statics_author_list'])
 
 
         return context

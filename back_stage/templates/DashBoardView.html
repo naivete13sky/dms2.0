@@ -318,8 +318,13 @@
                                     </div>
                                 </div>
                             </div>
+
+
+
+
                             <div class="col-sm-6">
                                 <h4 class="section-subtitle"><b>负责人-料号数</b> 南丁格尔玫瑰图</h4>
+
                                 <div class="panel">
                                     <div class="panel-content">
                                         <div id="donut-example">
@@ -328,7 +333,13 @@
                                                 <script type="text/javascript">
 
                                                 var x_list_dui_ji = {{ statics_job_by_day_x_dui_ji|safe }};
-                                                var statics_author_list= {{ statics_author_list|safe }};
+                                                var statics_author_list = {{ statics_author_list_json|safe }};
+
+                                                {#alert("abcd2");#}
+                                                {#alert(statics_author_list);#}
+
+                                                {#var statics_author_list= {{ statics_author_list|safe }};#}
+                                                {#alert("abc");#}
                                                 {#alert(statics_author_list);#}
 
                                                 var statics_author_list_js=[];
@@ -434,6 +445,8 @@
                                     </div>
                                 </div>
                             </div>
+
+
 
 
 
