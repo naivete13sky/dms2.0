@@ -222,7 +222,8 @@ SIMPLEUI_DEFAULT_THEME = 'admin.lte.css'
 
 
 # 修改默认首页
-SIMPLEUI_HOME_PAGE = 'http://127.0.0.1:8000/back_stage/'
+# SIMPLEUI_HOME_PAGE = 'http://127.0.0.1:8000/back_stage/'
+SIMPLEUI_HOME_PAGE = '../back_stage/'
 SIMPLEUI_HOME_TITLE = '看板'
 SIMPLEUI_HOME_ICON = 'fa-solid fa-gauge'
 
