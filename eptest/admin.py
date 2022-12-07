@@ -31,8 +31,8 @@ class JobForTestAdmin(admin.ModelAdmin):
     # ordering = ('recipe_status', 'receive_date',)
     list_per_page = 10
     list_display_links = ('job_name',)
-
-    exclude = ('author', 'publish')
+    # exclude = ('author', 'publish')
+    exclude = ('publish',)
 
     def get_queryset(self, request):
         return super().get_queryset(request).prefetch_related('tags')
