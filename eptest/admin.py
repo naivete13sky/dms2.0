@@ -60,8 +60,7 @@ class JobForTestAdmin(admin.ModelAdmin):
 
                         '''
             return mark_safe(f'<a href="../../../../admin/eptest/layer/?q=one_job_layer/{obj.id}/">查看</a>'
-                             r'''<button class="btn btn-transparent" title="点击重新生成" value=%s onclick="confirm_do(this.value);"><i class="fa fa-user-o"></i>
-                                    </button>
+                             r'''<button type='submit' title="点击重新生成" value=%s onclick="confirm_do(this.value);">生成</button>
                                 <script>
                                     function confirm_do(value){                
                                        var clickresult = false;                
