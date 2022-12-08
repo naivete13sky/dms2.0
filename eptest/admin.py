@@ -60,13 +60,14 @@ class JobForTestAdmin(admin.ModelAdmin):
 
                         '''
             return mark_safe(f'<a href="../../../../admin/eptest/layer/?q=one_job_layer/{obj.id}/">查看</a>'
-                             r'''<input type="reset" value="重新生成" onclick="return confirmReset()" class="buttonstyle"/>
+                             r'''<button class="btn btn-transparent" title="点击重新生成" value=%s onclick="confirm_do(this.value);"><i class="fa fa-user-o"></i>
+                                    </button>
                                 <script>
-                                    function confirmReset(){                
+                                    function confirm_do(value){                
                                        var clickresult = false;                
                                        clickresult = window.confirm("操作后所有信息都将被清空再生成。\n你确认操作吗？");
-                                       if (clickresult === true){                            
-                                            window.open("../../../../admin/eptest/layer/?q=one_job_layer/%s/");                                         
+                                       if (clickresult === true){                                            
+                                            window.location.href="../../../../eptest/get_layer_name_from_org/" + value + '/';                                       
                                        };                               
                                        return clickresult; 
                                     }                
