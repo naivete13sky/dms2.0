@@ -24,7 +24,7 @@ admin.site.site_title = '料号管理系统'
 class JobForTestAdmin(admin.ModelAdmin):
     list_display = ('id','job_parent_link','job_name','get_layer_info_link','get_test_file_link','file_type','test_usage_for_epcam_module','get_standard_odb_link','vs_result_ep','get_vs_info_g_link','bug_info','status','author','updated','tag_list','remark')
     list_filter = ('tags','file_type','author','test_usage_for_epcam_module',)
-    search_fields = ('id','job_parent__job_name','job_name','author__username','vs_result_ep','vs_result_g',)
+    search_fields = ('id','job_name','author__username','vs_result_ep','vs_result_g',)
     prepopulated_fields = {'remark': ('job_name',)}
     raw_id_fields = ('author','job_parent',)
     # date_hierarchy = 'publish'
@@ -34,6 +34,7 @@ class JobForTestAdmin(admin.ModelAdmin):
     # exclude = ('author', 'publish')
     exclude = ('publish',)
 
+    # <-------------------------------------处理tag,使得admin中可以显示正常的tag------------------------------------------->
     def get_queryset(self, request):
         return super().get_queryset(request).prefetch_related('tags')
     def tag_list(self, obj):
