@@ -34,17 +34,19 @@ class JobForTestAdmin(admin.ModelAdmin):
     # exclude = ('author', 'publish')
     exclude = ('publish',)
 
-    # <-------------------------------------处理tag,使得admin中可以显示正常的tag------------------------------------------->
+    # <-------------------------------------处理tag,使得admin中可以显示正常的tag--------------------------------------->
     def get_queryset(self, request):
         return super().get_queryset(request).prefetch_related('tags')
     def tag_list(self, obj):
         return ",".join(o.name for o in obj.tags.all())
 
 
+    # <-------------------------------------返回父料号--------------------------------------->
     def job_parent_link(self, obj):
         return mark_safe(f'<a href="../../job/job/{obj.job_parent_id}/change/">{obj.job_parent} </a>')
     job_parent_link.short_description = '父料号'
 
+    # <-------------------------------------层别信息--------------------------------------->
     def get_layer_info_link(self, obj):
         if obj.bool_layer_info == 'true':
             return mark_safe(f'<a href="../../../../admin/eptest/layer/?q=one_job_layer/{obj.id}/">查看</a>')
