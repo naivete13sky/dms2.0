@@ -50,7 +50,29 @@ class JobForTestAdmin(admin.ModelAdmin):
     # <-------------------------------------层别信息--------------------------------------->
     def get_layer_info_link(self, obj):
         if obj.bool_layer_info == 'true':
-            return mark_safe(f'<a href="../../../../admin/eptest/layer/?q=one_job_layer/{obj.id}/">查看</a>')
+            string_mark_safe = f'''<a href="../../../../admin/eptest/layer/?q=one_job_layer/{obj.id}/">查看</a>
+                        <input type="reset" value="重新生成" onclick="return confirmReset()" class="buttonstyle"/>
+                        <script>
+                            function confirmReset()
+
+                        </script>
+
+
+                        '''
+            return mark_safe(f'<a href="../../../../admin/eptest/layer/?q=one_job_layer/{obj.id}/">查看</a>'
+                             r'''<input type="reset" value="重新生成" onclick="return confirmReset()" class="buttonstyle"/>
+                                <script>
+                                    function confirmReset(){                
+                                       var clickresult = false;                
+                                       clickresult = window.confirm("操作后所有信息都将被清空再生成。\n你确认操作吗？");
+                                       if (clickresult === true){                            
+                                            window.open("../../../../admin/eptest/layer/?q=one_job_layer/%s/");                                         
+                                       };                               
+                                       return clickresult; 
+                                    }                
+                                </script>
+                            '''%(obj.id)
+            )
         else:
             if obj.file:
                 return mark_safe(f'<a href="../../../../eptest/get_layer_name_from_org/{obj.id}/">生成</a>')
