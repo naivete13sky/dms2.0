@@ -41,6 +41,7 @@ class JobForTestAdmin(admin.ModelAdmin):
         return ",".join(o.name for o in obj.tags.all())
 
 
+
     # <-------------------------------------返回父料号--------------------------------------->
     def job_parent_link(self, obj):
         return mark_safe(f'<a href="../../job/job/{obj.job_parent_id}/change/">{obj.job_parent} </a>')
