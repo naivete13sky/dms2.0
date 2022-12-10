@@ -100,9 +100,9 @@ class JobForTestAdmin(admin.ModelAdmin):
     get_bug_info_link.short_description = 'Bug'
     # </editor-fold>
 
+    # <editor-fold desc="actions,暂时没用">
     # 增加自定义按钮
     actions = ['make_copy', 'custom_button']
-
     def custom_button(self,request,queryset):
         pass
     # 显示的文本，与django admin一致
@@ -117,6 +117,7 @@ class JobForTestAdmin(admin.ModelAdmin):
     def make_copy(self,request,queryset):
         pass
     make_copy.short_description = '测试1'
+    # </editor-fold>
 
 
 
