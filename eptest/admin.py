@@ -4,7 +4,7 @@ import time
 
 import rarfile
 from django.conf import settings
-from django.contrib import admin
+from django.contrib import admin, messages
 from django.http import HttpResponse
 
 from cc.cc_method import CCMethod
@@ -102,7 +102,7 @@ class JobForTestAdmin(admin.ModelAdmin):
 
     # <editor-fold desc="actions,暂时没用">
     # 增加自定义按钮
-    actions = ['make_copy', 'custom_button']
+    actions = ['make_copy', 'custom_button','message_test','custom_button_link']
     def custom_button(self,request,queryset):
         pass
     # 显示的文本，与django admin一致
@@ -113,10 +113,35 @@ class JobForTestAdmin(admin.ModelAdmin):
     custom_button.type = 'danger'
     # 给按钮追加自定义的颜色
     custom_button.style = 'color:black;'
+    # 给按钮增加确认
+    custom_button.confirm = '你是否执意要点击这个按钮？'
 
     def make_copy(self,request,queryset):
         pass
     make_copy.short_description = '测试1'
+
+    def message_test(self, request, queryset):
+        messages.add_message(request, messages.SUCCESS, '操作成功123123123123')
+    # 给按钮增加确认
+    message_test.confirm = '你是否执意要点击这个按钮？'
+
+    def custom_button_link(self, request, queryset):
+        pass
+    # 显示的文本，与django admin一致
+    custom_button_link.short_description = '打开公司主页'
+    # icon，参考element-ui icon与https://fontawesome.com
+    custom_button_link.icon = 'fas fa-audio-description'
+    # 指定element-ui的按钮类型，参考https://element.eleme.cn/#/zh-CN/component/button
+    custom_button_link.type = 'danger'
+    # 给按钮追加自定义的颜色
+    custom_button_link.style = 'color:black;'
+    # 链接按钮，设置之后直接访问该链接
+    # 3中打开方式
+    # action_type 0=当前页内打开，1=新tab打开，2=浏览器tab打开
+    # 设置了action_type，不设置url，页面内将报错
+    # 设置成链接类型的按钮后，custom_button方法将不会执行。
+    custom_button_link.action_type = 0
+    custom_button_link.action_url = 'http://www.epsemicon.com'
     # </editor-fold>
 
 
