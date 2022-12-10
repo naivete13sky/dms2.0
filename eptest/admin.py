@@ -213,6 +213,7 @@ class BugAdmin(admin.ModelAdmin):
     search_fields = ('job__id','bug','bug_zentao_pri','status')
     prepopulated_fields = {'remark': ('bug',)}
     # ordering = ('recipe_status', 'receive_date',)
+    raw_id_fields = ('author', 'job',)
     list_per_page = 10
 
     # <editor-fold desc="根据料号ID精准查询此料号下的Bug信息用">
