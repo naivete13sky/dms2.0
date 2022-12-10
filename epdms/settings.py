@@ -287,7 +287,7 @@ SIMPLEUI_CONFIG = {
                     },
                     {
                         'name': '模块管理',
-                        'icon': 'fa-light fa-landmark',
+                        'icon': 'fa-solid fa-cube',
                         'url': '/admin/eptest/epcammodule/'
                     }
                 ]
