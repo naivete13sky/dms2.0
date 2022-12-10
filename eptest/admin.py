@@ -22,7 +22,7 @@ admin.site.site_title = '料号管理系统'
 
 @admin.register(JobForTest)
 class JobForTestAdmin(admin.ModelAdmin):
-    list_display = ('id','job_parent_link','job_name','get_layer_info_link','get_test_file_link','file_type','test_usage_for_epcam_module','get_standard_odb_link','vs_result_ep','get_vs_info_g_link','get_bug_info_link','status','author','updated','tag_list','remark')
+    list_display = ('id','job_parent_link','job_name','get_layer_info_link','get_test_file_link','file_type','test_usage_for_epcam_module','get_standard_odb_link','vs_result_ep','get_vs_info_g_link','get_bug_info_link','status','author','updated','tag_list','remark',)
     list_filter = ('tags','file_type','author','test_usage_for_epcam_module',)
     search_fields = ('=id','=job_name','author__username','vs_result_ep','vs_result_g',)
     prepopulated_fields = {'remark': ('job_name',)}
@@ -94,9 +94,32 @@ class JobForTestAdmin(admin.ModelAdmin):
     get_standard_odb_link.short_description = '标准料号'
     # </editor-fold>
 
+    # <editor-fold desc="bug">
     def get_bug_info_link(self, obj):
         return mark_safe(f'<a href="../../../../admin/eptest/bug/?q=one_job_bug/{obj.id}/">查看</a>')
     get_bug_info_link.short_description = 'Bug'
+    # </editor-fold>
+
+    # 增加自定义按钮
+    actions = ['make_copy', 'custom_button']
+
+    def custom_button(self,request,queryset):
+        pass
+    # 显示的文本，与django admin一致
+    custom_button.short_description = '测试2'
+    # icon，参考element-ui icon与https://fontawesome.com
+    custom_button.icon = 'fas fa-audio-description'
+    # 指定element-ui的按钮类型，参考https://element.eleme.cn/#/zh-CN/component/button
+    custom_button.type = 'danger'
+    # 给按钮追加自定义的颜色
+    custom_button.style = 'color:black;'
+
+    def make_copy(self,request,queryset):
+        pass
+    make_copy.short_description = '测试1'
+
+
+
 
 
 
@@ -166,6 +189,7 @@ class BugAdmin(admin.ModelAdmin):
     # ordering = ('recipe_status', 'receive_date',)
     list_per_page = 10
 
+    # <editor-fold desc="根据料号ID精准查询此料号下的Bug信息用">
     # 默认的查询集合
     def get_queryset(self, request):
         return super(BugAdmin, self).get_queryset(request).all().order_by("-id")
@@ -189,6 +213,7 @@ class BugAdmin(admin.ModelAdmin):
         # except:
         #     pass
         return queryset, use_distinct
+    # </editor-fold>
 
 
 
