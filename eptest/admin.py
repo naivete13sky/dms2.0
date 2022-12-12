@@ -17,7 +17,7 @@ from django.utils.safestring import mark_safe
 admin.site.site_header = '料号管理系统'
 admin.site.site_title = '料号管理系统'
 # admin.site.index_title = '3'
-
+from eptest.GL import GL
 
 
 @admin.register(JobForTest)
@@ -34,15 +34,17 @@ class JobForTestAdmin(admin.ModelAdmin):
     # exclude = ('author', 'publish')
     exclude = ('publish',)
 
+
+
+
+
+
     # <editor-fold desc="处理tag,使得admin中可以显示正常的tag">
     def get_queryset(self, request):
-        print('分割线'.center(192,'-'))
-        print(request)
-        query = request.GET.get('search_by_app_id', False)
-        if query:
-            print(query)
-            print("搜索指定料号下的信息")
-            return super().get_queryset(request).prefetch_related('tags').filter(id=query)
+        # 为了实现单个料号ID搜索，需要把ID传给实例。此处通过GL.py实现了全局变量传递。
+        self.query = request.GET.get('search_by_app_id', False)
+        if self.query:
+            GL.app_id = self.query
         return super().get_queryset(request).prefetch_related('tags')
     def tag_list(self, obj):
         return ",".join(o.name for o in obj.tags.all())
@@ -157,8 +159,20 @@ class JobForTestAdmin(admin.ModelAdmin):
     # </editor-fold>
 
 
-
-
+    # <editor-fold desc="自定义查询,实现ID准确搜索">
+    def get_search_results(self, request, queryset, search_term):
+        queryset, use_distinct = super(JobForTestAdmin, self).get_search_results(request, queryset, search_term)
+        search_id = None
+        if GL.app_id:
+            try:
+                search_id = int(GL.app_id)
+            except Exception as e:
+                print("输入非常ID！",e)
+            if search_id:
+                queryset = self.model.objects.filter(id=search_id)
+                return queryset, use_distinct
+        return queryset, use_distinct
+    # </editor-fold>
 
 
 
