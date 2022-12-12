@@ -43,6 +43,11 @@ class JobForTestAdmin(admin.ModelAdmin):
     def get_queryset(self, request):
         # 为了实现单个料号ID搜索，需要把ID传给实例。此处通过GL.py实现了全局变量传递。
         self.query = request.GET.get('search_by_app_id', False)
+        # 如果查询的ID空，就返回所有。
+        if self.query == "":
+            print("空空空！")
+            GL.app_id = None
+        # 如果查询的ID不为空。
         if self.query:
             GL.app_id = self.query
         return super().get_queryset(request).prefetch_related('tags')
@@ -162,23 +167,22 @@ class JobForTestAdmin(admin.ModelAdmin):
     # <editor-fold desc="自定义查询,实现ID准确搜索">
     def get_search_results(self, request, queryset, search_term):
         print("search_term:", search_term)
+        print("request:", request)
+
         # 单ID查询
         search_id = None
 
         queryset, use_distinct = super(JobForTestAdmin, self).get_search_results(request, queryset, search_term)
-        if search_term:
-            search_id = None
-            GL.app_id = None
-            return queryset, use_distinct
-        else:
-            if GL.app_id:
-                try:
-                    search_id = int(GL.app_id)
-                except Exception as e:
-                    print("输入非常ID！",e)
-                if search_id:
-                    queryset = self.model.objects.filter(id=search_id)
-                    return queryset, use_distinct
+
+
+        if GL.app_id:
+            try:
+                search_id = int(GL.app_id)
+            except Exception as e:
+                print("输入非常ID！",e)
+            if search_id:
+                queryset = self.model.objects.filter(id=search_id)
+                return queryset, use_distinct
         return queryset, use_distinct
     # </editor-fold>
 
