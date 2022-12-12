@@ -36,10 +36,22 @@ class JobForTestAdmin(admin.ModelAdmin):
 
     # <editor-fold desc="处理tag,使得admin中可以显示正常的tag">
     def get_queryset(self, request):
+        print('分割线'.center(192,'-'))
+        print(request)
+        query = request.GET.get('search_by_app_id', False)
+        if query:
+            print(query)
+            print("搜索指定料号下的信息")
+            return super().get_queryset(request).prefetch_related('tags').filter(id=query)
         return super().get_queryset(request).prefetch_related('tags')
     def tag_list(self, obj):
         return ",".join(o.name for o in obj.tags.all())
     # </editor-fold>
+
+
+
+
+
 
     # <editor-fold desc="返回父料号">
     def job_parent_link(self, obj):
@@ -143,6 +155,7 @@ class JobForTestAdmin(admin.ModelAdmin):
     custom_button_link.action_type = 0
     custom_button_link.action_url = 'http://www.epsemicon.com'
     # </editor-fold>
+
 
 
 

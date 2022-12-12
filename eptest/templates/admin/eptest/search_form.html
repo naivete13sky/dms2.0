@@ -22,12 +22,12 @@
 
                 <!-- start:cc_define -->
                 <script src={% static "javascripts/jquery.min.js" %}></script>
-                <input style="width: 100px;height:30px;" id="form-control" placeholder="ID精准查询" type="text" onkeydown="if(event.keyCode===13) {search_by_job_id()}">
+                <input style="width: 100px;height:30px;" id="form-control" placeholder="ID精准查询" type="text" onkeydown="if(event.keyCode===13) {search_by_app_id()}">
                 <script>
-                    function search_by_job_id() {
+                    function search_by_app_id() {
                        {#alert(123);#}
                        $('.btn_page_jump').click()
-                       window.location.href = "?search_by_job_id="+$("#form-control").val();
+                       window.location.href = "?search_by_app_id="+$("#form-control").val();
                     }
                 </script>
                 |
