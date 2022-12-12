@@ -161,16 +161,24 @@ class JobForTestAdmin(admin.ModelAdmin):
 
     # <editor-fold desc="自定义查询,实现ID准确搜索">
     def get_search_results(self, request, queryset, search_term):
-        queryset, use_distinct = super(JobForTestAdmin, self).get_search_results(request, queryset, search_term)
+        print("search_term:", search_term)
+        # 单ID查询
         search_id = None
-        if GL.app_id:
-            try:
-                search_id = int(GL.app_id)
-            except Exception as e:
-                print("输入非常ID！",e)
-            if search_id:
-                queryset = self.model.objects.filter(id=search_id)
-                return queryset, use_distinct
+
+        queryset, use_distinct = super(JobForTestAdmin, self).get_search_results(request, queryset, search_term)
+        if search_term:
+            search_id = None
+            GL.app_id = None
+            return queryset, use_distinct
+        else:
+            if GL.app_id:
+                try:
+                    search_id = int(GL.app_id)
+                except Exception as e:
+                    print("输入非常ID！",e)
+                if search_id:
+                    queryset = self.model.objects.filter(id=search_id)
+                    return queryset, use_distinct
         return queryset, use_distinct
     # </editor-fold>
 
