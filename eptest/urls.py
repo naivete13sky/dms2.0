@@ -29,5 +29,10 @@ urlpatterns = [
 
     path('view_vs_g/<int:job_id>/', views.view_vs_g,name='view_vs_g'),#查看G比图的列表
 
+
+    path('test', views.test,name='test'),#查看G比图的列表
+
+
+
 ]
 

@@ -1,0 +1,180 @@
+{#{% extends 'index_base.html' %}#}
+{% extends 'index_base_20221207.html' %}
+{% load static  %}
+{% block title %}悦谱数据管理系统{% endblock %}
+{% block content_header_child %}
+    <li>
+        <i class="fa fa-home" aria-hidden="true"></i>
+        <a href={% url "back_stage:dashboard" %}>看板</a>
+    </li>
+
+    <li>
+        <a href={% url "job_manage:JobListViewInput" %}>导入测试</a>
+    </li>
+<script>$("#basic-table").DataTable({retrieve: true,});</script>
+{% endblock %}
+
+{% block search %}
+    <script src={% static "javascripts/jquery.min.js" %}></script>
+{#    <form class="navbar-form">#}
+
+      <input class="form-control" id="form-control" placeholder="料号ID精准查询" type="text" onkeydown="if(event.keyCode==13) {search_by_job_id()}">
+
+{#    </form>#}
+
+    <script>
+        function search_by_job_id() {
+           {#alert(123);#}
+           {#$('.btn_page_jump').click()#}
+           window.location.href = "?search_by_job_id="+$("#form-control").val();
+        }
+    </script>
+
+
+
+
+
+{% endblock %}
+
+
+{% block main_content %}
+    <script src={% static "javascripts/jquery.min.js" %}></script>
+    <div class="row animated fadeInUp">
+        <div class="col-sm-12">
+            <div class="panel">
+                <div class="panel-content">
+                {#--------------------------------------开始--筛选--------------------------------------#}
+
+                        <form action="" class="form-inline" method="get" enctype="multipart/form-data" novalidate>
+
+
+                            {% csrf_token %}
+
+                            <label style="font-size:20px;">|</label>
+                            <label style="font-size:20px;">使用分类</label>
+                            <select id="query_job_file_usage_type" name="query_job_file_usage_type" class="form-control" style="width:110px;">
+                                {% for each in select_file_usage_type %}
+                                    {% if each.0 == query_job_file_usage_type  %}
+                                        <option selected="selected" value = {{ each.0 }} >{{ each.1 }}</option>
+                                    {% endif %}
+                                    {% if each.0 != query_job_file_usage_type  %}
+                                        <option value = {{ each.0 }} >{{ each.1 }}</option>
+                                    {% endif %}
+
+                                {% endfor %}
+                            </select>
+
+                            <label style="font-size:20px;">状态</label>
+                            <select id="query_job_status" name="query_job_status" class="form-control">
+                                {% for each in select_status %}
+                                    {% if each.0 == query_job_status  %}
+                                        <option selected="selected" value = {{ each.0 }} >{{ each.1 }}</option>
+                                    {% endif %}
+                                    {% if each.0 != query_job_status  %}
+                                        <option value = {{ each.0 }} >{{ each.1 }}</option>
+                                    {% endif %}
+
+                                {% endfor %}
+                            </select>
+
+
+                            <label style="font-size:20px;">G软件比图结果</label>
+                            <select id="query_job_vs_result_g" name="query_job_vs_result_g" class="form-control">
+                                {% for each in select_g_vs_result %}
+                                    {% if each.0 == query_job_vs_result_g  %}
+                                        <option selected="selected" value = {{ each.0 }} >{{ each.1 }}</option>
+                                    {% endif %}
+                                    {% if each.0 != query_job_vs_result_g  %}
+                                        <option value = {{ each.0 }} >{{ each.1 }}</option>
+                                    {% endif %}
+
+                                {% endfor %}
+                            </select>
+
+
+                            <label style="font-size:20px;">悦谱最新转图</label>
+                            <select id="query_job_file_odb_current" name="query_job_file_odb_current" class="form-control">
+                                {% for each in select_file_odb_current %}
+                                    {% if each.0 == query_job_file_odb_current  %}
+                                        <option selected="selected" value = {{ each.0 }} >{{ each.1 }}</option>
+                                    {% endif %}
+                                    {% if each.0 != query_job_file_odb_current  %}
+                                        <option value = {{ each.0 }} >{{ each.1 }}</option>
+                                    {% endif %}
+
+                                {% endfor %}
+                            </select>
+
+
+                            <div class="form-group">
+                                <input type="" class="form-control" id="query_job_name" name="query_job_name" value="{{ query_job_job_name }}" placeholder="料号名" style="width:120px;">
+                            </div>
+
+                            <div class="form-group">
+                                <input type="" class="form-control" id="query_job_author" name="query_job_author" value="{{ query_job_author }}" placeholder="负责人" style="width:80px;">
+                            </div>
+
+                            <div class="form-group">
+                                <input type="" class="form-control" id="query_job_from_object" name="query_job_from_object" value="{{ query_job_from_object }}" placeholder="料号来源" style="width:80px;">
+                            </div>
+
+                            <div class="form-group">
+                                <input type="" class="form-control" id="query_job_from_object_pcb_factory" name="query_job_from_object_pcb_factory" value="{{ query_job_from_object_pcb_factory }}" placeholder="来源-板厂" style="width:100px;">
+                            </div>
+
+
+                            <label style="font-size:20px;">每页显示行数</label>
+                            <select id="query_job_paginator_page" name="query_job_paginator_page" class="form-control">
+                                {% for each in select_page %}
+
+                                    {% if each.0|add:0 == query_job_paginator_page|add:0  %}
+                                        <option selected="selected" value = {{ each.0 }} >{{ each.1 }}</option>
+                                    {% endif %}
+                                    {% if each.0|add:0 != query_job_paginator_page|add:0  %}
+                                        <option value = {{ each.0 }} >{{ each.1 }}</option>
+                                    {% endif %}
+
+                                {% endfor %}
+                            </select>
+
+
+
+                            <div class="form-group">
+                                <button type="submit" id="submit_query_get" name="submit_query_get" class="btn btn-primary" value="submit_query_get">查询</button>
+                            </div>
+
+                            <br><br>
+                            <label>&ensp;标签：&ensp;</label>
+                            <div class="form-group">
+                                {% include 'job_tags_count.html' with page=jobs_page %}
+                            </div>
+
+                        </form>
+
+                {#--------------------------------------结束--筛选--------------------------------------#}
+
+
+
+
+
+
+
+
+
+
+
+
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+
+{% endblock %}
+{#<script src={% static "javascripts/jquery.min.js" %}></script>#}
+
+
+

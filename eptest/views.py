@@ -591,3 +591,8 @@ def view_vs_g(request,job_id):
 
     # return redirect('job_manage:LayerListView')
     return render(request, 'VsListViewOneJob.html', {'field_verbose_name': field_verbose_name, 'vs': vs,'job':job})
+
+
+def test(request):
+    pass
+    return render(request,'test.html')
