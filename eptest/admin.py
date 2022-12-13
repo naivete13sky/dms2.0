@@ -33,7 +33,7 @@ class JobForTestAdmin(admin.ModelAdmin):
     list_display_links = ('job_name',)
     # exclude = ('author', 'publish')
     exclude = ('publish',)
-    change_list_template = r'admin/eptest/JobForTest/change_list.html'
+    # change_list_template = r'admin/eptest/JobForTest/change_list.html'
 
 
 
