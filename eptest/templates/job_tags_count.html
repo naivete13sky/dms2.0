@@ -1,0 +1,15 @@
+{% load job_tags %}
+{% load static  %}
+<div class="row">
+    <div class="widget" >
+
+        {% get_tags_count as tag_list %}
+        {% for tag in tag_list %}
+{#            {{ tag }}#}
+            <a href="?tags__id__exact={{ tag.0 }}" style="font-size: 20px;">
+                <span style="padding: 5px;" class="label {% cycle 'label-default' 'label-primary' 'label-success' 'label-info' 'label-warning' 'label-danger' %}">{{ tag.1 }}:{{ tag.3 }}</span>
+            </a>&nbsp;
+        {% endfor %}
+    </div>
+
+</div>

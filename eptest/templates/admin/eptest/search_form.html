@@ -1,5 +1,6 @@
 {% load i18n static %}
 {% load simpletags %}
+{% load static  %}
 {% if cl.search_fields or cl.has_filters %}
     <script type="text/javascript">
         function preSubmit() {
@@ -15,6 +16,11 @@
     {% endautoescape %}
     <!-- search_form.html -->
     <div id="toolbar">
+        <label>&ensp;标签：&ensp;</label>
+        <div class="form-group">
+            {% include 'job_tags_count.html' with page=jobs_page %}
+        </div>
+
         <form id="changelist-search" method="get" onsubmit="preSubmit(this)">
             <input type="hidden" name="p" value=""/>
             <div class="simpleui-form"><!-- DIV needed for valid HTML -->
