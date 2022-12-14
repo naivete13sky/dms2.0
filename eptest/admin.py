@@ -201,7 +201,7 @@ admin.site.register(EpcamModule, EpcamModuleAdmin)
 
 @admin.register(Layer)
 class LayerAdmin(admin.ModelAdmin):
-    list_display = ('id','job_link','job','layer','layer_org','vs_result_manual','vs_result_ep','vs_result_g','layer_file_type','layer_type','units','coordinates','zeroes_omitted',
+    list_display = ('id','job_link','job','layer','vs_result_manual','vs_result_ep','vs_result_g','layer_file_type','layer_type','units','coordinates','zeroes_omitted',
                     'number_format_A','number_format_B','tool_units_ep','tool_units_g','status','remark')
 
     list_display_links = ('layer',)
