@@ -155,7 +155,7 @@ class Layer(models.Model):
 
     coordinates = models.CharField(max_length=20, choices=(('Absolute', 'Absolute'), ('Incremental', 'Incremental'), ('none', '未记录')),
                                 default='none',
-                                verbose_name="coordinates")
+                                verbose_name="坐标")
 
     zeroes_omitted = models.CharField(max_length=10, choices=(
     ('Leading', 'Leading'), ('Trailing', 'Trailing'), ('none', '未记录')), default='none', verbose_name="省零")
