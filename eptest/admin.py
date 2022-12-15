@@ -11,7 +11,8 @@ from cc.cc_method import CCMethod
 from .models import JobForTest,EpcamModule,Layer,Bug,Vs
 from mptt.admin import MPTTModelAdmin
 from django.utils.safestring import mark_safe
-
+from sqlalchemy import create_engine
+import pandas as pd
 
 # 更改管理后台名称
 admin.site.site_header = '料号管理系统'
@@ -284,9 +285,26 @@ class BugAdmin(admin.ModelAdmin):
         return queryset, use_distinct
     # </editor-fold>
 
+    # <editor-fold desc="创建Bug时，只要填入Bug的ID，其它信息自动带过来">
+    def save_model(self, request, obj, form, change):
+        pass
+        print("保存时做点啥")
+        engine = create_engine("mysql+mysqlconnector://chencheng:hWx9pWk5d5J@10.97.80.36:3336/zentao")
+        sql = '''SELECT a.* from zt_bug a where a.id={}
+                '''.format(int(obj.bug_zentao_id))
+        bug_pd = pd.read_sql_query(sql, engine)
 
+        obj.bug = bug_pd['title'][0]
+        obj.bug_zentao_pri = bug_pd['pri'][0]
+        obj.bug_zentao_status = bug_pd['status'][0]
+        obj.bug_creator = bug_pd['openedBy'][0]
+        obj.bug_create_date = bug_pd['openedDate'][0]
+        obj.bug_assigned_to = bug_pd['assignedTo'][0]
+        obj.author = request.user
+        obj.refresh_time = str(int(time.time()))
 
-
+        super().save_model(request, obj, form, change)
+    # </editor-fold>
 
 
 
