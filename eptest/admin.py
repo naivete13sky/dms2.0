@@ -25,7 +25,7 @@ from eptest.GL import GL
 class JobForTestAdmin(admin.ModelAdmin):
     list_display = ('id','job_parent_link','job_name','get_layer_info_link','get_test_file_link','file_type','test_usage_for_epcam_module','get_standard_odb_link','vs_result_ep','get_vs_info_g_link','get_bug_info_link','status','author','updated','tag_list','remark',)
     list_filter = ('tags','file_type','status','author','test_usage_for_epcam_module',)
-    search_fields = ('=id','=job_name','author__username','vs_result_ep','vs_result_g',)
+    search_fields = ('job_name','author__username','vs_result_ep','vs_result_g',)
     prepopulated_fields = {'remark': ('job_name',)}
     raw_id_fields = ('author','job_parent',)
     # date_hierarchy = 'publish'
