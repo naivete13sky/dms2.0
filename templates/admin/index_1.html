@@ -1,0 +1,41 @@
+{% extends 'admin/index.html' %}
+{% load static %}
+
+{% block head %}
+    {{ block.super }}
+
+{% endblock %}
+
+{% block logo %}
+    {{ block.super }}
+
+{% endblock %}
+
+
+{% block header %}
+    {{ block.super }}
+
+{% endblock %}
+
+{% block breadcrumb %}
+    {{ block.super }}
+
+{#    {% block search %}#}
+{#        <script src={% static "javascripts/jquery.min.js" %}></script>#}
+{#          <input class="form-control" id="form-control" placeholder="料号ID精准查询" type="text" onkeydown="if(event.keyCode===13) {search_by_job_id()}">#}
+{#        <script>#}
+{#            function search_by_job_id() {#}
+{#               alert(123);#}
+               {#$('.btn_page_jump').click()#}
+{#               window.location.href = "?search_by_job_id="+$("#form-control").val();#}
+{#            }#}
+{#        </script>#}
+{#    {% endblock %}#}
+
+{% endblock %}
+
+
+{% block script %}
+    {{ block.super }}
+
+{% endblock %}

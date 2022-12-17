@@ -237,7 +237,7 @@ SIMPLEUI_HOME_ICON = 'fa-solid fa-gauge'
 SIMPLEUI_CONFIG = {
     # 'system_keep': False, # 关闭系统菜单
     'system_keep': True, # 关闭系统菜单
-    'menu_display': ['主料号管理','测试','用户信息', '权限认证'],
+    'menu_display': ['主料号管理','测试','用户信息', '权限认证',],
     'dynamic': True,    # 设置是否开启动态菜单, 默认为False. 如果开启, 则会在每次用户登陆时动态展示菜单内容
 
     'menus':
@@ -329,6 +329,24 @@ SIMPLEUI_CONFIG = {
                             'name': '用户',
                             'icon': 'fa fa-user',
                             'url': 'auth/user/'
+                        },
+                    ]
+            },
+            {
+                'app': '',
+                'name': 'test',
+                'icon': 'fas fa-user-shield',
+                'models':
+                    [
+                        {
+                            'name': 'test1',
+                            'icon': 'fa fa-user',
+                            'url': 'www.baid.com'
+                        },
+                        {
+                            'name': 'test2',
+                            'icon': 'fa fa-user',
+                            'url': ''
                         },
                     ]
             },

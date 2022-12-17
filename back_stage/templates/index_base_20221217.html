@@ -60,28 +60,17 @@
 </head>
 
 <body>
-    <!-- container section start -->
-        <section id="container" class="sidebar-closed" style="padding:5px;">
+    <!--main content start-->
+        <div style="padding:5px">
+            {% block main_content %}
 
-            <!--main content start-->
-            <section id="main-content" >
-                <section class="wrapper" style="padding:5px">
-                    <!--overview start-->
-                    {% block main_content %}
+            {% endblock %}
+        </div>
 
-                    {% endblock %}
+        <a href="#" class="scroll-to-top"><i class="fa fa-angle-double-up"></i></a>
+    <!--main content end-->
 
 
-                </section>
-                <div class="text-right">
-
-                </div>
-            </section>
-
-            <a href="#" class="scroll-to-top"><i class="fa fa-angle-double-up"></i></a>
-            <!--main content end-->
-        </section>
-    <!-- container section end -->
 
     <!-- javascripts -->
     {#  <script src={% static "index_base_20220818/js/jquery.js" %}></script>#}
