@@ -84,11 +84,22 @@ class JobForTestAdmin(admin.ModelAdmin):
     # <editor-fold desc="G软件VS详情">
     def get_vs_info_g_link(self, obj):
         if obj.vs_result_g == 'passed':
-            return mark_safe(f'<a href="../../../../eptest/view_vs_g/{obj.id}/">通过</a>')
+            return mark_safe(f'<a href="../../../../eptest/view_vs_g/{obj.id}/">通过</a>'
+                             f'&nbsp; |&nbsp; '
+                             f'<a href="epdms://{obj.id}">点击比对</a>'
+                             )
         elif obj.vs_result_g == 'failed':
-            return mark_safe(f'<a href="../../../../eptest/view_vs_g/{obj.id}/">失败</a>')
+            return mark_safe(f'<a href="../../../../eptest/view_vs_g/{obj.id}/">失败</a>'
+                             f'&nbsp; |&nbsp; '
+                             f'<a href="epdms://{obj.id}">点击比对</a>'
+                             )
         else:
-            return mark_safe(f'<a href="../../../../eptest/view_vs_g/{obj.id}/">未比对</a>')
+            return mark_safe(f'<a href="../../../../eptest/view_vs_g/{obj.id}/">未比对</a>'
+                             f'&nbsp; |&nbsp; '
+                             f'<a href="epdms://{obj.id}">点击比对</a>'
+                             )
+
+
     get_vs_info_g_link.short_description = 'G软件VS详情'
     # </editor-fold>
 
