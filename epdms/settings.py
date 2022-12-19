@@ -342,7 +342,7 @@ SIMPLEUI_CONFIG = {
                         {
                             'name': 'Bug',
                             'icon': 'fa-solid fa-bug',
-                            'url': 'bug'
+                            'url': '../'
                         },
                         {
                             'name': 'else',
