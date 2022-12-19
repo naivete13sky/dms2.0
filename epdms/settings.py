@@ -244,6 +244,12 @@ SIMPLEUI_HOME_ICON = 'fa-solid fa-gauge'
 
 
 
+
+
+
+
+
+
 # 'http://127.0.0.1:8000/admin/#/admin/job/job/'
 SIMPLEUI_CONFIG = {
     # 'system_keep': False, # 关闭系统菜单
@@ -344,24 +350,7 @@ SIMPLEUI_CONFIG = {
                     ]
             },
 
-            {
-                'app': 'sites',
-                'name': '站点',
-                'icon': 'fas fa-user-shield',
-                'models':
-                    [
-                        {
-                            'name': '站点',
-                            'icon': 'fa fa-user',
-                            'url': 'sites/site/'
-                        },
-                        {
-                            'name': '站点',
-                            'icon': 'fa fa-user',
-                            'url': 'sites/site/'
-                        },
-                    ]
-            },
+
 
             {
                 'app': 'zentao',
@@ -372,7 +361,7 @@ SIMPLEUI_CONFIG = {
                         {
                             'name': 'Bug',
                             'icon': 'fa-solid fa-bug',
-                            'url': './zentao/BugView'
+                            'url': '/zentao/BugView'
                         },
                         {
                             'name': 'else',
@@ -381,6 +370,7 @@ SIMPLEUI_CONFIG = {
                         },
                     ]
             },
+
             {
                 'app': '',
                 'name': 'test',
