@@ -1,12 +1,544 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>{{ title }}</title>
-</head>
-<body>
-    {{ name }}
+{% extends "admin/base.html" %}
+{% load static  %}
 
 
-</body>
-</html>
+{% block my_css %}
+    <!-- Bootstrap CSS -->
+    <link href={% static "index_base_20220818/css/bootstrap.min.css" %} rel="stylesheet">
+
+    <!-- bootstrap theme -->
+    <link href={% static "index_base_20220818/css/bootstrap-theme.css" %} rel="stylesheet">
+    <!--external css-->
+    <!-- font icon -->
+    <link href={% static "index_base_20220818/css/elegant-icons-style.css" %} rel="stylesheet" />
+    <link href={% static "index_base_20220818/css/font-awesome.min.css" %} rel="stylesheet" />
+    <!-- full calendar css-->
+    <link href={% static "index_base_20220818/assets/fullcalendar/fullcalendar/bootstrap-fullcalendar.css" %} rel="stylesheet" />
+    <link href={% static "index_base_20220818/assets/fullcalendar/fullcalendar/fullcalendar.css" %} rel="stylesheet" />
+    <!-- easy pie chart-->
+    <link href={% static "index_base_20220818/assets/jquery-easy-pie-chart/jquery.easy-pie-chart.css" %} rel="stylesheet" type="text/css" media="screen" />
+    <!-- owl carousel -->
+    <link rel="stylesheet" href={% static "index_base_20220818/css/owl.carousel.css" %} type="text/css">
+    <link href={% static "index_base_20220818/css/jquery-jvectormap-1.2.2.css" %} rel="stylesheet">
+    <!-- Custom styles -->
+    <link rel="stylesheet" href={% static "index_base_20220818/css/fullcalendar.css" %}>
+    <link href={% static "index_base_20220818/css/widgets.css" %} rel="stylesheet">
+    <link href={% static "index_base_20220818/css/style.css" %} rel="stylesheet">
+    <link href={% static "index_base_20220818/css/style-responsive.css" %} rel="stylesheet" >
+    <link href={% static "index_base_20220818/css/xcharts.min.css" %} rel="stylesheet">
+    <link href={% static "index_base_20220818/css/jquery-ui-1.10.4.min.css" %} rel="stylesheet">
+
+    <link rel="apple-touch-icon" sizes="120x120" href={% static "favicon/apple-icon-120x120.png" %}>
+    <link rel="icon" type="/static/image/png" sizes="192x192" href={% static "favicon/android-icon-192x192.png" %}>
+    <link rel="icon" type="/static/image/png" sizes="32x32" href={% static "favicon/favicon-32x32.png" %}>
+    <link rel="icon" type="/static/image/png" sizes="16x16" href={% static "favicon/favicon-16x16.png" %}>
+    <link rel="stylesheet" type="text/css" href="http://apps.bdimg.com/libs/bootstrap/3.3.4/css/bootstrap.css">
+    <link rel="stylesheet" type="text/css" href="http://cdn.bootcss.com/font-awesome/4.6.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href={% static "vendor/animate.css/animate.css" %}>
+    <link rel="stylesheet" href={% static "vendor/data-table/media/css/dataTables.bootstrap.min.css" %}>
+    <link rel="stylesheet" href={% static "vendor/data-table/extensions/Responsive/css/responsive.bootstrap.min.css" %}>
+    <link rel="stylesheet" href={% static "stylesheets/css/style.css" %}>
+    <link rel="stylesheet" href={% static "vendor/select2/css/select2.min.css" %}>
+    <link rel="stylesheet" href={% static "vendor/select2/css/select2-bootstrap.min.css" %}>
+{#    <link rel="stylesheet" href={% static "vendor/bootstrap_date-picker/css/bootstrap-datepicker3.min.css" %}>#}
+    <link rel="stylesheet" href={% static "vendor/bootstrap_time-picker/css/timepicker.css" %}>
+{#    <link rel="stylesheet" href={% static "vendor/bootstrap_color-picker/css/bootstrap-colorpicker.min.css" %}>#}
+{#    <link href="{% static "admin/css/base.css" %}" rel="stylesheet">#}
+
+{% endblock %}
+{% block content %}
+    <script src={% static "javascripts/jquery.min.js" %}></script>
+
+    <div class="row animated fadeInUp">
+        <div class="col-sm-12">
+            <div class="panel">
+                <div class="panel-content">
+                    <div class="row">
+{#                        <h6>即将上线中！</h6>#}
+                        <div class="col-md-12">
+                            <h4>今日新增：{{ today_new_bug_count }}个</h4>
+                            <h4>今日解决：{{ job_published_counts }}个</h4>
+                            <h4>今日关闭：{{ job_published_counts }}个</h4>
+
+
+                            {#--------------------------------------开始--表格--------------------------------------#}
+
+
+                                <div class="table-responsive">
+
+                                    <table class=" table table-striped nowrap table-hover" id="listtable" cellspacing="0" width="100%">
+                                        <thead>
+                                            <tr>
+
+
+                                                {% for each in field_verbose_name %}
+                                                    <th>{{ each }}</th>
+
+                                                {% endfor  %}
+
+                                            </tr>
+                                        </thead>
+                                        <tbody id="table_body">
+
+                                            {% for each in statics_author_list %}
+
+                                                <tr>
+                                                    <td>{{ each.负责人 }}</td>
+
+                                                    <td>{{ each.料号数 }}</td>
+
+                                                    <td>{{ each.published料号数 }}</td>
+
+                                                    <td>{{ each.比图应通过料号数 }}</td>
+
+                                                    <td>{{ each.draft料号数 }}</td>
+
+
+                                                </tr>
+
+
+                                            {% endfor %}
+
+
+                                        </tbody>
+                                    </table>
+
+                                </div>
+
+                            {#--------------------------------------结束--表格--------------------------------------#}
+
+
+
+
+                            <div class="col-sm-6">
+                                <h4 class="section-subtitle"><b>人工确认率</b></h4>
+                                <div class="panel">
+                                    <div class="panel-content">
+                                        <div id="line-example">
+
+                                            <div id="main03" style="width: 700px;height:400px;">
+                                                <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/echarts/dist/echarts.min.js"></script>
+                                                <script type="text/javascript">
+
+                                                    var job_published_ratio = {{ job_published_ratio|safe }};
+
+                                                                                        // 基于准备好的dom，初始化echarts实例
+                                                    var myChart=echarts.init(document.getElementById('main03'));
+
+                                                                                                // 指定图表的配置项和数据
+                                                    var option = {
+                                                        tooltip: {
+                                                        formatter: '{a} <br/>{b} : {c}%'
+                                                        },
+                                                        series: [
+                                                        {
+                                                          name: '料号人工确认率',
+                                                          type: 'gauge',
+                                                          progress: {
+                                                            show: true
+                                                          },
+                                                          detail: {
+                                                            valueAnimation: true,
+                                                            formatter: '{value}'
+                                                          },
+                                                          data: [
+                                                            {
+                                                              value: job_published_ratio,
+                                                              name: '确认率'
+                                                            }
+                                                          ]
+                                                        }
+                                                        ]
+                                                    };
+
+
+
+
+
+                                                                                                // 使用刚指定的配置项和数据显示图表。
+                                                    myChart.setOption(option);
+                                                 </script>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-sm-6">
+                                <h4 class="section-subtitle"><b>每日新增料号数</b></h4>
+                                <div class="panel">
+                                    <div class="panel-content">
+                                        <div id="area-example">
+
+                                            <div id="main01" style="width: 700px;height:400px;">
+                                                <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/echarts/dist/echarts.min.js"></script>
+                                                <script type="text/javascript">
+
+                                                    var x_list = {{ statics_job_by_day_x|safe }};
+                                                    var y_list = {{ statics_job_by_day_y|safe }};
+
+
+                                                                                        // 基于准备好的dom，初始化echarts实例
+                                                    var myChart=echarts.init(document.getElementById('main01'));
+
+                                                                                                // 指定图表的配置项和数据
+                                                    var option = {
+                                                        tooltip: {
+                                                            trigger: 'axis',
+                                                            axisPointer: {
+                                                              type: 'shadow'
+                                                            }
+                                                        },
+                                                        grid: {
+                                                            left: '3%',
+                                                            right: '4%',
+                                                            bottom: '3%',
+                                                            containLabel: true
+                                                        },
+                                                        xAxis: [
+                                                            {
+                                                              type: 'category',
+                                                              data: x_list,
+                                                              axisTick: {
+                                                                alignWithLabel: true
+                                                              }
+                                                            }
+                                                        ],
+                                                        yAxis: [
+                                                            {
+                                                              type: 'value'
+                                                            }
+                                                        ],
+                                                        series: [
+                                                            {
+                                                              name: '料号个数',
+                                                              type: 'bar',
+                                                              barWidth: '60%',
+                                                                label: {
+                                                                    show: true
+                                                                },
+                                                              data: y_list
+                                                            }
+                                                        ]
+                                                    };
+
+                                                                                                // 使用刚指定的配置项和数据显示图表。
+                                                    myChart.setOption(option);
+                                                 </script>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-sm-6">
+                                <h4 class="section-subtitle"><b>每日新增料号数</b> 堆积图</h4>
+                                <div class="panel">
+                                    <div class="panel-content">
+                                        <div id="bar-example">
+
+                                            <div id="main02" style="width: 700px;height:400px;">
+                                                <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/echarts/dist/echarts.min.js"></script>
+                                                <script type="text/javascript">
+
+                                                var x_list_dui_ji = {{ statics_job_by_day_x_dui_ji|safe }};
+                                                var y_list_cc = {{ statics_job_by_day_author_list_7_day_cc|safe }};
+                                                var y_list_zjr = {{ statics_job_by_day_author_list_7_day_zjr|safe }};
+                                                var y_list_gcc = {{ statics_job_by_day_author_list_7_day_gcc|safe }};
+                                                var y_list_ze = {{ statics_job_by_day_author_list_7_day_ze|safe }};
+                                                var y_list_zzr = {{ statics_job_by_day_author_list_7_day_zzr|safe }};
+                                                var y_list_total = {{ statics_job_by_day_author_list_7_day_total|safe }};
+
+
+                                                                                    // 基于准备好的dom，初始化echarts实例
+                                                var myChart=echarts.init(document.getElementById('main02'));
+
+                                                                                            // 指定图表的配置项和数据
+                                                var option = {
+                                                    tooltip: {
+                                                    trigger: 'axis',
+                                                    axisPointer: {
+                                                      // Use axis to trigger tooltip
+                                                      type: 'shadow' // 'shadow' as default; can also be 'line' or 'shadow'
+                                                    }
+                                                    },
+                                                    legend: {},
+                                                    grid: {
+                                                        left: '3%',
+                                                        right: '4%',
+                                                        bottom: '3%',
+                                                        containLabel: true
+                                                    },
+                                                    xAxis: {
+                                                        type: 'category',
+                                                        data: x_list_dui_ji
+                                                    },
+                                                    yAxis: {
+                                                        type: 'value'
+                                                    },
+
+                                                    series: [
+
+                                                        {
+                                                            name: 'jinru.zhang',
+                                                            type: 'bar',
+                                                            stack: 'total',
+                                                            label: {
+                                                            show: false
+                                                            },
+                                                            emphasis: {
+                                                            focus: 'series'
+                                                            },
+                                                            data: y_list_zjr
+                                                        },
+                                                        {
+                                                            name: 'congcong.guo',
+                                                            type: 'bar',
+                                                            stack: 'total',
+                                                            label: {
+                                                            show: false
+                                                            },
+                                                            emphasis: {
+                                                            focus: 'series'
+                                                            },
+                                                            data: y_list_gcc
+                                                        },
+                                                        {
+                                                            name: 'en.zhu',
+                                                            type: 'bar',
+                                                            stack: 'total',
+                                                            label: {
+                                                            show: false
+                                                            },
+                                                            emphasis: {
+                                                            focus: 'series'
+                                                            },
+                                                            data: y_list_ze
+                                                        },
+                                                        {
+                                                            name: 'zhenru.zhao',
+                                                            type: 'bar',
+                                                            stack: 'total',
+                                                            label: {
+                                                            show: false
+                                                            },
+                                                            emphasis: {
+                                                            focus: 'series'
+                                                            },
+                                                            data: y_list_zzr
+                                                        },
+                                                        {
+                                                            name: '总计',
+                                                            type: 'bar',
+                                                            stack: 'all',
+                                                            label: {
+                                                                show: true,
+                                                                position: 'top',
+                                                            },
+                                                            emphasis: {
+                                                            focus: 'series'
+                                                            },
+                                                            data: y_list_total,
+                                                            z: -1,
+                                                            //不同系列的柱间距离，为百分比,如果想要两个系列的柱子重叠，可以设置 barGap 为 '-100%'。
+                                                            barGap: '-100%',
+                                                        },
+
+
+                                                    ]
+                                                };
+
+
+
+
+
+                                                                                            // 使用刚指定的配置项和数据显示图表。
+                                                myChart.setOption(option);
+                                             </script>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+
+
+
+                            <div class="col-sm-6">
+                                <h4 class="section-subtitle"><b>负责人-料号数</b> 南丁格尔玫瑰图</h4>
+
+                                <div class="panel">
+                                    <div class="panel-content">
+                                        <div id="donut-example">
+                                            <div id="main04" style="width: 700px;height:400px;">
+                                                <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/echarts/dist/echarts.min.js"></script>
+                                                <script type="text/javascript">
+
+                                                var x_list_dui_ji = {{ statics_job_by_day_x_dui_ji|safe }};
+                                                var statics_author_list = {{ statics_author_list_json|safe }};
+
+                                                {#alert("abcd2");#}
+                                                {#alert(statics_author_list);#}
+
+                                                {#var statics_author_list= {{ statics_author_list|safe }};#}
+                                                {#alert("abc");#}
+                                                {#alert(statics_author_list);#}
+
+                                                var statics_author_list_js=[];
+                                                for (var i in statics_author_list){
+                                                    var each_one={ value: statics_author_list[i].料号数, name: statics_author_list[i].负责人 };
+                                                    {#alert(each_one.name);#}
+                                                    statics_author_list_js.push(each_one);
+                                                };
+                                                {#alert(statics_author_list_js);#}
+
+
+
+
+                                                                                    // 基于准备好的dom，初始化echarts实例
+                                                var myChart=echarts.init(document.getElementById('main04'));
+
+                                                                                            // 指定图表的配置项和数据
+                                                var option = {
+                                                    title: {
+                                                        {#text: 'Nightingale Chart',#}
+                                                        {#subtext: 'Fake Data',#}
+                                                        left: 'center'
+                                                    },
+                                                    tooltip: {
+                                                        trigger: 'item',
+                                                        formatter: '{a} <br/>{b} : {c} ({d}%)'
+                                                    },
+                                                    legend: {
+                                                        left: 'center',
+                                                        top: 'bottom',
+                                                        {#data: [#}
+                                                        {#    'rose1',#}
+                                                        {#    'rose2',#}
+                                                        {#    'rose3',#}
+                                                        {#    'rose4',#}
+                                                        {#    'rose5',#}
+                                                        {#    'rose6',#}
+                                                        {#    'rose7',#}
+                                                        {#    'rose8'#}
+                                                        {#]#}
+                                                    },
+                                                    toolbox: {
+                                                        show: true,
+                                                        feature: {
+                                                            mark: { show: true },
+                                                            dataView: { show: true, readOnly: false },
+                                                            restore: { show: true },
+                                                            saveAsImage: { show: true }
+                                                        }
+                                                    },
+                                                    series: [
+                                                        {
+                                                            name: 'Radius Mode',
+                                                            type: 'pie',
+                                                            radius: [20, 140],
+                                                            center: ['50%', '50%'],
+                                                            roseType: 'radius',
+                                                            itemStyle: {
+                                                                borderRadius: 5,
+                                                                normal:{
+
+                                                                    label:{
+
+                                                                    show: true,
+
+                                                                    formatter: '{b} : {c} ({d}%)',
+
+                                                                    textStyle:{
+
+                                                                        fontSize:8
+
+                                                                    }
+
+                                                                    },
+
+                                                                    labelLine :{show:true}
+
+                                                                }
+                                                            },
+                                                            label: {
+                                                                show: true
+                                                            },
+                                                            emphasis: {
+                                                                label: {
+                                                                  show: true
+                                                                }
+                                                            },
+                                                            data: statics_author_list_js
+                                                        },
+
+                                                    ]
+                                                };
+
+
+
+
+
+                                                                                            // 使用刚指定的配置项和数据显示图表。
+                                                myChart.setOption(option);
+                                             </script>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+
+
+
+
+
+
+
+                            {#--------------------------------------开始--图表1--------------------------------------#}
+
+
+
+
+
+
+
+                            {#--------------------------------------结束--图表1--------------------------------------#}
+
+
+                            {#--------------------------------------开始--图表2--------------------------------------#}
+
+
+
+
+
+
+
+                            {#--------------------------------------结束--图表2--------------------------------------#}
+
+
+                            {#--------------------------------------开始--图表3--------------------------------------#}
+
+
+
+
+
+                            {#--------------------------------------结束--图表2--------------------------------------#}
+
+
+
+
+
+
+
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+{% endblock %}
+<script src={% static "javascripts/jquery.min.js" %}></script>
+
