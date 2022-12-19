@@ -47,6 +47,7 @@ INSTALLED_APPS = [
     'mptt',
     'eptest.apps.EptestConfig',
     'zentao.apps.ZentaoConfig',
+    'django.contrib.sites',
 
 ]
 
@@ -238,7 +239,7 @@ SIMPLEUI_HOME_ICON = 'fa-solid fa-gauge'
 SIMPLEUI_CONFIG = {
     # 'system_keep': False, # 关闭系统菜单
     'system_keep': True, # 关闭系统菜单
-    'menu_display': ['主料号管理','测试','用户信息', '权限认证','禅道'],
+    'menu_display': ['主料号管理','测试','用户信息', '权限认证','禅道','站点'],
     'dynamic': True,    # 设置是否开启动态菜单, 默认为False. 如果开启, 则会在每次用户登陆时动态展示菜单内容
 
     'menus':
@@ -333,6 +334,26 @@ SIMPLEUI_CONFIG = {
                         },
                     ]
             },
+
+            {
+                'app': 'sites',
+                'name': '站点',
+                'icon': 'fas fa-user-shield',
+                'models':
+                    [
+                        {
+                            'name': '站点',
+                            'icon': 'fa fa-user',
+                            'url': 'sites/site/'
+                        },
+                        {
+                            'name': '站点',
+                            'icon': 'fa fa-user',
+                            'url': 'sites/site/'
+                        },
+                    ]
+            },
+
             {
                 'app': 'zentao',
                 'name': '禅道',
@@ -342,7 +363,7 @@ SIMPLEUI_CONFIG = {
                         {
                             'name': 'Bug',
                             'icon': 'fa-solid fa-bug',
-                            'url': '../'
+                            'url': './zentao/BugView'
                         },
                         {
                             'name': 'else',
