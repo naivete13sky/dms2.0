@@ -35,6 +35,8 @@ urlpatterns = [
 
     path('eptest/', include('eptest.urls')),
 
+    path('zentao/',include('zentao.urls',namespace='zentao'))
+
 
 ]
 
