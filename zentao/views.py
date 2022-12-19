@@ -19,4 +19,13 @@ class BugView(TemplateView):
         kwargs['name'] = 'BugView'
         kwargs['title'] = "BugView"
 
+        from django.contrib.sites.models import Site
+
+        current_site = Site.objects.get_current()
+        current_site.domain
+        kwargs['domain'] = current_site.domain
+
+
+
+
         return kwargs
