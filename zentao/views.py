@@ -33,19 +33,49 @@ class BugView(TemplateView):
         bug_pd = pd.read_sql_query(sql, engine)
         # print(bug_pd)
         # bug_pd.to_excel(r'C:\Users\Administrator\Desktop\pd.xlsx')
+
+        # 今日新增bug
         bug_pd['create_date'] = pd.to_datetime(bug_pd['openedDate']).dt.date
         bug_static_by_create_date = bug_pd.groupby('create_date')["id"].count()
-
-        dict_create_date_number = {'create_date': bug_static_by_create_date.index, 'numbers': bug_static_by_create_date.values}
-        bug_static_by_create_date_pd=pd.DataFrame(dict_create_date_number)
+        bug_static_by_create_date_pd=pd.DataFrame(
+            {'create_date': bug_static_by_create_date.index, 'numbers': bug_static_by_create_date.values})
         # print(bug_static_by_create_date_pd)
         # bug_static_by_create_date_pd.to_excel(r'C:\Users\Administrator\Desktop\pd2.xlsx')
         # print(bug_static_by_create_date_pd.columns.tolist())#查看有哪些字段
         # print(datetime.date(datetime.now()))#今天
-        today_new_bug_count = bug_static_by_create_date_pd[(bug_static_by_create_date_pd.create_date == datetime.date(datetime.now()))]['numbers'].values[0]
-        # print(today_new_bug_count)
+        try:
+            today_new_bug_count = bug_static_by_create_date_pd[
+                (bug_static_by_create_date_pd.create_date == datetime.date(datetime.now()))]['numbers'].values[0]
+        except Exception as e:
+            print('今天新增bug为空',e)
+            today_new_bug_count = 0
         kwargs['today_new_bug_count'] = today_new_bug_count
 
+        # 今日解决bug
+        bug_pd['resolved_date'] = pd.to_datetime(bug_pd['resolvedDate']).dt.date
+        bug_static_by_resolved_date = bug_pd.groupby('resolved_date')["id"].count()
+        bug_static_by_resolved_date_pd = pd.DataFrame({'resolved_date': bug_static_by_resolved_date.index,
+                                   'numbers': bug_static_by_resolved_date.values})
+        try:
+            today_resolved_bug_count = bug_static_by_resolved_date_pd[
+                (bug_static_by_resolved_date_pd.resolved_date == datetime.date(datetime.now()))]['numbers'].values[0]
+        except Exception as e:
+            print('今天解决bug为空',e)
+            today_resolved_bug_count = 0
+        kwargs['today_resolved_bug_count'] = today_resolved_bug_count
+
+        # 今日关闭bug
+        bug_pd['closed_date'] = pd.to_datetime(bug_pd['closedDate']).dt.date
+        bug_static_by_closed_date = bug_pd.groupby('closed_date')["id"].count()
+        bug_static_by_closed_date_pd = pd.DataFrame({'closed_date': bug_static_by_closed_date.index,
+                                                       'numbers': bug_static_by_closed_date.values})
+        try:
+            today_closed_bug_count = bug_static_by_closed_date_pd[
+                (bug_static_by_closed_date_pd.closed_date == datetime.date(datetime.now()))]['numbers'].values[0]
+        except Exception as e:
+            print('今天解决bug为空', e)
+            today_closed_bug_count = 0
+        kwargs['today_closed_bug_count'] = today_closed_bug_count
 
 
 
