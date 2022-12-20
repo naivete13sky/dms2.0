@@ -1,5 +1,40 @@
 from django.contrib import admin
 from .models import Job,JobInfoForDevTest
+from django.utils.translation import gettext_lazy as _
+
+
+
+class HasFileTypeListFilter(admin.SimpleListFilter):
+    # 提供一个可读的标题
+    title = _('包含文件类型')
+    # 用于URL查询的参数.
+    parameter_name = 'has_file_type'
+
+    def lookups(self, request, model_admin):
+        """
+        返回一个二维元组。每个元组的第一个元素是用于URL查询的真实值，
+        这个值会被self.value()方法获取，并作为queryset方法的选择条件。
+        第二个元素则是可读的显示在admin页面右边侧栏的过滤选项。
+        """
+        return (
+            ('gerber274x', _('gerber274x')),
+            ('gerber274d', _('gerber274d')),
+            ('dxf', _('dxf')),
+            ('dwg', _('dwg')),
+            ('odb', _('odb')),
+            ('pcb', _('pcb')),
+
+        )
+
+    def queryset(self, request, queryset):
+        """
+        根据self.value()方法获取的条件值的不同执行具体的查询操作。
+        并返回相应的结果。
+        """
+        if self.value():
+            print("self.value:",self.value)
+            return queryset.filter(has_file_type__contains = self.value())
+
 
 
 @admin.register(Job)
@@ -7,7 +42,7 @@ class JobAdmin(admin.ModelAdmin):
     list_display = ('id','job_name','file_compressed','has_file_type','status','author','from_object_pcb_factory','from_object_pcb_design','publish','create_time','tag_list')
 
     search_fields = ('=id','job_name',)
-    list_filter = ('has_file_type', 'status', 'author__username','from_object_pcb_factory','from_object_pcb_design','tags')
+    list_filter = (HasFileTypeListFilter, 'status', 'author__username','from_object_pcb_factory','from_object_pcb_design','tags')
     prepopulated_fields = {'remark': ('job_name',)}
     raw_id_fields = ('author','from_object_pcb_factory','from_object_pcb_design')
     # date_hierarchy = 'publish'
@@ -28,6 +63,10 @@ class JobAdmin(admin.ModelAdmin):
         if not change:
             obj.author = request.user
         super().save_model(request, obj, form, change)
+
+
+
+
 
 
 @admin.register(JobInfoForDevTest)
