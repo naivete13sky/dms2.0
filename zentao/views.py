@@ -66,6 +66,10 @@ class BugView(TemplateView):
             bug_pd = bug_pd
 
 
+        kwargs['field_verbose_name'] = ['日期','新增','解决','关闭']
+
+
+
         # <editor-fold desc="新增">
         # 今日新增bug
         today = datetime.date(datetime.now())

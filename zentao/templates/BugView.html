@@ -90,16 +90,9 @@
 
 
                         <div class="col-md-12">
-                            <h4>今日新增：{{ today_new_bug_count }}个</h4>
-                            <h4>今日解决：{{ today_resolved_bug_count }}个</h4>
-                            <h4>今日关闭：{{ today_closed_bug_count }}个</h4>
 
-                            <h4>昨日新增：{{ yestoday_new_bug_count }}个</h4>
-                            <h4>昨日解决：{{ yestoday_resolved_bug_count }}个</h4>
-                            <h4>昨日关闭：{{ yestoday_closed_bug_count }}个</h4>
-
-                            <h4>激活数：{{ active_count }}个</h4>
-                            <h4>已解决：{{ resolved_count }}个</h4>
+                            <h3>激活数：{{ active_count }}个</h3>
+                            <h3>已解决：{{ resolved_count }}个</h3>
 
 
                             {#--------------------------------------开始--表格--------------------------------------#}
@@ -120,25 +113,37 @@
                                             </tr>
                                         </thead>
                                         <tbody id="table_body">
+                                            <tr>
+                                                <td>今日</td>
+                                                <td>{{ today_new_bug_count }}</td>
+                                                <td>{{ today_resolved_bug_count }}</td>
+                                                <td>{{ today_closed_bug_count }}</td>
+                                            </tr>
+                                            <tr>
+                                                <td>昨日</td>
+                                                <td>{{ yestoday_new_bug_count }}</td>
+                                                <td>{{ yestoday_resolved_bug_count }}</td>
+                                                <td>{{ yestoday_closed_bug_count }}</td>
+                                            </tr>
 
-                                            {% for each in statics_author_list %}
-
-                                                <tr>
-                                                    <td>{{ each.负责人 }}</td>
-
-                                                    <td>{{ each.料号数 }}</td>
-
-                                                    <td>{{ each.published料号数 }}</td>
-
-                                                    <td>{{ each.比图应通过料号数 }}</td>
-
-                                                    <td>{{ each.draft料号数 }}</td>
-
-
-                                                </tr>
-
-
-                                            {% endfor %}
+{#                                            {% for each in statics_author_list %}#}
+{##}
+{#                                                <tr>#}
+{#                                                    <td>{{ each.负责人 }}</td>#}
+{##}
+{#                                                    <td>{{ each.料号数 }}</td>#}
+{##}
+{#                                                    <td>{{ each.published料号数 }}</td>#}
+{##}
+{#                                                    <td>{{ each.比图应通过料号数 }}</td>#}
+{##}
+{#                                                    <td>{{ each.draft料号数 }}</td>#}
+{##}
+{##}
+{#                                                </tr>#}
+{##}
+{##}
+{#                                            {% endfor %}#}
 
 
                                         </tbody>
