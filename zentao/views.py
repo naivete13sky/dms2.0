@@ -114,3 +114,7 @@ class BugView(TemplateView):
 
 
         return kwargs
+
+
+class SwitchView(TemplateView):
+    template_name = r'switch.html'
