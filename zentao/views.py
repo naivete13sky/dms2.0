@@ -28,13 +28,12 @@ class BugView(TemplateView):
                 where a.id <> 3              
                 '''
         product_name_pd = pd.read_sql_query(sql, engine)
-
         product_name_select = [('all','所有'),]
         count = 0
         for tup in zip(product_name_pd['id'], product_name_pd['name']):
-            # print(tup, type(tup[1:]))
+            print(tup, type(tup[1:]))
             count += 1
-            product_name_select.append(tup)
+            product_name_select.append((str(tup[0]),tup[1]))
         print('product_name_select:',product_name_select)
         # product_name_list = pd.read_sql_query(sql, engine)['name'].unique().tolist()
         kwargs['product_name_select'] = product_name_select
@@ -56,6 +55,8 @@ class BugView(TemplateView):
             print("submit_query_get")
             query_product_name = self.request.GET.get('query_product_name', False)
             print("query_product_name:",query_product_name)
+            kwargs['query_product_name'] = query_product_name
+            print(query_product_name == '1')
             if query_product_name == 'all':
                 bug_pd = bug_pd
             else:

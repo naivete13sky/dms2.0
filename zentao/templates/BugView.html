@@ -64,10 +64,15 @@
                             <label style="font-size:20px;">项目</label>
                             <select id="query_product_name" name="query_product_name" class="form-control" style="width:180px;">
                                 {% for each in product_name_select %}
-                                    {% if each.0 == query_product_name  %}
+                                    query_product_name_cc:{{ query_product_name }}|
+{#                                    {{ each.0|stringformat:'i' }}?={{ query_product_name|stringformat:'i' }}#}
+
+                                    {% if each.0 == query_product_name %}
+                                        yes
                                         <option selected="selected" value = {{ each.0 }} >{{ each.1 }}</option>
                                     {% endif %}
-                                    {% if each.0 != query_product_name  %}
+                                    {% if each.0 != query_product_name %}
+                                        no
                                         <option value = {{ each.0 }} >{{ each.1 }}</option>
                                     {% endif %}
 
