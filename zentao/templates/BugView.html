@@ -276,7 +276,14 @@
                                                           ],
                                                           yAxis: {
                                                             type: 'category',
-                                                            axisLabel: { interval: 0, rotate: 30 }
+                                                            axisLabel: {
+                                                                interval: 0,
+                                                                rotate: 30,
+                                                                textStyle:{
+                                                                        fontSize:13,
+                                                                        fontWeight: 'bold',
+                                                                    }
+                                                                },
                                                           },
                                                           xAxis: {},
                                                           series: {
@@ -290,7 +297,7 @@
                                                           }
                                                         };
 
-                                                                                                // 使用刚指定的配置项和数据显示图表。
+                                                    // 使用刚指定的配置项和数据显示图表。
                                                     myChart.setOption(option);
                                                  </script>
                                             </div>
@@ -298,6 +305,79 @@
                                     </div>
                                 </div>
                             </div>
+
+
+{#                            {{ statics_bug_by_day_x|safe }}#}
+{#                            {{ statics_bug_by_day_y|safe }}#}
+                            <div class="col-sm-6">
+                                <h4 class="section-subtitle"><b>每日新增Bug数</b></h4>
+                                <div class="panel">
+                                    <div class="panel-content">
+                                        <div id="line-example">
+
+                                            <div id="main003" style="width: 700px;height:400px;">
+                                                <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/echarts/dist/echarts.min.js"></script>
+                                                <script type="text/javascript">
+
+                                                    var x_list = {{ statics_bug_by_day_x|safe }};
+                                                    var y_list = {{ statics_bug_by_day_y|safe }};
+
+
+
+                                                    // 基于准备好的dom，初始化echarts实例
+                                                    var myChart=echarts.init(document.getElementById('main003'));
+
+                                                    // 指定图表的配置项和数据
+                                                    var option = {
+                                                        tooltip: {
+                                                            trigger: 'axis',
+                                                            axisPointer: {
+                                                              type: 'shadow'
+                                                            }
+                                                        },
+                                                        grid: {
+                                                            left: '3%',
+                                                            right: '4%',
+                                                            bottom: '3%',
+                                                            containLabel: true
+                                                        },
+                                                        xAxis: [
+                                                            {
+                                                              type: 'category',
+                                                              data: x_list,
+                                                              axisTick: {
+                                                                alignWithLabel: true
+                                                              }
+                                                            }
+                                                        ],
+                                                        yAxis: [
+                                                            {
+                                                              type: 'value'
+                                                            }
+                                                        ],
+                                                        series: [
+                                                            {
+                                                              name: '料号个数',
+                                                              type: 'bar',
+                                                              barWidth: '60%',
+                                                                label: {
+                                                                    show: true
+                                                                },
+                                                              data: y_list
+                                                            }
+                                                        ]
+                                                    };
+
+
+                                                    // 使用刚指定的配置项和数据显示图表。
+                                                    myChart.setOption(option);
+                                                 </script>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
 
 
 

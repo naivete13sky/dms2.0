@@ -1,4 +1,5 @@
 import datetime
+import json
 from datetime import datetime
 from dateutil.relativedelta import relativedelta
 from django.http import HttpResponse
@@ -181,14 +182,50 @@ class BugView(TemplateView):
         # bug_active_pd = bug_pd[(bug_pd.status == 'active')]
         # .sort_values(ascending=False, inplace=False)[:10] 先排序，再获取前10
         active_bug_group_by_who_pd = bug_active_pd.groupby('assignedtowho')["id"].count().sort_values(ascending=False, inplace=False)[:10]
-        print('active_bug_group_by_who_pd：',type(active_bug_group_by_who_pd), active_bug_group_by_who_pd)
+        # print('active_bug_group_by_who_pd：',type(active_bug_group_by_who_pd), active_bug_group_by_who_pd)
         active_bug_group_by_who_dict = dict(active_bug_group_by_who_pd.items())
         for each in active_bug_group_by_who_dict:
             # print(each,':',bug_active_priority_distribution_dict[each])
             one_dict = {'name': each, 'score': active_bug_group_by_who_dict[each]}
             active_bug_group_by_who_list.append(one_dict)
-        print('active_bug_group_by_who_list:',active_bug_group_by_who_list)
+        # print('active_bug_group_by_who_list:',active_bug_group_by_who_list)
         kwargs['active_bug_group_by_who_list'] = active_bug_group_by_who_list
+        # </editor-fold>
+
+        # <editor-fold desc="每日新增Bug数">
+        new_bug_group_by_day_list = []
+        new_bug_group_by_day_pd = bug_pd.groupby('create_date')["id"].count().sort_index(ascending=False)[:30]
+        # print('new_bug_group_by_day_pd：', type(new_bug_group_by_day_pd), new_bug_group_by_day_pd)
+        new_bug_group_by_day_dict = dict(new_bug_group_by_day_pd.items())
+        for each in new_bug_group_by_day_dict:
+            pass
+            one_dict = {'day': each, 'count': new_bug_group_by_day_dict[each]}
+            new_bug_group_by_day_list.append(one_dict)
+        # print('new_bug_group_by_day_list:', new_bug_group_by_day_list)
+
+        x_list = []
+        y_list = []
+        for key in new_bug_group_by_day_dict:
+            # print(key)
+            # x_list.append(str(datetime.date(key["day"])))
+            # x_list.append(key)
+            x_list.append(str(key))
+            y_list.append(new_bug_group_by_day_dict[key])
+        x_list.reverse()
+        y_list.reverse()
+        print(x_list)
+        print(y_list)
+        kwargs['statics_bug_by_day_x'] = json.dumps(x_list)
+        kwargs['statics_bug_by_day_y'] = y_list
+
+
+
+        kwargs['new_bug_group_by_day_list'] = new_bug_group_by_day_list
+
+
+
+
+
         # </editor-fold>
 
 
