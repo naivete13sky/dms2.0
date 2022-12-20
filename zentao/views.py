@@ -202,7 +202,6 @@ class BugView(TemplateView):
             one_dict = {'day': each, 'count': new_bug_group_by_day_dict[each]}
             new_bug_group_by_day_list.append(one_dict)
         # print('new_bug_group_by_day_list:', new_bug_group_by_day_list)
-
         x_list = []
         y_list = []
         for key in new_bug_group_by_day_dict:
@@ -213,13 +212,11 @@ class BugView(TemplateView):
             y_list.append(new_bug_group_by_day_dict[key])
         x_list.reverse()
         y_list.reverse()
-        print(x_list)
-        print(y_list)
+        # print(x_list)
+        # print(y_list)
         kwargs['statics_bug_by_day_x'] = json.dumps(x_list)
         kwargs['statics_bug_by_day_y'] = y_list
-
-
-
+        # 下面这个没用着好像
         kwargs['new_bug_group_by_day_list'] = new_bug_group_by_day_list
 
 
@@ -228,6 +225,38 @@ class BugView(TemplateView):
 
         # </editor-fold>
 
+        # <editor-fold desc="每月新增Bug数">
+        new_bug_group_by_month_list = []
+        bug_pd['create_year'] = pd.to_datetime(bug_pd['openedDate']).dt.year
+        bug_pd['create_month'] = pd.to_datetime(bug_pd['openedDate']).dt.month
+        bug_pd['create_year_month'] = bug_pd.create_year.map(str) + '-' + bug_pd.create_month.map("{:02}".format)
+        # bug_pd.to_excel(r'C:\Users\Administrator\Desktop\pdc5.xlsx')
+        new_bug_group_by_month_pd = bug_pd.groupby('create_year_month')["id"].count().sort_index(ascending=False)[:12]
+        # print('new_bug_group_by_day_pd：', type(new_bug_group_by_day_pd), new_bug_group_by_day_pd)
+        new_bug_group_by_month_dict = dict(new_bug_group_by_month_pd.items())
+        for each in new_bug_group_by_month_dict:
+            pass
+            one_dict = {'day': each, 'count': new_bug_group_by_month_dict[each]}
+            new_bug_group_by_month_list.append(one_dict)
+        # print('new_bug_group_by_day_list:', new_bug_group_by_day_list)
+        x_list = []
+        y_list = []
+        for key in new_bug_group_by_month_dict:
+            # print(key)
+            # x_list.append(str(datetime.date(key["day"])))
+            # x_list.append(key)
+            x_list.append(str(key))
+            y_list.append(new_bug_group_by_month_dict[key])
+        x_list.reverse()
+        y_list.reverse()
+        print(x_list)
+        print(y_list)
+        kwargs['statics_bug_by_month_x'] = json.dumps(x_list)
+        kwargs['statics_bug_by_month_y'] = y_list
+        # 下面这个没用着好像
+        kwargs['new_bug_group_by_month_list'] = new_bug_group_by_month_list
+
+        # </editor-fold>
 
 
         return kwargs
