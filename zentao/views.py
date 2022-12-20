@@ -25,7 +25,7 @@ class BugView(TemplateView):
         # <editor-fold desc="拿到项目名称">
         engine = create_engine("mysql+mysqlconnector://chencheng:hWx9pWk5d5J@10.97.80.36:3336/zentao")
         sql = '''SELECT a.* from zt_product a
-                where a.id <> 1              
+                where a.id <> 3              
                 '''
         product_name_pd = pd.read_sql_query(sql, engine)
 
@@ -41,13 +41,28 @@ class BugView(TemplateView):
         # </editor-fold>
 
         sql = '''SELECT a.*,b.name productname,c.realname createbywho,d.realname assignedtowho from zt_bug a
-                LEFT JOIN zt_product b on a.product=b.id
-                LEFT JOIN zt_user c on a.openedBy=c.account
-                LEFT JOIN zt_user d on a.assignedTo=d.account
-                where a.deleted='0'
-                '''
+                                        LEFT JOIN zt_product b on a.product=b.id
+                                        LEFT JOIN zt_user c on a.openedBy=c.account
+                                        LEFT JOIN zt_user d on a.assignedTo=d.account
+                                        where a.deleted='0'
+                                        '''
         bug_pd = pd.read_sql_query(sql, engine)
-        # bug_pd.to_excel(r'C:\Users\Administrator\Desktop\pd.xlsx')
+        # bug_pd.to_excel(r'C:\Users\Administrator\Desktop\pdc1.xlsx')
+
+        # get方式query数据
+        submit_query_get = self.request.GET.get('submit_query_get', False)
+        if submit_query_get:
+            pass
+            print("submit_query_get")
+            query_product_name = self.request.GET.get('query_product_name', False)
+            print("query_product_name:",query_product_name)
+            if query_product_name == 'all':
+                bug_pd = bug_pd
+            else:
+                bug_pd = bug_pd[(bug_pd['product'] == int(query_product_name))]
+        else:
+            bug_pd = bug_pd
+
 
         # <editor-fold desc="新增">
         # 今日新增bug
@@ -127,8 +142,6 @@ class BugView(TemplateView):
         # 已解决
         kwargs['resolved_count'] = bug_pd[(bug_pd.status == 'resolved')]['id'].count()
 
-
-
         sql = '''SELECT * from zt_module
         '''
         bug_moudle_pd = pd.read_sql_query(sql, engine)
@@ -139,6 +152,11 @@ class BugView(TemplateView):
         '''
 
 
+
+
+
+
         return kwargs
+
 
 
