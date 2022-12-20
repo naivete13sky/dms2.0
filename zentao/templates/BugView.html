@@ -235,6 +235,71 @@
                             </div>
 
 
+                            <div class="col-sm-6">
+                                <h4 class="section-subtitle"><b>拥有激活Bug数排行榜</b></h4>
+                                <div class="panel">
+                                    <div class="panel-content">
+                                        <div id="line-example">
+
+                                            <div id="main002" style="width: 700px;height:400px;">
+                                                <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/echarts/dist/echarts.min.js"></script>
+                                                <script type="text/javascript">
+
+                                                    var statistics_active_bug_group_by_who_list = {{ active_bug_group_by_who_list|safe }};
+                                                    {#alert(statistics_bug_active_priority_distribution);#}
+                                                    var statistics_active_bug_group_by_who_list_js=[];
+                                                    for (var i in statistics_active_bug_group_by_who_list){
+                                                        var each_one={ score: statistics_active_bug_group_by_who_list[i].score, name: statistics_active_bug_group_by_who_list[i].name };
+                                                        {#alert(each_one.value);#}
+                                                        {#alert(each_one.name);#}
+                                                        statistics_active_bug_group_by_who_list_js.push(each_one);
+                                                    };
+
+
+
+                                                    // 基于准备好的dom，初始化echarts实例
+                                                    var myChart=echarts.init(document.getElementById('main002'));
+
+                                                    // 指定图表的配置项和数据
+                                                    var option = {
+                                                          dataset: [
+                                                            {
+                                                              dimensions: ['name', 'age', 'profession', 'score', 'date'],
+                                                              source:statistics_active_bug_group_by_who_list_js
+                                                            },
+                                                            {
+                                                              transform: {
+                                                                type: 'sort',
+                                                                config: { dimension: 'score', order: 'asc' }
+                                                              }
+                                                            }
+                                                          ],
+                                                          yAxis: {
+                                                            type: 'category',
+                                                            axisLabel: { interval: 0, rotate: 30 }
+                                                          },
+                                                          xAxis: {},
+                                                          series: {
+                                                            type: 'bar',
+                                                            encode: { y: 'name', x: 'score' },
+                                                            datasetIndex: 1,
+                                                               label: {
+                                                                    show: true,
+                                                                    position: 'inside'
+                                                                  },
+                                                          }
+                                                        };
+
+                                                                                                // 使用刚指定的配置项和数据显示图表。
+                                                    myChart.setOption(option);
+                                                 </script>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+
 
                             <div class="col-sm-6">
                                 <h4 class="section-subtitle"><b>人工确认率</b></h4>

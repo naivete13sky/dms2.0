@@ -156,6 +156,7 @@ class BugView(TemplateView):
 
 
 
+        # <editor-fold desc="优先级分布">
         # 优先级分布
         priority_distribution_list = []
         bug_active_pd = bug_pd[(bug_pd.status == 'active')]
@@ -163,7 +164,7 @@ class BugView(TemplateView):
         # print('bug_active_pd:',bug_active_pd)
         # bug_active_priority_distribution_pd = bug_active_pd.groupby('pri').agg('count')
         bug_active_priority_distribution_pd = bug_active_pd.groupby('pri')["id"].count()
-        print('bug_active_priority_distribution_pd：',bug_active_priority_distribution_pd)
+        # print('bug_active_priority_distribution_pd：',bug_active_priority_distribution_pd)
         # print(type(bug_active_priority_distribution_pd))
         # print(list(bug_active_priority_distribution_pd.items()))
         # print(dict(bug_active_priority_distribution_pd.items()))
@@ -173,9 +174,22 @@ class BugView(TemplateView):
             one_dict = {'优先级':'优先级' + str(each),'个数':bug_active_priority_distribution_dict[each]}
             priority_distribution_list.append(one_dict)
         kwargs['bug_active_priority_distribution'] = priority_distribution_list
+        # </editor-fold>
 
-
-
+        # <editor-fold desc="拥有Bug数据排行榜">
+        active_bug_group_by_who_list = []
+        # bug_active_pd = bug_pd[(bug_pd.status == 'active')]
+        # .sort_values(ascending=False, inplace=False)[:10] 先排序，再获取前10
+        active_bug_group_by_who_pd = bug_active_pd.groupby('assignedtowho')["id"].count().sort_values(ascending=False, inplace=False)[:10]
+        print('active_bug_group_by_who_pd：',type(active_bug_group_by_who_pd), active_bug_group_by_who_pd)
+        active_bug_group_by_who_dict = dict(active_bug_group_by_who_pd.items())
+        for each in active_bug_group_by_who_dict:
+            # print(each,':',bug_active_priority_distribution_dict[each])
+            one_dict = {'name': each, 'score': active_bug_group_by_who_dict[each]}
+            active_bug_group_by_who_list.append(one_dict)
+        print('active_bug_group_by_who_list:',active_bug_group_by_who_list)
+        kwargs['active_bug_group_by_who_list'] = active_bug_group_by_who_list
+        # </editor-fold>
 
 
 
