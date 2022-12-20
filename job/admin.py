@@ -3,7 +3,7 @@ from .models import Job,JobInfoForDevTest
 from django.utils.translation import gettext_lazy as _
 
 
-
+# 自定义筛选器。MultiSelectField类型的字段直接放在list_filter里有问题的。
 class HasFileTypeListFilter(admin.SimpleListFilter):
     # 提供一个可读的标题
     title = _('包含文件类型')
@@ -32,7 +32,7 @@ class HasFileTypeListFilter(admin.SimpleListFilter):
         并返回相应的结果。
         """
         if self.value():
-            print("self.value:",self.value)
+            # print("self.value:",self.value)
             return queryset.filter(has_file_type__contains = self.value())
 
 
