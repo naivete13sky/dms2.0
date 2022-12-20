@@ -170,7 +170,7 @@ class BugView(TemplateView):
         bug_active_priority_distribution_dict = dict(bug_active_priority_distribution_pd.items())
         for each in bug_active_priority_distribution_dict:
             # print(each,':',bug_active_priority_distribution_dict[each])
-            one_dict = {'优先级':each,'个数':bug_active_priority_distribution_dict[each]}
+            one_dict = {'优先级':'优先级' + str(each),'个数':bug_active_priority_distribution_dict[each]}
             priority_distribution_list.append(one_dict)
         kwargs['bug_active_priority_distribution'] = priority_distribution_list
 
