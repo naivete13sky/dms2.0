@@ -149,6 +149,84 @@
                             {#--------------------------------------结束--表格--------------------------------------#}
 
 
+                            {{ bug_active_priority_distribution|safe }}
+                            <div class="col-sm-6">
+                                <h4 class="section-subtitle"><b>优先级分布</b></h4>
+                                <div class="panel">
+                                    <div class="panel-content">
+                                        <div id="line-example">
+
+                                            <div id="main001" style="width: 700px;height:400px;">
+                                                <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/echarts/dist/echarts.min.js"></script>
+                                                <script type="text/javascript">
+
+                                                    var statistics_bug_active_priority_distribution = {{ bug_active_priority_distribution|safe }};
+                                                    {#alert(statistics_bug_active_priority_distribution);#}
+                                                    var statistics_bug_active_priority_distribution_js=[];
+                                                    for (var i in statistics_bug_active_priority_distribution){
+                                                        var each_one={ value: statistics_bug_active_priority_distribution[i].个数, name: statistics_bug_active_priority_distribution[i].优先级 };
+                                                        {#alert(each_one.value);#}
+                                                        {#alert(each_one.name);#}
+                                                        statistics_bug_active_priority_distribution_js.push(each_one);
+                                                    };
+
+
+
+
+
+
+                                                    // 基于准备好的dom，初始化echarts实例
+                                                    var myChart=echarts.init(document.getElementById('main001'));
+
+                                                    // 指定图表的配置项和数据
+                                                    var option = {
+                                                        tooltip: {
+                                                            trigger: 'item'
+                                                            },
+                                                        legend: {
+                                                            top: '5%',
+                                                            left: 'center'
+                                                            },
+                                                        series: [
+                                                                {
+                                                                  name: '优先级',
+                                                                  type: 'pie',
+                                                                  radius: ['40%', '70%'],
+                                                                  avoidLabelOverlap: false,
+                                                                  itemStyle: {
+                                                                    borderRadius: 10,
+                                                                    borderColor: '#fff',
+                                                                    borderWidth: 2
+                                                                  },
+                                                                  label: {
+                                                                    show: false,
+                                                                    position: 'center'
+                                                                  },
+                                                                  emphasis: {
+                                                                    label: {
+                                                                      show: true,
+                                                                      fontSize: 40,
+                                                                      fontWeight: 'bold'
+                                                                    }
+                                                                  },
+                                                                  labelLine: {
+                                                                    show: false
+                                                                  },
+                                                                  data: statistics_bug_active_priority_distribution_js
+                                                                }
+                                                            ]
+                                                        };
+
+
+                                                                                                // 使用刚指定的配置项和数据显示图表。
+                                                    myChart.setOption(option);
+                                                 </script>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
 
 
                             <div class="col-sm-6">

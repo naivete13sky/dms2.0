@@ -31,7 +31,7 @@ class BugView(TemplateView):
         product_name_select = [('all','所有'),]
         count = 0
         for tup in zip(product_name_pd['id'], product_name_pd['name']):
-            print(tup, type(tup[1:]))
+            # print(tup, type(tup[1:]))
             count += 1
             product_name_select.append((str(tup[0]),tup[1]))
         print('product_name_select:',product_name_select)
@@ -143,14 +143,36 @@ class BugView(TemplateView):
         # 已解决
         kwargs['resolved_count'] = bug_pd[(bug_pd.status == 'resolved')]['id'].count()
 
+
+
+
         sql = '''SELECT * from zt_module
         '''
         bug_moudle_pd = pd.read_sql_query(sql, engine)
         # print(bug_moudle_pd)
-
         sql = '''SELECT * from zt_module a
         where a.grade=1 
         '''
+
+
+
+        # 优先级分布
+        priority_distribution_list = []
+        bug_active_pd = bug_pd[(bug_pd.status == 'active')]
+        # print(bug_active_pd.shape[0])
+        # print('bug_active_pd:',bug_active_pd)
+        # bug_active_priority_distribution_pd = bug_active_pd.groupby('pri').agg('count')
+        bug_active_priority_distribution_pd = bug_active_pd.groupby('pri')["id"].count()
+        print('bug_active_priority_distribution_pd：',bug_active_priority_distribution_pd)
+        # print(type(bug_active_priority_distribution_pd))
+        # print(list(bug_active_priority_distribution_pd.items()))
+        # print(dict(bug_active_priority_distribution_pd.items()))
+        bug_active_priority_distribution_dict = dict(bug_active_priority_distribution_pd.items())
+        for each in bug_active_priority_distribution_dict:
+            # print(each,':',bug_active_priority_distribution_dict[each])
+            one_dict = {'优先级':each,'个数':bug_active_priority_distribution_dict[each]}
+            priority_distribution_list.append(one_dict)
+        kwargs['bug_active_priority_distribution'] = priority_distribution_list
 
 
 
