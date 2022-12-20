@@ -54,7 +54,36 @@
             <div class="panel">
                 <div class="panel-content">
                     <div class="row">
-{#                        <h6>即将上线中！</h6>#}
+
+
+                        <form action="" class="form-inline" method="get" enctype="multipart/form-data" novalidate>
+
+                            {% csrf_token %}
+
+{#                            <label style="font-size:20px;">|</label>#}
+                            <label style="font-size:20px;">项目</label>
+                            <select id="query_job_file_usage_type" name="query_job_file_usage_type" class="form-control" style="width:180px;">
+                                {% for each in product_name_select %}
+                                    {% if each.0 == query_job_file_usage_type  %}
+                                        <option selected="selected" value = {{ each.0 }} >{{ each.1 }}</option>
+                                    {% endif %}
+                                    {% if each.0 != query_job_file_usage_type  %}
+                                        <option value = {{ each.0 }} >{{ each.1 }}</option>
+                                    {% endif %}
+
+                                {% endfor %}
+                            </select>
+
+                            <div class="form-group">
+                                <button type="submit" id="submit_query_get" name="submit_query_get" class="btn btn-primary" value="submit_query_get">查询</button>
+                            </div>
+
+                            <br><br>
+
+
+                        </form>
+
+
                         <div class="col-md-12">
                             <h4>今日新增：{{ today_new_bug_count }}个</h4>
                             <h4>今日解决：{{ today_resolved_bug_count }}个</h4>

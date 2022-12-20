@@ -21,10 +21,28 @@ class BugView(TemplateView):
     # 获取模板中数据
     def get_context_data(self, **kwargs):
         kwargs = super().get_context_data(**kwargs)
-        kwargs['name'] = 'BugView'
-        kwargs['title'] = "BugView"
 
+        # 拿到项目名称
         engine = create_engine("mysql+mysqlconnector://chencheng:hWx9pWk5d5J@10.97.80.36:3336/zentao")
+        sql = '''SELECT a.* from zt_product a
+                where a.id <> 1              
+                '''
+        product_name_pd = pd.read_sql_query(sql, engine)
+
+        product_name_select = [('all','所有'),]
+        count = 0
+        for tup in zip(product_name_pd['id'], product_name_pd['name']):
+            # print(tup, type(tup[1:]))
+            count += 1
+            product_name_select.append(tup)
+        print('product_name_select:',product_name_select)
+        # product_name_list = pd.read_sql_query(sql, engine)['name'].unique().tolist()
+
+        kwargs['product_name_select'] = product_name_select
+
+
+
+
         sql = '''SELECT a.*,b.name productname,c.realname createbywho,d.realname assignedtowho from zt_bug a
                 LEFT JOIN zt_product b on a.product=b.id
                 LEFT JOIN zt_user c on a.openedBy=c.account
@@ -116,5 +134,3 @@ class BugView(TemplateView):
         return kwargs
 
 
-class SwitchView(TemplateView):
-    template_name = r'switch.html'

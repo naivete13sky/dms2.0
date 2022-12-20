@@ -8,7 +8,7 @@ urlpatterns = [
     path('BugView', views.BugView.as_view(),name='BugView'),#类视图，删除料号。
 
     # path('bug_view', views.bug_view, name='bug_view'),
-    path('switch',views.SwitchView.as_view(),name='switch')
+    # path('switch',views.SwitchView.as_view(),name='switch')
 
 
 
