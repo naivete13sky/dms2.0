@@ -62,12 +62,12 @@
 
 {#                            <label style="font-size:20px;">|</label>#}
                             <label style="font-size:20px;">项目</label>
-                            <select id="query_job_file_usage_type" name="query_job_file_usage_type" class="form-control" style="width:180px;">
+                            <select id="query_product_name" name="query_product_name" class="form-control" style="width:180px;">
                                 {% for each in product_name_select %}
-                                    {% if each.0 == query_job_file_usage_type  %}
+                                    {% if each.0 == query_product_name  %}
                                         <option selected="selected" value = {{ each.0 }} >{{ each.1 }}</option>
                                     {% endif %}
-                                    {% if each.0 != query_job_file_usage_type  %}
+                                    {% if each.0 != query_product_name  %}
                                         <option value = {{ each.0 }} >{{ each.1 }}</option>
                                     {% endif %}
 
@@ -92,6 +92,9 @@
                             <h4>昨日新增：{{ yestoday_new_bug_count }}个</h4>
                             <h4>昨日解决：{{ yestoday_resolved_bug_count }}个</h4>
                             <h4>昨日关闭：{{ yestoday_closed_bug_count }}个</h4>
+
+                            <h4>激活数：{{ active_count }}个</h4>
+                            <h4>已解决：{{ resolved_count }}个</h4>
 
 
                             {#--------------------------------------开始--表格--------------------------------------#}

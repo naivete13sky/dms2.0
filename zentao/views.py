@@ -22,7 +22,7 @@ class BugView(TemplateView):
     def get_context_data(self, **kwargs):
         kwargs = super().get_context_data(**kwargs)
 
-        # 拿到项目名称
+        # <editor-fold desc="拿到项目名称">
         engine = create_engine("mysql+mysqlconnector://chencheng:hWx9pWk5d5J@10.97.80.36:3336/zentao")
         sql = '''SELECT a.* from zt_product a
                 where a.id <> 1              
@@ -37,11 +37,8 @@ class BugView(TemplateView):
             product_name_select.append(tup)
         print('product_name_select:',product_name_select)
         # product_name_list = pd.read_sql_query(sql, engine)['name'].unique().tolist()
-
         kwargs['product_name_select'] = product_name_select
-
-
-
+        # </editor-fold>
 
         sql = '''SELECT a.*,b.name productname,c.realname createbywho,d.realname assignedtowho from zt_bug a
                 LEFT JOIN zt_product b on a.product=b.id
@@ -50,10 +47,9 @@ class BugView(TemplateView):
                 where a.deleted='0'
                 '''
         bug_pd = pd.read_sql_query(sql, engine)
-        # print(bug_pd)
         # bug_pd.to_excel(r'C:\Users\Administrator\Desktop\pd.xlsx')
 
-
+        # <editor-fold desc="新增">
         # 今日新增bug
         today = datetime.date(datetime.now())
         yestoday = today - relativedelta(days=1)
@@ -78,7 +74,9 @@ class BugView(TemplateView):
             print('昨天新增bug为空',e)
             yestoday_new_bug_count = 0
         kwargs['yestoday_new_bug_count'] = yestoday_new_bug_count
+        # </editor-fold>
 
+        # <editor-fold desc="解决">
         # 今日解决bug
         bug_pd['resolved_date'] = pd.to_datetime(bug_pd['resolvedDate']).dt.date
         bug_static_by_resolved_date = bug_pd.groupby('resolved_date')["id"].count()
@@ -98,7 +96,9 @@ class BugView(TemplateView):
             print('昨天解决bug为空',e)
             yestoday_resolved_bug_count = 0
         kwargs['yestoday_resolved_bug_count'] = yestoday_resolved_bug_count
+        # </editor-fold>
 
+        # <editor-fold desc="关闭">
         # 今日关闭bug
         bug_pd['closed_date'] = pd.to_datetime(bug_pd['closedDate']).dt.date
         bug_static_by_closed_date = bug_pd.groupby('closed_date')["id"].count()
@@ -118,6 +118,14 @@ class BugView(TemplateView):
             print('今天解决bug为空', e)
             yestoday_closed_bug_count = 0
         kwargs['yestoday_closed_bug_count'] = yestoday_closed_bug_count
+        # </editor-fold>
+
+        # 激活数
+        # print(bug_pd[(bug_pd.status == 'active') & (bug_pd.productname == 'EP-CAM')]['id'].count())
+        kwargs['active_count'] = bug_pd[(bug_pd.status == 'active')]['id'].count()
+
+        # 已解决
+        kwargs['resolved_count'] = bug_pd[(bug_pd.status == 'resolved')]['id'].count()
 
 
 
