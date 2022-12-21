@@ -466,14 +466,10 @@
                                                 <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/echarts/dist/echarts.min.js"></script>
                                                 <script type="text/javascript">
 
-
-
-
-
                                                     // 基于准备好的dom，初始化echarts实例
                                                     var myChart=echarts.init(document.getElementById('main005'));
 
-                                                    var chartDom = document.getElementById('main005');
+                                                    {#var chartDom = document.getElementById('main005');#}
                                                     {#const uploadedDataURL = 'C:/Users/Administrator/Desktop/data2.json';#}
                                                     const uploadedDataURL = 'http://127.0.0.1:8000/zentao/TestJsonView2';
                                                     myChart.showLoading();
