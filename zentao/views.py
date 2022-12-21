@@ -151,9 +151,7 @@ class BugView(TemplateView):
 
 
 
-        sql = '''SELECT * from zt_module
-        '''
-        bug_moudle_pd = pd.read_sql_query(sql, engine)
+
         # print(bug_moudle_pd)
         sql = '''SELECT * from zt_module a
         where a.grade=1 
@@ -261,6 +259,37 @@ class BugView(TemplateView):
         kwargs['new_bug_group_by_month_list'] = new_bug_group_by_month_list
 
         # </editor-fold>
+
+        # <editor-fold desc="模块分布">
+        bug_active_distribution_by_module_dict = {}
+
+        sql = '''SELECT * from zt_module
+                '''
+        bug_moudle_pd = pd.read_sql_query(sql, engine)
+        # bug_moudle_pd.to_excel(r'C:\Users\Administrator\Desktop\pdmodule1.xlsx')
+
+        bug_pd_with_module = pd.merge(left=bug_pd, right=bug_moudle_pd, left_on='module', right_on='id', how='left')
+
+
+
+        def format_tree(node):
+            children = []
+
+            for _key, child in node.children.items():
+                formatted_child = format_tree(child)
+                children.append(formatted_child)
+
+            return {"name": node.name, "children": children}
+
+
+
+
+
+
+        # </editor-fold>
+
+
+
 
 
         return kwargs
