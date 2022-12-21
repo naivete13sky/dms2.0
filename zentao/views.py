@@ -266,4 +266,15 @@ class BugView(TemplateView):
         return kwargs
 
 
+class TestView(TemplateView):
+    template_name = r'TestView.html'
 
+
+class TestJsonView(View):
+    def get(self, request, *args, **kwargs):
+
+        with open(r'C:\Users\Administrator\Desktop\data.json', encoding='utf-8') as f:
+            data_from_json = json.load(f)
+        # print(data_from_json)
+        # return HttpResponse('hello,cc')
+        return HttpResponse(json.dumps(data_from_json))
