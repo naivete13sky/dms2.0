@@ -64,20 +64,43 @@ def cc1():
     print(data_dict_1)
 
 
+def cc2():
+    engine = create_engine("mysql+mysqlconnector://chencheng:hWx9pWk5d5J@10.97.80.36:3336/zentao")
+    sql = '''SELECT * from zt_module                '''
+    bug_moudle_pd = pd.read_sql_query(sql, engine)
+    bug_moudle_pd = bug_moudle_pd[(bug_moudle_pd.deleted == '0')]
+    # print(bug_moudle_pd)
+
+    data_list_1 = []
+    for tup in zip(
+            bug_moudle_pd['id'],bug_moudle_pd['root'],bug_moudle_pd['name'],bug_moudle_pd['parent'],
+            bug_moudle_pd['grade'], bug_moudle_pd['type']
+                   ):
+        pass
+        current_dict = {'module_id':tup[0],'module_root':tup[1],'module_name':tup[2],'module_parent_id':tup[3]}
+        data_list_1.append(current_dict)
+    # print(data_list_1)
+    return data_list_1
+
+
+
+
+
+
 """
 列表转树函数
 关键字：id、parent_id、children
 """
 def list2tree(data: list) -> list:
     # 转成ID为Key的字典
-    mapping: dict = dict(zip([i['id'] for i in data], data))
+    mapping: dict = dict(zip([i['module_id'] for i in data], data))
 
     # 树容器
     container: list = []
 
     for d in data:
         # 如果找不到父级项，则是根节点
-        parent: dict = mapping.get(d['parent_id'])
+        parent: dict = mapping.get(d['module_parent_id'])
         if parent is None:
             container.append(d)
         else:
@@ -97,14 +120,25 @@ def list2tree(data: list) -> list:
 
 if __name__=="__main__":
     data: list = [
-        {'id': 1, 'parent_id': 0, 'name': '用户管理', 'url': 'https://www.baidu.com'},
-        {'id': 2, 'parent_id': 0, 'name': '菜单管理', 'url': 'https://www.baidu.com'},
-        {'id': 3, 'parent_id': 1, 'name': '新增用户', 'url': 'https://www.baidu.com'},
-        {'id': 4, 'parent_id': 1, 'name': '删除用户', 'url': 'https://www.baidu.com'},
-        {'id': 5, 'parent_id': 2, 'name': '新增菜单', 'url': 'https://www.baidu.com'},
-        {'id': 6, 'parent_id': 2, 'name': '删除菜单', 'url': 'https://www.baidu.com'},
+        {'module_id': 1, 'module_parent_id': 0, 'name': '用户管理', 'url': 'https://www.baidu.com'},
+        {'module_id': 2, 'module_parent_id': 0, 'name': '菜单管理', 'url': 'https://www.baidu.com'},
+        {'module_id': 3, 'module_parent_id': 1, 'name': '新增用户', 'url': 'https://www.baidu.com'},
+        {'module_id': 7, 'module_parent_id': 3, 'name': '新增用户cc', 'url': 'https://www.baidu.comcc'},
+        {'module_id': 4, 'module_parent_id': 1, 'name': '删除用户', 'url': 'https://www.baidu.com'},
+        {'module_id': 5, 'module_parent_id': 2, 'name': '新增菜单', 'url': 'https://www.baidu.com'},
+        {'module_id': 6, 'module_parent_id': 2, 'name': '删除菜单', 'url': 'https://www.baidu.com'},
     ]
 
-    # 打印验证一下
-    for i in list2tree(data):
-        print(i)
+
+    data = cc2()
+
+
+
+    # # 打印验证一下
+    # for i in list2tree(data):
+    #     print(i)
+    cc = list2tree(data)
+    print(type(cc))
+    print(len(cc))
+    for each in cc:
+        print(each)
