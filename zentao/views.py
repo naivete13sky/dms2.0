@@ -278,3 +278,12 @@ class TestJsonView(View):
         # print(data_from_json)
         # return HttpResponse('hello,cc')
         return HttpResponse(json.dumps(data_from_json))
+
+class TestJsonView2(View):
+    def get(self, request, *args, **kwargs):
+
+        with open(r'C:\Users\Administrator\Desktop\data2.json', encoding='utf-8') as f:
+            data_from_json = json.load(f)
+        # print(data_from_json)
+        # return HttpResponse('hello,cc')
+        return HttpResponse(json.dumps(data_from_json))

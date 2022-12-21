@@ -453,8 +453,11 @@
                                 </div>
                             </div>
 
+
+
+
                             <div class="col-sm-6">
-                                <h4 class="section-subtitle"><b>test</b></h4>
+                                <h4 class="section-subtitle"><b>Bug模块分布</b></h4>
                                 <div class="panel">
                                     <div class="panel-content">
                                         <div id="line-example">
@@ -463,77 +466,94 @@
                                                 <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/echarts/dist/echarts.min.js"></script>
                                                 <script type="text/javascript">
 
+
+
+
+
+                                                    // 基于准备好的dom，初始化echarts实例
+                                                    var myChart=echarts.init(document.getElementById('main005'));
+
+                                                    var chartDom = document.getElementById('main005');
+                                                    {#const uploadedDataURL = 'C:/Users/Administrator/Desktop/data2.json';#}
+                                                    const uploadedDataURL = 'http://127.0.0.1:8000/zentao/TestJsonView2';
                                                     myChart.showLoading();
-                                                    $.get('http://127.0.0.1:8000/zentao/TestJsonView', function (diskData) {
-
+                                                    $.getJSON(uploadedDataURL, function (rawData) {
                                                       myChart.hideLoading();
-
-                                                        {#alert(diskData)#}
-                                                      const formatUtil = echarts.format;
-                                                      function getLevelOption() {
-                                                        return [
-                                                          {
-                                                            itemStyle: {
-                                                              borderWidth: 0,
-                                                              gapWidth: 5
-                                                            }
-                                                          },
-                                                          {
-                                                            itemStyle: {
-                                                              gapWidth: 1
-                                                            }
-                                                          },
-                                                          {
-                                                            colorSaturation: [0.35, 0.5],
-                                                            itemStyle: {
-                                                              gapWidth: 1,
-                                                              borderColorSaturation: 0.6
-                                                            }
+                                                      function convert(source, target, basePath) {
+                                                        for (let key in source) {
+                                                          let path = basePath ? basePath + '.' + key : key;
+                                                          if (!key.match(/^\$/)) {
+                                                            target.children = target.children || [];
+                                                            const child = {
+                                                              name: path
+                                                            };
+                                                            target.children.push(child);
+                                                            convert(source[key], child, path);
                                                           }
-                                                        ];
+                                                        }
+                                                        if (!target.children) {
+                                                          target.value = source.$count || 1;
+                                                        } else {
+                                                          target.children.push({
+                                                            name: basePath,
+                                                            value: source.$count
+                                                          });
+                                                        }
                                                       }
+                                                      const data = {
+                                                        children: []
+                                                      };
+                                                      convert(rawData, data, '');
                                                       myChart.setOption(
                                                         (option = {
                                                           title: {
-                                                            text: 'Disk Usage',
-                                                            left: 'center'
+                                                            text: 'ECharts Options',
+                                                            subtext: '2016/04',
+                                                            left: 'leafDepth'
                                                           },
-                                                          tooltip: {
-                                                            formatter: function (info) {
-                                                              var value = info.value;
-                                                              var treePathInfo = info.treePathInfo;
-                                                              var treePath = [];
-                                                              for (var i = 1; i < treePathInfo.length; i++) {
-                                                                treePath.push(treePathInfo[i].name);
-                                                              }
-                                                              return [
-                                                                '<div class="tooltip-title">' +
-                                                                  formatUtil.encodeHTML(treePath.join('/')) +
-                                                                  '</div>',
-                                                                'Disk Usage: ' + formatUtil.addCommas(value) + ' KB'
-                                                              ].join('');
-                                                            }
-                                                          },
+                                                          tooltip: {},
                                                           series: [
                                                             {
-                                                              name: 'Disk Usage',
+                                                              name: 'option',
                                                               type: 'treemap',
                                                               visibleMin: 300,
-                                                              label: {
-                                                                show: true,
-                                                                formatter: '{b}'
-                                                              },
-                                                              itemStyle: {
-                                                                borderColor: '#fff'
-                                                              },
-                                                              levels: getLevelOption(),
-                                                              data: diskData
+                                                              data: data.children,
+                                                              leafDepth: 2,
+                                                              levels: [
+                                                                {
+                                                                  itemStyle: {
+                                                                    borderColor: '#555',
+                                                                    borderWidth: 4,
+                                                                    gapWidth: 4
+                                                                  }
+                                                                },
+                                                                {
+                                                                  colorSaturation: [0.3, 0.6],
+                                                                  itemStyle: {
+                                                                    borderColorSaturation: 0.7,
+                                                                    gapWidth: 2,
+                                                                    borderWidth: 2
+                                                                  }
+                                                                },
+                                                                {
+                                                                  colorSaturation: [0.3, 0.5],
+                                                                  itemStyle: {
+                                                                    borderColorSaturation: 0.6,
+                                                                    gapWidth: 1
+                                                                  }
+                                                                },
+                                                                {
+                                                                  colorSaturation: [0.3, 0.5]
+                                                                }
+                                                              ]
                                                             }
                                                           ]
                                                         })
                                                       );
                                                     });
 
+
+
                                                  </script>
                                             </div>
                                         </div>
@@ -545,383 +565,6 @@
 
 
 
-                            <div class="col-sm-6">
-                                <h4 class="section-subtitle"><b>人工确认率</b></h4>
-                                <div class="panel">
-                                    <div class="panel-content">
-                                        <div id="line-example">
-
-                                            <div id="main03" style="width: 700px;height:400px;">
-                                                <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/echarts/dist/echarts.min.js"></script>
-                                                <script type="text/javascript">
-
-                                                    var job_published_ratio = {{ job_published_ratio|safe }};
-
-                                                                                        // 基于准备好的dom，初始化echarts实例
-                                                    var myChart=echarts.init(document.getElementById('main03'));
-
-                                                                                                // 指定图表的配置项和数据
-                                                    var option = {
-                                                        tooltip: {
-                                                        formatter: '{a} <br/>{b} : {c}%'
-                                                        },
-                                                        series: [
-                                                        {
-                                                          name: '料号人工确认率',
-                                                          type: 'gauge',
-                                                          progress: {
-                                                            show: true
-                                                          },
-                                                          detail: {
-                                                            valueAnimation: true,
-                                                            formatter: '{value}'
-                                                          },
-                                                          data: [
-                                                            {
-                                                              value: job_published_ratio,
-                                                              name: '确认率'
-                                                            }
-                                                          ]
-                                                        }
-                                                        ]
-                                                    };
-
-
-
-
-
-                                                                                                // 使用刚指定的配置项和数据显示图表。
-                                                    myChart.setOption(option);
-                                                 </script>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div class="col-sm-6">
-                                <h4 class="section-subtitle"><b>每日新增料号数</b></h4>
-                                <div class="panel">
-                                    <div class="panel-content">
-                                        <div id="area-example">
-
-                                            <div id="main01" style="width: 700px;height:400px;">
-                                                <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/echarts/dist/echarts.min.js"></script>
-                                                <script type="text/javascript">
-
-                                                    var x_list = {{ statics_job_by_day_x|safe }};
-                                                    var y_list = {{ statics_job_by_day_y|safe }};
-
-
-                                                                                        // 基于准备好的dom，初始化echarts实例
-                                                    var myChart=echarts.init(document.getElementById('main01'));
-
-                                                                                                // 指定图表的配置项和数据
-                                                    var option = {
-                                                        tooltip: {
-                                                            trigger: 'axis',
-                                                            axisPointer: {
-                                                              type: 'shadow'
-                                                            }
-                                                        },
-                                                        grid: {
-                                                            left: '3%',
-                                                            right: '4%',
-                                                            bottom: '3%',
-                                                            containLabel: true
-                                                        },
-                                                        xAxis: [
-                                                            {
-                                                              type: 'category',
-                                                              data: x_list,
-                                                              axisTick: {
-                                                                alignWithLabel: true
-                                                              }
-                                                            }
-                                                        ],
-                                                        yAxis: [
-                                                            {
-                                                              type: 'value'
-                                                            }
-                                                        ],
-                                                        series: [
-                                                            {
-                                                              name: '料号个数',
-                                                              type: 'bar',
-                                                              barWidth: '60%',
-                                                                label: {
-                                                                    show: true
-                                                                },
-                                                              data: y_list
-                                                            }
-                                                        ]
-                                                    };
-
-                                                                                                // 使用刚指定的配置项和数据显示图表。
-                                                    myChart.setOption(option);
-                                                 </script>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div class="col-sm-6">
-                                <h4 class="section-subtitle"><b>每日新增料号数</b> 堆积图</h4>
-                                <div class="panel">
-                                    <div class="panel-content">
-                                        <div id="bar-example">
-
-                                            <div id="main02" style="width: 700px;height:400px;">
-                                                <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/echarts/dist/echarts.min.js"></script>
-                                                <script type="text/javascript">
-
-                                                var x_list_dui_ji = {{ statics_job_by_day_x_dui_ji|safe }};
-                                                var y_list_cc = {{ statics_job_by_day_author_list_7_day_cc|safe }};
-                                                var y_list_zjr = {{ statics_job_by_day_author_list_7_day_zjr|safe }};
-                                                var y_list_gcc = {{ statics_job_by_day_author_list_7_day_gcc|safe }};
-                                                var y_list_ze = {{ statics_job_by_day_author_list_7_day_ze|safe }};
-                                                var y_list_zzr = {{ statics_job_by_day_author_list_7_day_zzr|safe }};
-                                                var y_list_total = {{ statics_job_by_day_author_list_7_day_total|safe }};
-
-
-                                                                                    // 基于准备好的dom，初始化echarts实例
-                                                var myChart=echarts.init(document.getElementById('main02'));
-
-                                                                                            // 指定图表的配置项和数据
-                                                var option = {
-                                                    tooltip: {
-                                                    trigger: 'axis',
-                                                    axisPointer: {
-                                                      // Use axis to trigger tooltip
-                                                      type: 'shadow' // 'shadow' as default; can also be 'line' or 'shadow'
-                                                    }
-                                                    },
-                                                    legend: {},
-                                                    grid: {
-                                                        left: '3%',
-                                                        right: '4%',
-                                                        bottom: '3%',
-                                                        containLabel: true
-                                                    },
-                                                    xAxis: {
-                                                        type: 'category',
-                                                        data: x_list_dui_ji
-                                                    },
-                                                    yAxis: {
-                                                        type: 'value'
-                                                    },
-
-                                                    series: [
-
-                                                        {
-                                                            name: 'jinru.zhang',
-                                                            type: 'bar',
-                                                            stack: 'total',
-                                                            label: {
-                                                            show: false
-                                                            },
-                                                            emphasis: {
-                                                            focus: 'series'
-                                                            },
-                                                            data: y_list_zjr
-                                                        },
-                                                        {
-                                                            name: 'congcong.guo',
-                                                            type: 'bar',
-                                                            stack: 'total',
-                                                            label: {
-                                                            show: false
-                                                            },
-                                                            emphasis: {
-                                                            focus: 'series'
-                                                            },
-                                                            data: y_list_gcc
-                                                        },
-                                                        {
-                                                            name: 'en.zhu',
-                                                            type: 'bar',
-                                                            stack: 'total',
-                                                            label: {
-                                                            show: false
-                                                            },
-                                                            emphasis: {
-                                                            focus: 'series'
-                                                            },
-                                                            data: y_list_ze
-                                                        },
-                                                        {
-                                                            name: 'zhenru.zhao',
-                                                            type: 'bar',
-                                                            stack: 'total',
-                                                            label: {
-                                                            show: false
-                                                            },
-                                                            emphasis: {
-                                                            focus: 'series'
-                                                            },
-                                                            data: y_list_zzr
-                                                        },
-                                                        {
-                                                            name: '总计',
-                                                            type: 'bar',
-                                                            stack: 'all',
-                                                            label: {
-                                                                show: true,
-                                                                position: 'top',
-                                                            },
-                                                            emphasis: {
-                                                            focus: 'series'
-                                                            },
-                                                            data: y_list_total,
-                                                            z: -1,
-                                                            //不同系列的柱间距离，为百分比,如果想要两个系列的柱子重叠，可以设置 barGap 为 '-100%'。
-                                                            barGap: '-100%',
-                                                        },
-
-
-                                                    ]
-                                                };
-
-
-
-
-
-                                                                                            // 使用刚指定的配置项和数据显示图表。
-                                                myChart.setOption(option);
-                                             </script>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-
-
-
-
-                            <div class="col-sm-6">
-                                <h4 class="section-subtitle"><b>负责人-料号数</b> 南丁格尔玫瑰图</h4>
-
-                                <div class="panel">
-                                    <div class="panel-content">
-                                        <div id="donut-example">
-                                            <div id="main04" style="width: 700px;height:400px;">
-                                                <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/echarts/dist/echarts.min.js"></script>
-                                                <script type="text/javascript">
-
-                                                var x_list_dui_ji = {{ statics_job_by_day_x_dui_ji|safe }};
-                                                var statics_author_list = {{ statics_author_list_json|safe }};
-
-                                                {#alert("abcd2");#}
-                                                {#alert(statics_author_list);#}
-
-                                                {#var statics_author_list= {{ statics_author_list|safe }};#}
-                                                {#alert("abc");#}
-                                                {#alert(statics_author_list);#}
-
-                                                var statics_author_list_js=[];
-                                                for (var i in statics_author_list){
-                                                    var each_one={ value: statics_author_list[i].料号数, name: statics_author_list[i].负责人 };
-                                                    {#alert(each_one.name);#}
-                                                    statics_author_list_js.push(each_one);
-                                                };
-                                                {#alert(statics_author_list_js);#}
-
-
-
-
-                                                                                    // 基于准备好的dom，初始化echarts实例
-                                                var myChart=echarts.init(document.getElementById('main04'));
-
-                                                                                            // 指定图表的配置项和数据
-                                                var option = {
-                                                    title: {
-                                                        {#text: 'Nightingale Chart',#}
-                                                        {#subtext: 'Fake Data',#}
-                                                        left: 'center'
-                                                    },
-                                                    tooltip: {
-                                                        trigger: 'item',
-                                                        formatter: '{a} <br/>{b} : {c} ({d}%)'
-                                                    },
-                                                    legend: {
-                                                        left: 'center',
-                                                        top: 'bottom',
-                                                        {#data: [#}
-                                                        {#    'rose1',#}
-                                                        {#    'rose2',#}
-                                                        {#    'rose3',#}
-                                                        {#    'rose4',#}
-                                                        {#    'rose5',#}
-                                                        {#    'rose6',#}
-                                                        {#    'rose7',#}
-                                                        {#    'rose8'#}
-                                                        {#]#}
-                                                    },
-                                                    toolbox: {
-                                                        show: true,
-                                                        feature: {
-                                                            mark: { show: true },
-                                                            dataView: { show: true, readOnly: false },
-                                                            restore: { show: true },
-                                                            saveAsImage: { show: true }
-                                                        }
-                                                    },
-                                                    series: [
-                                                        {
-                                                            name: 'Radius Mode',
-                                                            type: 'pie',
-                                                            radius: [20, 140],
-                                                            center: ['50%', '50%'],
-                                                            roseType: 'radius',
-                                                            itemStyle: {
-                                                                borderRadius: 5,
-                                                                normal:{
-
-                                                                    label:{
-
-                                                                    show: true,
-
-                                                                    formatter: '{b} : {c} ({d}%)',
-
-                                                                    textStyle:{
-
-                                                                        fontSize:8
-
-                                                                    }
-
-                                                                    },
-
-                                                                    labelLine :{show:true}
-
-                                                                }
-                                                            },
-                                                            label: {
-                                                                show: true
-                                                            },
-                                                            emphasis: {
-                                                                label: {
-                                                                  show: true
-                                                                }
-                                                            },
-                                                            data: statics_author_list_js
-                                                        },
-
-                                                    ]
-                                                };
-
-
-
-
-
-                                                                                            // 使用刚指定的配置项和数据显示图表。
-                                                myChart.setOption(option);
-                                             </script>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
 
 
 

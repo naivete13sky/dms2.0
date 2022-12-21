@@ -8,8 +8,8 @@ urlpatterns = [
     path('BugView', views.BugView.as_view(),name='BugView'),#类视图，删除料号。
 
     path('TestView', views.TestView.as_view(), name='TestView'),
-    path('TestJsonView',views.TestJsonView.as_view(),name='TestJsonView')
-
+    path('TestJsonView',views.TestJsonView.as_view(),name='TestJsonView'),
+    path('TestJsonView2',views.TestJsonView2.as_view(),name='TestJsonView2')
 
 
 ]
