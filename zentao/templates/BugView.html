@@ -453,7 +453,93 @@
                                 </div>
                             </div>
 
+                            <div class="col-sm-6">
+                                <h4 class="section-subtitle"><b>test</b></h4>
+                                <div class="panel">
+                                    <div class="panel-content">
+                                        <div id="line-example">
 
+                                            <div id="main005" style="width: 700px;height:400px;">
+                                                <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/echarts/dist/echarts.min.js"></script>
+                                                <script type="text/javascript">
+
+                                                    myChart.showLoading();
+                                                    $.get('http://127.0.0.1:8000/zentao/TestJsonView', function (diskData) {
+
+                                                      myChart.hideLoading();
+
+                                                        alert(diskData)
+                                                      const formatUtil = echarts.format;
+                                                      function getLevelOption() {
+                                                        return [
+                                                          {
+                                                            itemStyle: {
+                                                              borderWidth: 0,
+                                                              gapWidth: 5
+                                                            }
+                                                          },
+                                                          {
+                                                            itemStyle: {
+                                                              gapWidth: 1
+                                                            }
+                                                          },
+                                                          {
+                                                            colorSaturation: [0.35, 0.5],
+                                                            itemStyle: {
+                                                              gapWidth: 1,
+                                                              borderColorSaturation: 0.6
+                                                            }
+                                                          }
+                                                        ];
+                                                      }
+                                                      myChart.setOption(
+                                                        (option = {
+                                                          title: {
+                                                            text: 'Disk Usage',
+                                                            left: 'center'
+                                                          },
+                                                          tooltip: {
+                                                            formatter: function (info) {
+                                                              var value = info.value;
+                                                              var treePathInfo = info.treePathInfo;
+                                                              var treePath = [];
+                                                              for (var i = 1; i < treePathInfo.length; i++) {
+                                                                treePath.push(treePathInfo[i].name);
+                                                              }
+                                                              return [
+                                                                '<div class="tooltip-title">' +
+                                                                  formatUtil.encodeHTML(treePath.join('/')) +
+                                                                  '</div>',
+                                                                'Disk Usage: ' + formatUtil.addCommas(value) + ' KB'
+                                                              ].join('');
+                                                            }
+                                                          },
+                                                          series: [
+                                                            {
+                                                              name: 'Disk Usage',
+                                                              type: 'treemap',
+                                                              visibleMin: 300,
+                                                              label: {
+                                                                show: true,
+                                                                formatter: '{b}'
+                                                              },
+                                                              itemStyle: {
+                                                                borderColor: '#fff'
+                                                              },
+                                                              levels: getLevelOption(),
+                                                              data: diskData
+                                                            }
+                                                          ]
+                                                        })
+                                                      );
+                                                    });
+
+                                                 </script>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
 
 
 
