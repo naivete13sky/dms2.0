@@ -322,7 +322,8 @@ def list2tree4(data: list) -> list:
             # parent.update({d['module_name']: children})
             parent.update({temp_module_name: children})
     container = str(container).replace('[','').replace(']','')
-
+    container=eval(container)
+    container = json.dumps(container, ensure_ascii=False)
     return container
 
 
@@ -383,12 +384,5 @@ if __name__=="__main__":
 
     cc = list2tree4(cc4())
     print(cc)
-    print(type(cc))
-    ccc=eval(cc)
-    print(ccc)
-    print(type(ccc))
-    dd=json.dumps(ccc,ensure_ascii=False)
-    print(dd)
-    print(type(dd))
 
 
