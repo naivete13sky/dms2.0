@@ -82,7 +82,23 @@ def cc2():
     # print(data_list_1)
     return data_list_1
 
+def cc3():
+    engine = create_engine("mysql+mysqlconnector://chencheng:hWx9pWk5d5J@10.97.80.36:3336/zentao")
+    sql = '''SELECT * from zt_module                '''
+    bug_moudle_pd = pd.read_sql_query(sql, engine)
+    bug_moudle_pd = bug_moudle_pd[(bug_moudle_pd.deleted == '0')]
+    # print(bug_moudle_pd)
 
+    data_list_1 = []
+    for tup in zip(
+            bug_moudle_pd['id'],bug_moudle_pd['root'],bug_moudle_pd['name'],bug_moudle_pd['parent'],
+            bug_moudle_pd['grade'], bug_moudle_pd['type']
+                   ):
+        pass
+        current_dict = {'module_id':tup[0],'module_name':tup[2],'module_parent_id':tup[3]}
+        data_list_1.append(current_dict)
+    # print(data_list_1)
+    return data_list_1
 
 
 
@@ -112,7 +128,44 @@ def list2tree(data: list) -> list:
     return container
 
 
+def list2tree2(data: list) -> list:
+    # 转成ID为Key的字典
+    mapping = dict(zip([i['module_id'] for i in data], data))
+    # print('mapping:',mapping)
+    # 树容器
+    # container: list = []
+    container: dict = {}
 
+    print('data:', data)
+    for d in data:
+        print("d:",d)
+        # 如果找不到父级项，则是根节点
+        parent: dict = mapping.get(d['module_parent_id'])
+        # print('parent:',parent)
+        if parent is None:
+            d['$count']=0
+            # container.append(d)
+            temp_module_name =  d['module_name']
+            d.pop('module_name',None)
+            container[temp_module_name]=d
+
+        else:
+            children: list = parent.get('children')
+            # children: dict = parent.get('children')
+            if not children:
+                children = []
+                # children = {}
+            d['$count']=0
+            # children.append(d)
+            temp_module_name = d['module_name']
+            d.pop('module_name', None)
+            # children[temp_module_name] = d
+            children.append(d)
+
+            # parent.update({'children': children})
+            # parent.update({d['module_name']: children})
+            parent.update({temp_module_name: children})
+    return container
 
 
 
@@ -130,15 +183,22 @@ if __name__=="__main__":
     ]
 
 
-    data = cc2()
+    # data = cc2()
 
 
 
     # # 打印验证一下
     # for i in list2tree(data):
     #     print(i)
-    cc = list2tree(data)
-    print(type(cc))
-    print(len(cc))
-    for each in cc:
-        print(each)
+    # cc = list2tree(data)
+    # print(type(cc))
+    # print(len(cc))
+    # for each in cc:
+    #     print(each)
+
+    cc = list2tree2(cc3())
+    print(cc)
+
+    # data_dict = {}
+    # for each in cc:
+    #     print(each)
