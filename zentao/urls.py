@@ -9,7 +9,9 @@ urlpatterns = [
 
     path('TestView', views.TestView.as_view(), name='TestView'),
     path('TestJsonView',views.TestJsonView.as_view(),name='TestJsonView'),
-    path('TestJsonView2',views.TestJsonView2.as_view(),name='TestJsonView2')
+    path('TestJsonView2',views.TestJsonView2.as_view(),name='TestJsonView2'),
+
+    path('BugModuleDistributionJsonView',views.BugModuleDistributionJsonView.as_view(),name='BugModuleDistributionJsonView'),
 
 
 ]

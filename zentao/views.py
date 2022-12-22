@@ -9,6 +9,7 @@ from django.shortcuts import render, redirect
 from django.views.generic.base import View, TemplateView
 from sqlalchemy import create_engine
 import pandas as pd
+from zentao.GL import GL
 
 
 class BugView_0(View):
@@ -297,9 +298,9 @@ class BugView(TemplateView):
                             '$count': current_count}
             data_list_1.append(current_dict)
         # print(data_list_1)
-        data_json=self.list2tree_dict(data_list_1)
-        print(data_json)
-
+        data_bug_module_distribution_json=self.list2tree_dict(data_list_1)
+        # print(data_bug_module_distribution_json)
+        GL.data_bug_module_distribution_json=data_bug_module_distribution_json
 
         # </editor-fold>
 
@@ -374,4 +375,23 @@ class TestJsonView2(View):
             data_from_json = json.load(f)
         # print(data_from_json)
         # return HttpResponse('hello,cc')
+        return HttpResponse(json.dumps(data_from_json))
+
+class BugModuleDistributionJsonView(View):
+    def get(self, request, *args, **kwargs):
+
+        # <editor-fold desc="模块分布">
+
+
+
+        data_from_json = GL.data_bug_module_distribution_json
+
+
+        with open(r'C:\Users\Administrator\Desktop\data2.json', encoding='utf-8') as f:
+            data_from_json = json.load(f)
+
+
+        # </editor-fold>
+        print('data_from_json:',data_from_json)
+
         return HttpResponse(json.dumps(data_from_json))
