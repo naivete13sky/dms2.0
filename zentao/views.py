@@ -304,8 +304,8 @@ class BugView(TemplateView):
         # print(data_bug_module_distribution_json)
         data_bug_module_distribution_dict = json.loads(data_bug_module_distribution_json)
 
-        with open(os.path.join(settings.BASE_DIR,r'zentao\temp\data_bug_distribution.json'),'w', encoding='utf-8') as fw:
-            json.dump(data_bug_module_distribution_dict,fw,indent=4,ensure_ascii=False)
+        # with open(os.path.join(settings.BASE_DIR,r'zentao\temp\data_bug_distribution.json'),'w', encoding='utf-8') as fw:
+        #     json.dump(data_bug_module_distribution_dict,fw,indent=4,ensure_ascii=False)
 
         GL.data_bug_module_distribution_json=data_bug_module_distribution_json
 
@@ -396,11 +396,12 @@ class BugModuleDistributionJsonView(View):
         data_from_json = GL.data_bug_module_distribution_json
 
 
-        with open(os.path.join(settings.BASE_DIR,r'zentao\temp\data_bug_distribution.json'), encoding='utf-8') as f:
-            data_from_json = json.load(f)
+        # with open(os.path.join(settings.BASE_DIR,r'zentao\temp\data_bug_distribution.json'), encoding='utf-8') as f:
+        #     data_from_json = json.load(f)
 
 
         # </editor-fold>
         print('data_from_json:',data_from_json)
 
-        return HttpResponse(json.dumps(data_from_json))
+        return HttpResponse(data_from_json)
+        # return HttpResponse(json.dumps(data_from_json))
