@@ -1,3 +1,5 @@
+import json
+
 from sqlalchemy import create_engine
 import pandas as pd
 
@@ -292,7 +294,7 @@ def list2tree4(data: list) -> list:
 
     # print('data:', data)
     for d in data:
-        print("d:",d)
+        # print("d:",d)
         # 如果找不到父级项，则是根节点
         parent: dict = mapping.get(d['module_parent_id'])
         # print('parent:',parent)
@@ -320,6 +322,7 @@ def list2tree4(data: list) -> list:
             # parent.update({d['module_name']: children})
             parent.update({temp_module_name: children})
     container = str(container).replace('[','').replace(']','')
+
     return container
 
 
@@ -380,5 +383,12 @@ if __name__=="__main__":
 
     cc = list2tree4(cc4())
     print(cc)
+    print(type(cc))
+    ccc=eval(cc)
+    print(ccc)
+    print(type(ccc))
+    dd=json.dumps(ccc,ensure_ascii=False)
+    print(dd)
+    print(type(dd))
 
-    # print(cc1_1())
+
