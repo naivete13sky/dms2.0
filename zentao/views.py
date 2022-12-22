@@ -1,5 +1,6 @@
 import datetime
 import json
+import os
 from datetime import datetime
 from dateutil.relativedelta import relativedelta
 from django.http import HttpResponse
@@ -10,6 +11,7 @@ from django.views.generic.base import View, TemplateView
 from sqlalchemy import create_engine
 import pandas as pd
 from zentao.GL import GL
+from django.conf import settings
 
 
 class BugView_0(View):
@@ -300,7 +302,14 @@ class BugView(TemplateView):
         # print(data_list_1)
         data_bug_module_distribution_json=self.list2tree_dict(data_list_1)
         # print(data_bug_module_distribution_json)
+        data_bug_module_distribution_dict = json.loads(data_bug_module_distribution_json)
+
+        with open(os.path.join(settings.BASE_DIR,r'zentao\temp\data_bug_distribution.json'),'w', encoding='utf-8') as fw:
+            json.dump(data_bug_module_distribution_dict,fw,indent=4,ensure_ascii=False)
+
         GL.data_bug_module_distribution_json=data_bug_module_distribution_json
+
+
 
         # </editor-fold>
 
@@ -387,7 +396,7 @@ class BugModuleDistributionJsonView(View):
         data_from_json = GL.data_bug_module_distribution_json
 
 
-        with open(r'C:\Users\Administrator\Desktop\data2.json', encoding='utf-8') as f:
+        with open(os.path.join(settings.BASE_DIR,r'zentao\temp\data_bug_distribution.json'), encoding='utf-8') as f:
             data_from_json = json.load(f)
 
 
