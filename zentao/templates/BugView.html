@@ -483,6 +483,7 @@
                                                             target.children = target.children || [];
                                                             const child = {
                                                               name: path
+                                                                {#name: path+':'+source.$count#}
                                                             };
                                                             target.children.push(child);
                                                             convert(source[key], child, path);
@@ -492,7 +493,8 @@
                                                           target.value = source.$count || 1;
                                                         } else {
                                                           target.children.push({
-                                                            name: basePath,
+                                                              {#name: basePath,#}
+                                                            name: basePath+'：'+source.$count,
                                                             value: source.$count
                                                           });
                                                         }
