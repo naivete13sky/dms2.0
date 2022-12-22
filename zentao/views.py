@@ -402,6 +402,28 @@ class BugModuleDistributionJsonView(View):
 
         # </editor-fold>
         print('data_from_json:',data_from_json)
+        data_dict = json.loads(data_from_json)
+        print('data_dict:',data_dict)
+        print("分割线".center(192,'-'))
+
+
+        def analyze_data(data):
+            if isinstance(data, dict):
+                for k in list(data):
+                    if k in ["module_id","module_parent_id",]:
+                        data.pop(k)
+                    else:
+                        analyze_data(data[k])
+            elif isinstance(data, (list, tuple)):
+                for i in range(len(data)):
+                    analyze_data(data[i])
+            else:
+                pass
+                # print(data)
+
+        analyze_data(data_dict)
+        print('now data_dict:',data_dict)
+        data_from_json=json.dumps(data_dict,indent=4,ensure_ascii=False)
 
         return HttpResponse(data_from_json)
         # return HttpResponse(json.dumps(data_from_json))
