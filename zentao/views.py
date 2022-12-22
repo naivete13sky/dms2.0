@@ -272,14 +272,6 @@ class BugView(TemplateView):
 
 
 
-        def format_tree(node):
-            children = []
-
-            for _key, child in node.children.items():
-                formatted_child = format_tree(child)
-                children.append(formatted_child)
-
-            return {"name": node.name, "children": children}
 
 
 
