@@ -493,8 +493,8 @@
                                                           target.value = source.$count || 1;
                                                         } else {
                                                           target.children.push({
-                                                              {#name: basePath,#}
-                                                            name: basePath+'：'+source.$count,
+                                                              name: basePath,
+                                                            {#name: basePath+'：'+source.$count,#}
                                                             value: source.$count
                                                           });
                                                         }
@@ -518,6 +518,22 @@
                                                               visibleMin: 300,
                                                               data: data.children,
                                                               leafDepth: 2,
+                                                                label: {
+                                                                    show: true,
+                                                                    formatter: function (a) {
+                                                                      {#var str = '类别:';#}
+                                                                      var str = '';
+                                                                      return str.concat(
+                                                                        a.name + '\n\n' + '次数:',
+                                                                        a.value + ' ' + '占比:',
+                                                                        ((a.value / 2010) * 100).toFixed(2) + '%'
+                                                                      );
+                                                                    },
+                                                                    //这里的重点在于设置百分比
+                                                                    position: 'inside',
+                                                                    color: 'black',
+                                                                    fontSize: 14
+                                                                  },
                                                               levels: [
                                                                 {
                                                                   itemStyle: {
