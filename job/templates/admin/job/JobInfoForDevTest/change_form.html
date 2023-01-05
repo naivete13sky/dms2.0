@@ -91,7 +91,6 @@
 
 {#                hellow cc#}
                 {#-----------------------------重要说明--开始：这里通过调用js替换网页内容，实现了把admmin里好用的功能拿了过来-----------------------------#}
-
                             <link rel="stylesheet" type="text/css" href="/static/admin/css/forms.css">
                             <script src="/static/admin/js/vendor/jquery/jquery.js"></script>
                             <script src="/static/admin/js/jquery.init.js"></script>
@@ -153,9 +152,29 @@
                                     {#alert(x);#}
                                     {#x.value=x.value.toUpperCase();#}
                                     var y=document.getElementById("id_job");
-                                    x.value=y.value;
+                                    {#x.value=y.value;#}
+
+                                    $("#id_job_name").click(function(){
+                                        {#alert('abc');#}
+                                        $.get("/job/GetJobNameByID/"+y.value,function(data,status){
+                                            {#alert("数据: " + data + "\n状态: " + status);#}
+                                            x.value=data;
+                                        });
+                                    });
                                 }
                             </script>
+
+{#                            <script>#}
+{#                                $(document).ready(function(){#}
+{#                                    $("#id_job_name").change(function(){#}
+                                        {#alert('abc');#}
+{#                                        $.get("/job/GetJobNameByID/5399",function(data,status){#}
+{#                                            alert("数据: " + data + "\n状态: " + status);#}
+{#                                        });#}
+{#                                    });#}
+{#                                });#}
+{#                            </script>#}
+
 
                 {#-----------------------------重要说明--结束：这里-----------------------------#}
 

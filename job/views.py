@@ -5,6 +5,8 @@ from django.shortcuts import render, get_object_or_404
 from django.urls import reverse_lazy
 from django.utils import timezone
 from django.views.generic import ListView, DetailView, UpdateView, CreateView, DeleteView
+from django.views.generic.base import View
+
 from .forms import JobFormsReadOnly,JobForm
 from .models import Job,MyTag
 from account.models import QueryData, Customer
@@ -347,3 +349,16 @@ class JobDeleteView(DeleteView):
   model = Job
   template_name = 'JobDeleteView.html'
   success_url = reverse_lazy('job:JobListView')
+
+
+class GetJobNameByID(View):
+    def get(self, request,pk):
+        # 处理GET请求
+        # print(pk)
+        current_job = Job.objects.get(id = pk)
+        # print(current_job,current_job.job_name)
+        return HttpResponse(current_job.job_name)
+
+    def post(self, request,pk):
+        # 处理POST请求
+        return HttpResponse('POST')

@@ -19,7 +19,7 @@ urlpatterns = [
 
     path('JobDeleteView/<int:pk>', views.JobDeleteView.as_view(),name='JobDeleteView'),#类视图，删除料号。
 
-
+    path('GetJobNameByID/<int:pk>', views.GetJobNameByID.as_view(),name='GetJobNameByID'),#类视图。
 
 
 ]
