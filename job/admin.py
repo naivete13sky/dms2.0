@@ -80,7 +80,7 @@ class JobInfoForDevTestAdmin(admin.ModelAdmin):
     # date_hierarchy = 'publish'
     # ordering = ('recipe_status', 'receive_date',)
     list_per_page = 10
-    exclude = ('author', 'publish','solderMaxWindowNum4singleSide','origStepName','prepareStepName','pcsStepName','setStepName','panelStepName')
+    exclude = ('author', 'publish','solderMaxWindowNum4singleSide','origStepName','prepareStepName','pcsStepName','setStepName','panelStepName','hasPGlayer','hasSMlayer')
 
     def get_queryset(self, request):
         return super().get_queryset(request).prefetch_related('tags')

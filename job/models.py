@@ -174,7 +174,7 @@ class JobInfoForDevTest(models.Model):
 
     # ------------------------------------------------线路层相关的-------------------------------------------
     copperLayerNum = models.IntegerField(null=True, blank=True,validators=[validators.MaxValueValidator(1000),validators.MinValueValidator(0)],
-                                         help_text="信号层数量(含地电层)",verbose_name='信号层数')
+                                         help_text="线路层数量(含信号层及地电层)",verbose_name='线路层数')
     pgLayerNum = models.IntegerField(null=True, blank=True, validators=[validators.MaxValueValidator(1000),
                                                                             validators.MinValueValidator(0)],
                                          help_text="地电层数量", verbose_name='地电层数')
