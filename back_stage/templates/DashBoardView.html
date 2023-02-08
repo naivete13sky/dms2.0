@@ -247,6 +247,7 @@
                                                 var y_list_gcc = {{ statics_job_by_day_author_list_7_day_gcc|safe }};
                                                 var y_list_ze = {{ statics_job_by_day_author_list_7_day_ze|safe }};
                                                 var y_list_zzr = {{ statics_job_by_day_author_list_7_day_zzr|safe }};
+                                                var y_list_xh = {{ statics_job_by_day_author_list_7_day_xh|safe }};
                                                 var y_list_total = {{ statics_job_by_day_author_list_7_day_total|safe }};
 
 
@@ -326,6 +327,18 @@
                                                             focus: 'series'
                                                             },
                                                             data: y_list_zzr
+                                                        },
+                                                        {
+                                                            name: 'huan.xing',
+                                                            type: 'bar',
+                                                            stack: 'total',
+                                                            label: {
+                                                            show: false
+                                                            },
+                                                            emphasis: {
+                                                            focus: 'series'
+                                                            },
+                                                            data: y_list_xh
                                                         },
                                                         {
                                                             name: '总计',

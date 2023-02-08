@@ -113,6 +113,8 @@ class DashBoardView(TemplateView):
         context['statics_job_by_day_author_list_7_day_ze'] = get_statics_job_by_day_author_list_n_day("en.zhu",7)
         print("statics_job_by_day_author_list_7_day_zzr:", get_statics_job_by_day_author_list_n_day("zhenru.zhao", 7))
         context['statics_job_by_day_author_list_7_day_zzr'] = get_statics_job_by_day_author_list_n_day("zhenru.zhao", 7)
+        print("statics_job_by_day_author_list_7_day_xh:", get_statics_job_by_day_author_list_n_day("huan.xing", 7))
+        context['statics_job_by_day_author_list_7_day_xh'] = get_statics_job_by_day_author_list_n_day("huan.xing", 7)
 
         print("statics_job_by_day_author_list_7_day_total:", get_statics_job_by_day_author_list_n_day("all", 7))
         context['statics_job_by_day_author_list_7_day_total'] = get_statics_job_by_day_author_list_n_day("all", 7)
