@@ -1,6 +1,7 @@
 from django.contrib import admin
 from .models import Job,JobInfoForDevTest
 from django.utils.translation import gettext_lazy as _
+from import_export.admin import ImportExportModelAdmin
 
 
 # 自定义筛选器。MultiSelectField类型的字段直接放在list_filter里有问题的。
@@ -38,7 +39,8 @@ class HasFileTypeListFilter(admin.SimpleListFilter):
 
 
 @admin.register(Job)
-class JobAdmin(admin.ModelAdmin):
+# class JobAdmin(admin.ModelAdmin):
+class JobAdmin(ImportExportModelAdmin):
     list_display = ('id','job_name','file_compressed','has_file_type','status','author','from_object_pcb_factory','from_object_pcb_design','publish','create_time','tag_list')
 
     search_fields = ('=id','job_name',)

@@ -57,6 +57,7 @@ INSTALLED_APPS = [
     'eptest.apps.EptestConfig',
     'zentao.apps.ZentaoConfig',
     'django.contrib.sites',
+    'import_export',
 
 ]
 
