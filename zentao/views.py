@@ -190,7 +190,7 @@ class BugView(TemplateView):
         kwargs['bug_active_priority_distribution'] = priority_distribution_list
         # </editor-fold>
 
-        # <editor-fold desc="拥有Bug数据排行榜">
+        # <editor-fold desc="拥有激活Bug数据排行榜">
         active_bug_group_by_who_list = []
         # bug_active_pd = bug_pd[(bug_pd.status == 'active')]
         # .sort_values(ascending=False, inplace=False)[:10] 先排序，再获取前10
@@ -313,6 +313,24 @@ class BugView(TemplateView):
 
         # </editor-fold>
 
+
+
+        # <editor-fold desc="已解决状态Bug在谁手上">
+        resolved_bug_group_by_who_list = []
+        bug_resolved_pd = bug_pd[(bug_pd.status == 'resolved')]
+        # .sort_values(ascending=False, inplace=False)[:10] 先排序，再获取前10
+        resolved_bug_group_by_who_pd = bug_resolved_pd.groupby('assignedtowho')["id"].count().sort_values(ascending=False,
+                                                                                                      inplace=False)[
+                                     :10]
+        # print('active_bug_group_by_who_pd：',type(active_bug_group_by_who_pd), active_bug_group_by_who_pd)
+        resolved_bug_group_by_who_dict = dict(resolved_bug_group_by_who_pd.items())
+        for each in resolved_bug_group_by_who_dict:
+            # print(each,':',bug_active_priority_distribution_dict[each])
+            one_dict = {'name': each, 'score': resolved_bug_group_by_who_dict[each]}
+            resolved_bug_group_by_who_list.append(one_dict)
+        print('resolved_bug_group_by_who_list:',resolved_bug_group_by_who_list)
+        kwargs['resolved_bug_group_by_who_list'] = resolved_bug_group_by_who_list
+        # </editor-fold>
 
 
 
