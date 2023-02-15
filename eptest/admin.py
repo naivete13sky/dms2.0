@@ -25,7 +25,7 @@ from eptest.GL import GL
 @admin.register(JobForTest)
 # class JobForTestAdmin(admin.ModelAdmin):
 class JobForTestAdmin(ImportExportModelAdmin):
-    list_display = ('id','job_parent_link','job_name','get_layer_info_link','file','get_test_file_link','file_type','test_usage_for_epcam_module','get_standard_odb_link','vs_result_ep','get_vs_info_g_link','get_bug_info_link','status','author','updated','tag_list','remark',)
+    list_display = ('id','job_parent_link','job_name','get_layer_info_link','file','get_test_file_link','file_type','test_usage_for_epcam_module','standard_odb','get_standard_odb_link','vs_result_ep','get_vs_info_g_link','get_bug_info_link','status','author','updated','tag_list','remark',)
     list_filter = ('tags','file_type','status','author','test_usage_for_epcam_module',)
     search_fields = ('job_name','author__username','vs_result_ep','vs_result_g',)
     prepopulated_fields = {'remark': ('job_name',)}
@@ -34,7 +34,7 @@ class JobForTestAdmin(ImportExportModelAdmin):
     # ordering = ('recipe_status', 'receive_date',)
     list_per_page = 10
     list_display_links = ('job_name',)
-    list_editable = ('file','test_usage_for_epcam_module',)
+    list_editable = ('file','standard_odb','test_usage_for_epcam_module',)
     # exclude = ('author', 'publish')
     exclude = ('publish',)
     # change_list_template = r'admin/eptest/JobForTest/change_list.html'
