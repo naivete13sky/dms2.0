@@ -13,6 +13,7 @@ from mptt.admin import MPTTModelAdmin
 from django.utils.safestring import mark_safe
 from sqlalchemy import create_engine
 import pandas as pd
+from import_export.admin import ImportExportModelAdmin
 
 # 更改管理后台名称
 admin.site.site_header = '料号管理系统'
@@ -22,7 +23,8 @@ from eptest.GL import GL
 
 
 @admin.register(JobForTest)
-class JobForTestAdmin(admin.ModelAdmin):
+# class JobForTestAdmin(admin.ModelAdmin):
+class JobForTestAdmin(ImportExportModelAdmin):
     list_display = ('id','job_parent_link','job_name','get_layer_info_link','get_test_file_link','file_type','test_usage_for_epcam_module','get_standard_odb_link','vs_result_ep','get_vs_info_g_link','get_bug_info_link','status','author','updated','tag_list','remark',)
     list_filter = ('tags','file_type','status','author','test_usage_for_epcam_module',)
     search_fields = ('job_name','author__username','vs_result_ep','vs_result_g',)
