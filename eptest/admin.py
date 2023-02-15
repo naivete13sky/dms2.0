@@ -34,6 +34,7 @@ class JobForTestAdmin(ImportExportModelAdmin):
     # ordering = ('recipe_status', 'receive_date',)
     list_per_page = 10
     list_display_links = ('job_name',)
+    list_editable = ('test_usage_for_epcam_module',)
     # exclude = ('author', 'publish')
     exclude = ('publish',)
     # change_list_template = r'admin/eptest/JobForTest/change_list.html'
