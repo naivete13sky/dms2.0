@@ -45,6 +45,7 @@ class JobAdmin(ImportExportModelAdmin):
 
     search_fields = ('=id','job_name',)
     list_filter = (HasFileTypeListFilter, 'status', 'author__username','from_object_pcb_factory','from_object_pcb_design','tags')
+    list_editable = ('file_compressed', )
     prepopulated_fields = {'remark': ('job_name',)}
     raw_id_fields = ('author','from_object_pcb_factory','from_object_pcb_design')
     # date_hierarchy = 'publish'

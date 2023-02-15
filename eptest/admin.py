@@ -29,7 +29,7 @@ class JobForTestAdmin(ImportExportModelAdmin):
     list_display = (
     'id', 'job_parent_link', 'job_name', 'get_layer_info_link', 'file',  'file_type',
     'test_usage_for_epcam_module', 'standard_odb', 'vs_result_ep', 'get_vs_info_g_link',
-    'get_bug_info_link', 'status', 'author', 'tag_list', 'remark',)
+    'get_bug_info_link', 'status', 'author', 'updated', 'tag_list', 'remark',)
     list_filter = ('tags','file_type','status','author','test_usage_for_epcam_module',)
     search_fields = ('job_name','author__username','vs_result_ep','vs_result_g',)
     prepopulated_fields = {'remark': ('job_name',)}
