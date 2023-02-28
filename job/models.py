@@ -41,7 +41,7 @@ class TaggedWhatever(GenericTaggedItemBase):
 
 # Create your models here.
 class Job(models.Model):
-    job_name = models.CharField(max_length=20, validators=[validators.MinLengthValidator(limit_value=3)],
+    job_name = models.CharField(max_length=50, validators=[validators.MinLengthValidator(limit_value=3)],
                                                                 help_text='料号名称,有可能有重复名字', verbose_name="料号名称")
     file_compressed = models.FileField(upload_to='files', blank=True, null=True,
                                        help_text='原始文件,rar压缩包', verbose_name="原始文件")
