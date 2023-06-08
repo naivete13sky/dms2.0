@@ -74,6 +74,10 @@ class Job(models.Model):
     remark = models.CharField(max_length=100, validators=[validators.MinLengthValidator(limit_value=0)], blank=True,
                               null=True, help_text='料号的说明备注', verbose_name="备注")
 
+    epvs_search_id = models.CharField(max_length=30,blank=True, null=True, validators=[validators.MinLengthValidator(limit_value=12)],
+                                help_text='EPVS工具使用', verbose_name="EPVS查询料号ID")
+
+
     class Meta:
         db_table = 'job_job'
         ordering = ('-create_time',)
