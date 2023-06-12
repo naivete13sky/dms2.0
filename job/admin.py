@@ -63,6 +63,7 @@ class JobAdmin(ImportExportModelAdmin):
     '''保存时自动设置author为当前登录用户'''
     def save_model(self, request, obj, form, change):
         # If creating new article, associate request.user with author.
+        print('request.user:',request.user)
         if not change:
             obj.author = request.user
         super().save_model(request, obj, form, change)

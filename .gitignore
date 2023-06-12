@@ -141,3 +141,4 @@ migrations/
 !/common_static/echarts-master/dist/
 !/collected_static/echarts-master/dist/
 zentao/temp/
+cc.py
