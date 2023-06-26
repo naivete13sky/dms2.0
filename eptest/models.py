@@ -43,7 +43,7 @@ class TaggedWhateverForEptest(GenericTaggedItemBase):
 class JobForTest(models.Model):
     job_parent = models.ForeignKey(Job, on_delete=models.CASCADE, null=True, blank=True,
                             related_name='eptest_job_for_test_job_job', verbose_name="主料号名称")
-    job_name = models.CharField(max_length=20, null=True, blank=True,validators=[validators.MinLengthValidator(limit_value=3)],
+    job_name = models.CharField(max_length=64, null=True, blank=True,validators=[validators.MinLengthValidator(limit_value=3)],
                                 help_text='料号名称,有可能有重复名字', verbose_name="料号名称")
 
     file = models.FileField(upload_to='files', blank=True, null=True,
