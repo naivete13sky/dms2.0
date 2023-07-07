@@ -112,7 +112,6 @@ class JobAdmin(ImportExportModelAdmin,ExportActionMixin):
 
 
 
-
 @admin.register(JobInfoForDevTest)
 class JobInfoForDevTestAdmin(admin.ModelAdmin):
     list_display = ('id','job','status','author','file','has_step_multi','job_type_1','job_type_2','job_type_3','updated','tag_list','remark')
