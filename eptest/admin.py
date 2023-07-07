@@ -13,7 +13,8 @@ from mptt.admin import MPTTModelAdmin
 from django.utils.safestring import mark_safe
 from sqlalchemy import create_engine
 import pandas as pd
-from import_export.admin import ImportExportModelAdmin
+from import_export.admin import ImportExportModelAdmin, ExportActionMixin
+from django.utils.translation import gettext_lazy as _
 
 # 更改管理后台名称
 admin.site.site_header = '料号管理系统'
@@ -24,7 +25,7 @@ from eptest.GL import GL
 
 @admin.register(JobForTest)
 # class JobForTestAdmin(admin.ModelAdmin):
-class JobForTestAdmin(ImportExportModelAdmin):
+class JobForTestAdmin(ImportExportModelAdmin,ExportActionMixin):
     # list_display = ('id','job_parent_link','job_name','get_layer_info_link','file','get_test_file_link','file_type','test_usage_for_epcam_module','standard_odb','get_standard_odb_link','vs_result_ep','get_vs_info_g_link','get_bug_info_link','status','author','updated','tag_list','remark',)
     list_display = (
     'id', 'job_parent_link', 'job_name', 'get_layer_info_link', 'file',  'file_type',
@@ -204,6 +205,29 @@ class JobForTestAdmin(ImportExportModelAdmin):
                 return queryset, use_distinct
         return queryset, use_distinct
     # </editor-fold>
+
+    # 批量导出，支持导出选定的记录
+    def export_selected_objects(self, request, queryset):
+        # 导出选定的记录
+        selected_ids = request.POST.getlist(admin.ACTION_CHECKBOX_NAME)
+        selected_objects = self.get_queryset(request).filter(pk__in=selected_ids)
+
+        # 创建导出的数据
+        export_data = self.get_export_data(selected_objects)
+
+        # 创建HTTP响应对象
+        response = HttpResponse(content_type=self.get_export_content_type())
+        response['Content-Disposition'] = self.get_export_filename()
+
+        # 导出数据到HTTP响应对象
+        self.write_export_data(response, export_data)
+
+        # 返回HTTP响应
+        return response
+
+    export_selected_objects.short_description = _('Export selected objects')
+
+    actions = [export_selected_objects]
 
 
 

@@ -1,8 +1,8 @@
 from django.contrib import admin
 from .models import Job,JobInfoForDevTest
 from django.utils.translation import gettext_lazy as _
-from import_export.admin import ImportExportModelAdmin
-
+from import_export.admin import ImportExportModelAdmin, ExportActionMixin
+from django.http import HttpResponse
 
 # 自定义筛选器。MultiSelectField类型的字段直接放在list_filter里有问题的。
 class HasFileTypeListFilter(admin.SimpleListFilter):
@@ -40,7 +40,7 @@ class HasFileTypeListFilter(admin.SimpleListFilter):
 
 @admin.register(Job)
 # class JobAdmin(admin.ModelAdmin):
-class JobAdmin(ImportExportModelAdmin):
+class JobAdmin(ImportExportModelAdmin,ExportActionMixin):
     list_display = ('id','job_name','file_compressed','has_file_type','status','author','from_object_pcb_factory','from_object_pcb_design','publish','create_time','tag_list')
 
     search_fields = ('=id','job_name',)
@@ -67,6 +67,43 @@ class JobAdmin(ImportExportModelAdmin):
         if not change:
             obj.author = request.user
         super().save_model(request, obj, form, change)
+
+    # 批量导出，支持导出选定的记录
+    def export_selected_objects(self, request, queryset):
+        # 导出选定的记录
+        selected_ids = request.POST.getlist(admin.ACTION_CHECKBOX_NAME)
+        selected_objects = self.get_queryset(request).filter(pk__in=selected_ids)
+
+        # 创建导出的数据
+        export_data = self.get_export_data(selected_objects)
+
+        # 创建HTTP响应对象
+        response = HttpResponse(content_type=self.get_export_content_type())
+        response['Content-Disposition'] = self.get_export_filename()
+
+        # 导出数据到HTTP响应对象
+        self.write_export_data(response, export_data)
+
+        # 返回HTTP响应
+        return response
+
+    export_selected_objects.short_description = _('Export selected objects')
+
+    actions = [export_selected_objects]
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
