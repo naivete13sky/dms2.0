@@ -15,6 +15,7 @@ from sqlalchemy import create_engine
 import pandas as pd
 from import_export.admin import ImportExportModelAdmin, ExportActionMixin
 from django.utils.translation import gettext_lazy as _
+from .resource import JobForTestResource
 
 # 更改管理后台名称
 admin.site.site_header = '料号管理系统'
@@ -26,6 +27,8 @@ from eptest.GL import GL
 @admin.register(JobForTest)
 # class JobForTestAdmin(admin.ModelAdmin):
 class JobForTestAdmin(ImportExportModelAdmin,ExportActionMixin):
+    resource_class = JobForTestResource
+
     # list_display = ('id','job_parent_link','job_name','get_layer_info_link','file','get_test_file_link','file_type','test_usage_for_epcam_module','standard_odb','get_standard_odb_link','vs_result_ep','get_vs_info_g_link','get_bug_info_link','status','author','updated','tag_list','remark',)
     list_display = (
     'id', 'job_parent_link', 'job_name', 'get_layer_info_link', 'file',  'file_type',
