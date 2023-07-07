@@ -87,9 +87,9 @@ class JobAdmin(ImportExportModelAdmin,ExportActionMixin):
         # 返回HTTP响应
         return response
 
-    export_selected_objects.short_description = _('Export selected objects')
-
-    actions = [export_selected_objects]
+    # export_selected_objects.short_description = _('Export selected objects')
+    #
+    # actions = [export_selected_objects]
 
 
 
