@@ -6,7 +6,8 @@ import rarfile
 from django.conf import settings
 from django.shortcuts import render, redirect
 from django.views.decorators.csrf import csrf_exempt
-
+from django.http import JsonResponse
+from django.views.decorators.csrf import csrf_protect
 from .models import EpcamModule
 from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
 from django.db.models import Q
@@ -596,3 +597,29 @@ def view_vs_g(request,job_id):
 def test(request):
     pass
     return render(request,'test.html')
+
+
+@csrf_protect
+def update_pagination_size_post_eptest_bug(request):
+    if request.method == 'POST':
+        selected_size = int(request.POST.get('size', 10))  # 默认为10
+
+        # 在这里更新分页组件的每页显示条数
+        print('selected_size:',selected_size)
+
+        return JsonResponse({'success': True})
+    else:
+        return JsonResponse({'success': False})
+
+def update_pagination_size_get_eptest_bug(request):
+    if request.method == 'GET':
+        print(request.GET)
+        selected_size = int(request.GET.get('select_value_pagination_eptest_bug', 10))  # 默认为10
+        # 在这里更新分页组件的每页显示条数
+        print('selected_size:',selected_size)
+
+
+
+        return JsonResponse({'success': True})
+    else:
+        return JsonResponse({'success': False})
