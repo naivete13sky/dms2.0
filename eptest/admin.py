@@ -402,6 +402,19 @@ class BugAdmin(admin.ModelAdmin):
 
 
 
+    def get_changelist(self, request, **kwargs):
+        from django.contrib.admin.views.main import ChangeList
+        # 获取用户选择的每页显示条数，默认为 25 条
+        per_page = int(request.GET.get('per_page', 10))
+        print('per_page',per_page)
+
+        # 设置每页显示条数
+        self.list_per_page = per_page
+
+        return ChangeList
+
+
+
 @admin.register(Vs)
 class VsAdmin(admin.ModelAdmin):
     list_display = ('job','layer','layer_org','vs_result','vs_result_detail','vs_method','layer_file_type','layer_type',)

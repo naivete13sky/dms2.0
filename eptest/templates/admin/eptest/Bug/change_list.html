@@ -106,85 +106,19 @@
             {% block pagination %}{% pagination cl %}{% endblock %}
 {#            设置每页显示条数#}
 
-            <select id="pagination-size">
-              <option value="10">10</option>
-              <option value="20">20</option>
-              <option value="30">30</option>
-            </select>
-
-            <script>
-                function getCookie(name) {
-                    var cookieValue = null;
-                    if (document.cookie && document.cookie !== '') {
-                      var cookies = document.cookie.split(';');
-                      for (var i = 0; i < cookies.length; i++) {
-                        var cookie = cookies[i].trim();
-                        if (cookie.substring(0, name.length + 1) === (name + '=')) {
-                          cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
-                          break;
-                        }
-                      }
-                    }
-                    {#alert(cookieValue);#}
-                    return cookieValue;
-                }
 
 
-              // 处理选择每页显示条数的事件
-              document.getElementById('pagination-size').addEventListener('change', function() {
-                var selectedSize = this.value;
-                var csrftoken = getCookie('csrftoken');
-                // 发送 AJAX 请求到服务器
-                var xhr = new XMLHttpRequest();
-                xhr.open('POST', 'eptest/update_pagination_size_eptest_bug/', true);
-                xhr.setRequestHeader('Content-Type', 'application/json');
-                xhr.setRequestHeader('X-CSRFToken', csrftoken);  // 添加 CSRF 令牌到请求头
-                xhr.send(JSON.stringify({ size: selectedSize }));
-              });
-            </script>
-
-
-{#            <form method="GET" action="{% url 'eptest:update_pagination_size_get_eptest_bug' %}">#}
-            <form method="GET" action="">
-                <div class="input select">
-                    <label>每页显示条数:</label>
-                    <div class="body">
-                        <select id="pagination-size2" name="select_value_pagination_eptest_bug">
-                          <option value="10">10</option>
-                          <option value="20">20</option>
-                          <option value="30">30</option>
-                        </select>
-                    </div>
-                </div>
-                <button type="submit">提交</button>
-            </form>
-
-
-
-
-                <form action="" method="get" class="changelist-form">
-                    <label for="id_per_page">每页显示：</label>
-                    <select name="per_page" id="id_per_page">
+                <form action="" method="get" class="pagination">
+                    <label for="per-page-select">每页显示:</label>
+                    <select name="per_page" id="per-page-select">
+                        <option value="10"{% if cl.get_results_per_page == 10 %} selected{% endif %}>10</option>
                         <option value="25"{% if cl.get_results_per_page == 25 %} selected{% endif %}>25</option>
                         <option value="50"{% if cl.get_results_per_page == 50 %} selected{% endif %}>50</option>
-                        <option value="100"{% if cl.get_results_per_page == 100 %} selected{% endif %}>100</option>
-                        <!-- 添加更多选项以满足你的需求 -->
+                        <!-- 添加更多选项，根据你的需求 -->
                     </select>
-                    <input type="submit" value="Go">
+                    <input type="submit" value="应用">
                 </form>
 
-                <div>
-                    <form method="get" action="" id="changelist-form" novalidate>
-                        <label for="select-page-size">每页显示：</label>
-                        <select name="pagesize" id="select-page-size">
-                            <option value="10">10</option>
-                            <option value="25">25</option>
-                            <option value="50">50</option>
-                            <option value="100">100</option>
-                        </select>
-                        <input type="submit" value="Go">
-                    </form>
-                </div>
 
 {#            设置每页显示条数#}
         </div>

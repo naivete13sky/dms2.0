@@ -599,27 +599,3 @@ def test(request):
     return render(request,'test.html')
 
 
-@csrf_protect
-def update_pagination_size_post_eptest_bug(request):
-    if request.method == 'POST':
-        selected_size = int(request.POST.get('size', 10))  # 默认为10
-
-        # 在这里更新分页组件的每页显示条数
-        print('selected_size:',selected_size)
-
-        return JsonResponse({'success': True})
-    else:
-        return JsonResponse({'success': False})
-
-def update_pagination_size_get_eptest_bug(request):
-    if request.method == 'GET':
-        print(request.GET)
-        selected_size = int(request.GET.get('select_value_pagination_eptest_bug', 10))  # 默认为10
-        # 在这里更新分页组件的每页显示条数
-        print('selected_size:',selected_size)
-
-
-
-        return JsonResponse({'success': True})
-    else:
-        return JsonResponse({'success': False})

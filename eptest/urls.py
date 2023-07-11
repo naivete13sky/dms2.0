@@ -32,9 +32,7 @@ urlpatterns = [
 
     path('test', views.test,name='test'),#查看G比图的列表
 
-    path('update_pagination_size_post_eptest_bug', views.update_pagination_size_post_eptest_bug,name='update_pagination_size_post_eptest_bug'),
 
-    path('update_pagination_size_get_eptest_bug', views.update_pagination_size_get_eptest_bug,name='update_pagination_size_get_eptest_bug'),
 
 ]
 
