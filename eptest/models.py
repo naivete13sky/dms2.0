@@ -244,7 +244,8 @@ class Bug(models.Model):
 
     def __str__(self):
         # Return a string that represents the instance
-        return self.bug_zentao_id
+        # return self.bug_zentao_id
+        return str(self.id)
 
 
 class Vs(models.Model):

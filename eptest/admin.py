@@ -351,6 +351,55 @@ class BugAdmin(admin.ModelAdmin):
         super().save_model(request, obj, form, change)
     # </editor-fold>
 
+    # <editor-fold desc="增加自定义按钮">
+    actions = ['update_bug_info_button']
+
+    def update_bug_info_button(self, request, queryset):
+        engine = create_engine("mysql+mysqlconnector://chencheng:hWx9pWk5d5J@10.97.80.36:3336/zentao")
+        from django.contrib.admin.helpers import ACTION_CHECKBOX_NAME
+        selected = request.POST.getlist(ACTION_CHECKBOX_NAME)
+        print('selected:',selected)
+
+
+        if selected:
+            for each in queryset:
+                print(each.id)
+                current_bug = Bug.objects.get(id=int(each.id))
+                print('current_bug:',current_bug)
+                print('current_bug_bug_zentao_id:', current_bug.bug_zentao_id)
+
+                sql = '''SELECT a.* from zt_bug a where a.id={}
+                                        '''.format(int(current_bug.bug_zentao_id))
+                bug_pd = pd.read_sql_query(sql, engine)
+
+                current_bug.bug = bug_pd['title'][0]
+                current_bug.bug_zentao_pri = bug_pd['pri'][0]
+                current_bug.bug_zentao_status = bug_pd['status'][0]
+                current_bug.bug_creator = bug_pd['openedBy'][0]
+                current_bug.bug_create_date = bug_pd['openedDate'][0]
+                current_bug.bug_assigned_to = bug_pd['assignedTo'][0]
+                current_bug.author = request.user
+                current_bug.refresh_time = str(int(time.time()))
+
+                current_bug.save()
+        else:
+            pass
+
+    # 显示的文本，与django admin一致
+    update_bug_info_button.short_description = '更新Bug信息'
+    # icon，参考element-ui icon与https://fontawesome.com
+    # custom_button.icon = 'fas fa-audio-description'
+    update_bug_info_button.icon = 'fas fa-refresh'
+
+    # 指定element-ui的按钮类型，参考https://element.eleme.cn/#/zh-CN/component/button
+    # custom_button.type = 'danger'
+    update_bug_info_button.type = 'primary'
+
+    # 给按钮追加自定义的颜色
+    update_bug_info_button.style = 'color:black;'
+    # </editor-fold>
+
+
 
 
 @admin.register(Vs)
