@@ -5,6 +5,8 @@ import time
 import rarfile
 from django.conf import settings
 from django.contrib import admin, messages
+from django.contrib.admin.views.main import ChangeList
+from django.core.paginator import Paginator
 from django.http import HttpResponse
 
 from cc.cc_method import CCMethod
@@ -189,8 +191,8 @@ class JobForTestAdmin(ImportExportModelAdmin,ExportActionMixin):
 
     # <editor-fold desc="自定义查询,实现ID准确搜索">
     def get_search_results(self, request, queryset, search_term):
-        print("search_term:", search_term)
-        print("request:", request)
+        # print("search_term:", search_term)
+        # print("request:", request)
 
         # 单ID查询
         search_id = None
@@ -274,7 +276,7 @@ class LayerAdmin(admin.ModelAdmin):
     def get_search_results(self, request, queryset, search_term):
         print("search_term:", search_term)
         queryset, use_distinct = super(LayerAdmin, self).get_search_results(request, queryset, search_term)
-        print("queryset:",queryset)
+        # print("queryset:",queryset)
         print("use_distinct:", use_distinct)
         if "one_job_layer/" in search_term:
             print("搜索指定料号下的layer信息")
@@ -307,14 +309,28 @@ class BugAdmin(admin.ModelAdmin):
     # <editor-fold desc="根据料号ID精准查询此料号下的Bug信息用">
     # 默认的查询集合
     def get_queryset(self, request):
+        # return super(BugAdmin, self).get_queryset(request).all().order_by("-id")
+
+        # 获取用户选择的每页显示条数，默认为 10 条
+        per_page = int(request.GET.get('per_page', 10))
+
+        # 设置每页显示条数
+        self.list_per_page = per_page
+        print('per_page：', per_page)
+
+        # 调用父类的get_queryset方法获取查询集
+        # queryset = super().get_queryset(request)
+
+        # return queryset
+
         return super(BugAdmin, self).get_queryset(request).all().order_by("-id")
 
     # 根据关键字进行查询集合,自定义查询。如果搜索内容包括了“one_job_bug/123”,则说明是要查某个料号（ID：123）的Bug信息
     def get_search_results(self, request, queryset, search_term):
-        print("search_term:", search_term)
+        # print("search_term:", search_term)
         queryset, use_distinct = super(BugAdmin, self).get_search_results(request, queryset, search_term)
-        print("queryset:", queryset)
-        print("use_distinct:", use_distinct)
+        # print("queryset:", queryset)
+        # print("use_distinct:", use_distinct)
         if "one_job_bug/" in search_term:
             print("搜索指定料号下的bug信息")
             queryset = self.model.objects.filter(job__id=int(search_term.split("/")[1]))
@@ -399,21 +415,23 @@ class BugAdmin(admin.ModelAdmin):
     update_bug_info_button.style = 'color:black;'
     # </editor-fold>
 
-    def get_queryset(self, request):
-        # 获取用户选择的每页显示条数，默认为 10 条
-        per_page = int(request.GET.get('per_page', 10))
+    def changelist_view(self, request, extra_context=None):
+        if request.GET.get('per_page'):
+            self.list_per_page = int(request.GET.get('per_page'))
+        return super().changelist_view(request, extra_context=extra_context)
 
-        # 设置每页显示条数
-        self.list_per_page = per_page
-        print('per_page', per_page)
-
-        # 调用父类的get_queryset方法获取查询集
-        queryset = super().get_queryset(request)
-
-        return queryset
+    def get_paginator(self, request, queryset, per_page, orphans=0, allow_empty_first_page=True):
+        # 使用自定义的 Paginator 类
+        return CustomPaginator(queryset, per_page, orphans=orphans, allow_empty_first_page=allow_empty_first_page)
 
 
 
+
+# 自定义 Paginator 类，包含 per_page 参数
+class CustomPaginator(Paginator):
+    def __init__(self, object_list, per_page, orphans=0, allow_empty_first_page=True):
+        self.per_page = per_page
+        super().__init__(object_list, per_page, orphans=orphans, allow_empty_first_page=allow_empty_first_page)
 
 
 @admin.register(Vs)
