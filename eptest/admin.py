@@ -296,8 +296,49 @@ class LayerAdmin(admin.ModelAdmin):
 
 
 
+
+#为了实现在admin后台可页面上设置每页显示条数，通过下面方法，要创建一个过滤器PageSizeFilter。
+#还要创建一个CustomModelAdmin类，这个类实现changelist_view方法。因为在过滤器PageSizeFilter无法重写changelist_view，所以要写此类实现类似效果。
+
+class PageSizeFilter(admin.SimpleListFilter):
+    title = _('Page Size')  # 在过滤器下拉列表中显示的标题
+
+    parameter_name = 'page_size'  # URL参数名称
+
+    def lookups(self, request, model_admin):
+        # 返回一个包含元组的列表，每个元组包含两个值：
+        # - 过滤器值，将作为URL参数值传递
+        # - 在过滤器下拉列表中显示的文本
+        return (
+            ('10', _('10')),
+            ('20', _('20')),
+            ('50', _('50')),
+            ('100', _('100')),
+        )
+
+    def queryset(self, request, queryset):
+        pass
+        return queryset
+
+class CustomModelAdmin(admin.ModelAdmin):
+    def changelist_view(self, request, extra_context=None):
+        if 'page_size' in request.GET:
+            # 获取用户选择的每页显示条数
+            page_size = int(request.GET['page_size'])
+            # 将每页显示条数存储到session中
+            request.session['page_size'] = page_size
+        else:
+            # 如果用户没有选择任何值，则从session中获取上次选择的值
+            page_size = request.session.get('page_size', 10)
+
+        # 设置每页显示条数
+        self.list_per_page = page_size
+
+        return super().changelist_view(request, extra_context)
+
+
 @admin.register(Bug)
-class BugAdmin(admin.ModelAdmin):
+class BugAdmin(CustomModelAdmin):
     list_display = ('job','bug','bug_zentao_id','bug_zentao_pri','bug_zentao_status','bug_creator','bug_create_date','bug_assigned_to',
                     'author','status','refresh_time','remark','create_time','updated',)
 
@@ -396,9 +437,12 @@ class BugAdmin(admin.ModelAdmin):
     update_bug_info_button.style = 'color:black;'
     # </editor-fold>
 
+    # def changelist_view(self, request, extra_context=None):
+    #
+    #     self.list_per_page = 50
+    #     return super().changelist_view(request, extra_context)
 
-
-
+    list_filter = [PageSizeFilter]  # 注册自定义的Filter
 
 
 @admin.register(Vs)
