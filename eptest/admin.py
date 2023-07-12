@@ -415,16 +415,24 @@ class BugAdmin(admin.ModelAdmin):
     update_bug_info_button.style = 'color:black;'
     # </editor-fold>
 
+    # def changelist_view(self, request, extra_context=None):
+    #     if request.GET.get('per_page'):
+    #         self.list_per_page = int(request.GET.get('per_page'))
+    #     return super().changelist_view(request, extra_context=extra_context)
+
     def changelist_view(self, request, extra_context=None):
         if request.GET.get('per_page'):
             self.list_per_page = int(request.GET.get('per_page'))
         return super().changelist_view(request, extra_context=extra_context)
 
+    # def get_paginator(self, request, queryset, per_page, orphans=0, allow_empty_first_page=True):
+    #     # 使用自定义的 Paginator 类
+    #     return CustomPaginator(queryset, per_page, orphans=orphans, allow_empty_first_page=allow_empty_first_page)
+
     def get_paginator(self, request, queryset, per_page, orphans=0, allow_empty_first_page=True):
-        # 使用自定义的 Paginator 类
-        return CustomPaginator(queryset, per_page, orphans=orphans, allow_empty_first_page=allow_empty_first_page)
-
-
+        per_page = int(request.GET.get('per_page', self.list_per_page))
+        return super().get_paginator(request, queryset, per_page, orphans=orphans,
+                                     allow_empty_first_page=allow_empty_first_page)
 
 
 # 自定义 Paginator 类，包含 per_page 参数
@@ -432,6 +440,9 @@ class CustomPaginator(Paginator):
     def __init__(self, object_list, per_page, orphans=0, allow_empty_first_page=True):
         self.per_page = per_page
         super().__init__(object_list, per_page, orphans=orphans, allow_empty_first_page=allow_empty_first_page)
+
+
+
 
 
 @admin.register(Vs)

@@ -5,40 +5,29 @@
     {% django_version_is_gte_32x as is_32x %}
     {% if pagination_required %}
         <el-pagination
-                background
-                @current-change="handleCurrentChange"
-                {% if is_32x %}
-                :current-page="{{ cl.page_num }}"
-                {% else %}
-                :current-page="{{ cl.page_num }}+1"
-                {% endif %}
-                :page-size="{{ cl.list_per_page }}"
-                layout="total,prev, pager, next, jumper"
-                :total="{{ cl.result_count|to_str }}">
-
-
-
-
-
+            background
+            @current-change="handleCurrentChange"
+            {% if is_32x %}
+            :current-page="{{ cl.page_num }}"
+            {% else %}
+            :current-page="{{ cl.page_num }}+1"
+            {% endif %}
+            :page-sizes="[10, 20, 50, 100]"
+            :page-size.sync="pageSize"
+            layout="total,prev, pager, next, jumper, sizes"
+            :total="{{ cl.result_count|to_str }}">
         </el-pagination>
-        <form action="" method="get" class="pagination">
-            <input type="hidden" name="per_page" value="{{ cl.list_per_page }}">
-            <label for="per-page-select">每页显示:</label>
-            <select name="per_page" id="per-page-select">
-                <option value="10"{% if cl.get_results_per_page == 10 %} selected{% endif %}>10</option>
-                <option value="25"{% if cl.get_results_per_page == 25 %} selected{% endif %}>25</option>
-                <option value="50"{% if cl.get_results_per_page == 50 %} selected{% endif %}>50</option>
-                <!-- 添加更多选项，根据你的需求 -->
-            </select>
-            <input type="submit" value="应用">
-        </form>
     {% endif %}
 </div>
 <script type="text/javascript">
     $(function () {
+
+
         new Vue({
             el: "#pagination",
-            data: {},
+            data: {
+                pageSize: {{ cl.list_per_page }}
+            },
             methods: {
                 handleCurrentChange: function (page) {
                     {% if is_32x %}
@@ -46,6 +35,12 @@
                     {% else %}
                         page_go(page - 1);
                     {% endif %}
+                },
+                handleSizeChange: function (size) {
+                    this.pageSize = size;
+                    // 将每页显示条数传递给后端，例如使用一个隐藏的表单字段
+                    $("#changelist-search input[name='per_page']").val(size);
+                    $("#changelist-search").submit();
                 }
             }
         })
@@ -57,5 +52,3 @@
 
     })
 </script>
-
-
