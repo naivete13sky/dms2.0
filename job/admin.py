@@ -42,7 +42,7 @@ class HasFileTypeListFilter(admin.SimpleListFilter):
 #为了实现在admin后台可页面上设置每页显示条数，通过下面方法，要创建一个过滤器PageSizeFilter。
 #还要创建一个CustomModelAdmin类，这个类实现changelist_view方法。因为在过滤器PageSizeFilter无法重写changelist_view，所以要写此类实现类似效果。
 class PageSizeFilter(admin.SimpleListFilter):
-    title = _('Page Size')  # 在过滤器下拉列表中显示的标题
+    title = _('每页显示条数')  # 在过滤器下拉列表中显示的标题
 
     parameter_name = 'page_size'  # URL参数名称
 

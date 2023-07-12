@@ -26,10 +26,51 @@ admin.site.site_title = '料号管理系统'
 # admin.site.index_title = '3'
 from eptest.GL import GL
 
+#为了实现在admin后台可页面上设置每页显示条数，通过下面方法，要创建一个过滤器PageSizeFilter。
+#还要创建一个CustomModelAdmin类，这个类实现changelist_view方法。因为在过滤器PageSizeFilter无法重写changelist_view，所以要写此类实现类似效果。
+class PageSizeFilter(admin.SimpleListFilter):
+    title = _('每页显示条数')  # 在过滤器下拉列表中显示的标题
+
+    parameter_name = 'page_size'  # URL参数名称
+
+    def lookups(self, request, model_admin):
+        # 返回一个包含元组的列表，每个元组包含两个值：
+        # - 过滤器值，将作为URL参数值传递
+        # - 在过滤器下拉列表中显示的文本
+        return (
+            ('10', _('10')),
+            ('20', _('20')),
+            ('50', _('50')),
+            ('100', _('100')),
+        )
+
+    def queryset(self, request, queryset):
+        pass
+        return queryset
+
+class CustomModelAdmin(admin.ModelAdmin):
+    def changelist_view(self, request, extra_context=None):
+        if 'page_size' in request.GET:
+            # 获取用户选择的每页显示条数
+            page_size = int(request.GET['page_size'])
+            # 将每页显示条数存储到session中
+            request.session['page_size'] = page_size
+        else:
+            # 如果用户没有选择任何值，则从session中获取上次选择的值
+            page_size = request.session.get('page_size', 10)
+
+        # 设置每页显示条数
+        self.list_per_page = page_size
+
+        return super().changelist_view(request, extra_context)
+
+
+
+
 
 @admin.register(JobForTest)
 # class JobForTestAdmin(admin.ModelAdmin):
-class JobForTestAdmin(ImportExportModelAdmin,ExportActionMixin):
+class JobForTestAdmin(ImportExportModelAdmin,ExportActionMixin,CustomModelAdmin):
     resource_class = JobForTestResource
 
     # list_display = ('id','job_parent_link','job_name','get_layer_info_link','file','get_test_file_link','file_type','test_usage_for_epcam_module','standard_odb','get_standard_odb_link','vs_result_ep','get_vs_info_g_link','get_bug_info_link','status','author','updated','tag_list','remark',)
@@ -37,7 +78,7 @@ class JobForTestAdmin(ImportExportModelAdmin,ExportActionMixin):
     'id', 'job_parent_link', 'job_name', 'get_layer_info_link', 'file',  'file_type',
     'test_usage_for_epcam_module', 'standard_odb', 'vs_result_ep', 'get_vs_info_g_link',
     'get_bug_info_link', 'status', 'author', 'updated', 'tag_list', 'remark',)
-    list_filter = ('tags','file_type','status','author','test_usage_for_epcam_module',)
+    list_filter = ('tags','file_type','status','author','test_usage_for_epcam_module',PageSizeFilter)
     search_fields = ('job_name','author__username','vs_result_ep','vs_result_g',)
     prepopulated_fields = {'remark': ('job_name',)}
     raw_id_fields = ('author','job_parent',)
@@ -297,44 +338,7 @@ class LayerAdmin(admin.ModelAdmin):
 
 
 
-#为了实现在admin后台可页面上设置每页显示条数，通过下面方法，要创建一个过滤器PageSizeFilter。
-#还要创建一个CustomModelAdmin类，这个类实现changelist_view方法。因为在过滤器PageSizeFilter无法重写changelist_view，所以要写此类实现类似效果。
 
-class PageSizeFilter(admin.SimpleListFilter):
-    title = _('Page Size')  # 在过滤器下拉列表中显示的标题
-
-    parameter_name = 'page_size'  # URL参数名称
-
-    def lookups(self, request, model_admin):
-        # 返回一个包含元组的列表，每个元组包含两个值：
-        # - 过滤器值，将作为URL参数值传递
-        # - 在过滤器下拉列表中显示的文本
-        return (
-            ('10', _('10')),
-            ('20', _('20')),
-            ('50', _('50')),
-            ('100', _('100')),
-        )
-
-    def queryset(self, request, queryset):
-        pass
-        return queryset
-
-class CustomModelAdmin(admin.ModelAdmin):
-    def changelist_view(self, request, extra_context=None):
-        if 'page_size' in request.GET:
-            # 获取用户选择的每页显示条数
-            page_size = int(request.GET['page_size'])
-            # 将每页显示条数存储到session中
-            request.session['page_size'] = page_size
-        else:
-            # 如果用户没有选择任何值，则从session中获取上次选择的值
-            page_size = request.session.get('page_size', 10)
-
-        # 设置每页显示条数
-        self.list_per_page = page_size
-
-        return super().changelist_view(request, extra_context)
 
 
 @admin.register(Bug)
