@@ -39,15 +39,58 @@ class HasFileTypeListFilter(admin.SimpleListFilter):
 
 
 
+#为了实现在admin后台可页面上设置每页显示条数，通过下面方法，要创建一个过滤器PageSizeFilter。
+#还要创建一个CustomModelAdmin类，这个类实现changelist_view方法。因为在过滤器PageSizeFilter无法重写changelist_view，所以要写此类实现类似效果。
+class PageSizeFilter(admin.SimpleListFilter):
+    title = _('Page Size')  # 在过滤器下拉列表中显示的标题
+
+    parameter_name = 'page_size'  # URL参数名称
+
+    def lookups(self, request, model_admin):
+        # 返回一个包含元组的列表，每个元组包含两个值：
+        # - 过滤器值，将作为URL参数值传递
+        # - 在过滤器下拉列表中显示的文本
+        return (
+            ('10', _('10')),
+            ('20', _('20')),
+            ('50', _('50')),
+            ('100', _('100')),
+        )
+
+    def queryset(self, request, queryset):
+        pass
+        return queryset
+
+class CustomModelAdmin(admin.ModelAdmin):
+    def changelist_view(self, request, extra_context=None):
+        if 'page_size' in request.GET:
+            # 获取用户选择的每页显示条数
+            page_size = int(request.GET['page_size'])
+            # 将每页显示条数存储到session中
+            request.session['page_size'] = page_size
+        else:
+            # 如果用户没有选择任何值，则从session中获取上次选择的值
+            page_size = request.session.get('page_size', 10)
+
+        # 设置每页显示条数
+        self.list_per_page = page_size
+
+        return super().changelist_view(request, extra_context)
+
+
+
+
+
+
 @admin.register(Job)
 # class JobAdmin(admin.ModelAdmin):
-class JobAdmin(ImportExportModelAdmin,ExportActionMixin):
+class JobAdmin(ImportExportModelAdmin,ExportActionMixin,CustomModelAdmin):
     resource_class = JobResource
 
     list_display = ('id','job_name','file_compressed','has_file_type','status','author','from_object_pcb_factory','from_object_pcb_design','publish','create_time','tag_list')
 
     search_fields = ('=id','job_name',)
-    list_filter = (HasFileTypeListFilter, 'status', 'author__username','from_object_pcb_factory','from_object_pcb_design','tags')
+    list_filter = (HasFileTypeListFilter, 'status', 'author__username','from_object_pcb_factory','from_object_pcb_design','tags',PageSizeFilter)
     list_editable = ('file_compressed', )
     prepopulated_fields = {'remark': ('job_name',)}
     raw_id_fields = ('author','from_object_pcb_factory','from_object_pcb_design')
