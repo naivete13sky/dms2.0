@@ -5,6 +5,7 @@ import time
 import rarfile
 from django.conf import settings
 from django.contrib import admin, messages
+from django.contrib.admin import SimpleListFilter
 from django.contrib.admin.views.main import ChangeList
 from django.core.paginator import Paginator
 from django.http import HttpResponse
@@ -308,30 +309,8 @@ class BugAdmin(admin.ModelAdmin):
 
     # <editor-fold desc="根据料号ID精准查询此料号下的Bug信息用">
     # 默认的查询集合
-    # def get_queryset(self, request):
-    #     # return super(BugAdmin, self).get_queryset(request).all().order_by("-id")
-    #
-    #     # 获取用户选择的每页显示条数，默认为 10 条
-    #     per_page = int(request.GET.get('per_page', 10))
-    #
-    #     # 设置每页显示条数
-    #     self.list_per_page = per_page
-    #     print('per_page：', per_page)
-    #
-    #     # 调用父类的get_queryset方法获取查询集
-    #     # queryset = super().get_queryset(request)
-    #
-    #     # return queryset
-    #
-    #     return super(BugAdmin, self).get_queryset(request).all().order_by("-id")
-
     def get_queryset(self, request):
-        queryset = super().get_queryset(request)
-        per_page = int(request.GET.get('per_page', self.list_per_page))
-        self.list_per_page = per_page
-        print("per_page:", per_page)
-        print("list_per_page:", self.list_per_page)
-        return queryset.order_by("-id")
+        return super(BugAdmin, self).get_queryset(request).all().order_by("-id")
 
 
 
@@ -345,14 +324,6 @@ class BugAdmin(admin.ModelAdmin):
             print("搜索指定料号下的bug信息")
             queryset = self.model.objects.filter(job__id=int(search_term.split("/")[1]))
             return queryset, use_distinct
-        # try:
-        #     search_term_as_int = int(search_term)
-        #     print("search_term_as_int:",search_term_as_int)
-        #     queryset &= (self.model.objects.filter(gift_rule_id=search_term_as_int) |
-        #                  self.model.objects.filter(user_id=search_term_as_int) |
-        #                  self.model.objects.filter(activity_id=search_term))
-        # except:
-        #     pass
         return queryset, use_distinct
     # </editor-fold>
 
@@ -424,18 +395,6 @@ class BugAdmin(admin.ModelAdmin):
     # 给按钮追加自定义的颜色
     update_bug_info_button.style = 'color:black;'
     # </editor-fold>
-
-
-
-    def changelist_view(self, request, extra_context=None):
-        self.list_per_page = int(request.GET.get('per_page', self.list_per_page))
-        return super().changelist_view(request, extra_context=extra_context)
-
-
-    def get_paginator(self, request, queryset, per_page, orphans=0, allow_empty_first_page=True):
-        per_page = int(request.GET.get('per_page', self.list_per_page))
-        return super().get_paginator(request, queryset, per_page, orphans=orphans,
-                                     allow_empty_first_page=allow_empty_first_page)
 
 
 
