@@ -399,19 +399,20 @@ class BugAdmin(admin.ModelAdmin):
     update_bug_info_button.style = 'color:black;'
     # </editor-fold>
 
-
-
-
-    def get_changelist(self, request, **kwargs):
-        from django.contrib.admin.views.main import ChangeList
-        # 获取用户选择的每页显示条数，默认为 25 条
+    def get_queryset(self, request):
+        # 获取用户选择的每页显示条数，默认为 10 条
         per_page = int(request.GET.get('per_page', 10))
-        print('per_page',per_page)
 
         # 设置每页显示条数
         self.list_per_page = per_page
+        print('per_page', per_page)
 
-        return ChangeList
+        # 调用父类的get_queryset方法获取查询集
+        queryset = super().get_queryset(request)
+
+        return queryset
+
+
 
 
 
