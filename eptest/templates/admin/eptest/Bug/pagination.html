@@ -10,7 +10,7 @@
             {% if is_32x %}
             :current-page="{{ cl.page_num }}"
             {% else %}
-            :current-page="{{ cl.page_num }}+1"
+            :current-page="{{ cl.page_num|add:'1' }}"
             {% endif %}
             :page-sizes="[10, 20, 50, 100]"
             :page-size.sync="pageSize"
@@ -21,8 +21,6 @@
 </div>
 <script type="text/javascript">
     $(function () {
-
-
         new Vue({
             el: "#pagination",
             data: {
@@ -31,24 +29,28 @@
             methods: {
                 handleCurrentChange: function (page) {
                     {% if is_32x %}
-                        page_go(page);
+                        page_go(page, this.pageSize);
                     {% else %}
-                        page_go(page - 1);
+                        page_go(page - 1, this.pageSize);
                     {% endif %}
+                    console.log("cc");
                 },
                 handleSizeChange: function (size) {
                     this.pageSize = size;
+                    console.log("cc2");
                     // 将每页显示条数传递给后端，例如使用一个隐藏的表单字段
                     $("#changelist-search input[name='per_page']").val(size);
                     $("#changelist-search").submit();
                 }
-            }
-        })
 
-        function page_go(p) {
+
+            }
+        });
+
+        function page_go(p, pageSize) {
             $("#changelist-search input[name='p']").val(p);
+            $("#changelist-search input[name='per_page']").val(pageSize);
             $("#changelist-search").submit();
         }
-
-    })
+    });
 </script>

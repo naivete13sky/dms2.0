@@ -308,22 +308,32 @@ class BugAdmin(admin.ModelAdmin):
 
     # <editor-fold desc="根据料号ID精准查询此料号下的Bug信息用">
     # 默认的查询集合
+    # def get_queryset(self, request):
+    #     # return super(BugAdmin, self).get_queryset(request).all().order_by("-id")
+    #
+    #     # 获取用户选择的每页显示条数，默认为 10 条
+    #     per_page = int(request.GET.get('per_page', 10))
+    #
+    #     # 设置每页显示条数
+    #     self.list_per_page = per_page
+    #     print('per_page：', per_page)
+    #
+    #     # 调用父类的get_queryset方法获取查询集
+    #     # queryset = super().get_queryset(request)
+    #
+    #     # return queryset
+    #
+    #     return super(BugAdmin, self).get_queryset(request).all().order_by("-id")
+
     def get_queryset(self, request):
-        # return super(BugAdmin, self).get_queryset(request).all().order_by("-id")
-
-        # 获取用户选择的每页显示条数，默认为 10 条
-        per_page = int(request.GET.get('per_page', 10))
-
-        # 设置每页显示条数
+        queryset = super().get_queryset(request)
+        per_page = int(request.GET.get('per_page', self.list_per_page))
         self.list_per_page = per_page
-        print('per_page：', per_page)
+        print("per_page:", per_page)
+        print("list_per_page:", self.list_per_page)
+        return queryset.order_by("-id")
 
-        # 调用父类的get_queryset方法获取查询集
-        # queryset = super().get_queryset(request)
 
-        # return queryset
-
-        return super(BugAdmin, self).get_queryset(request).all().order_by("-id")
 
     # 根据关键字进行查询集合,自定义查询。如果搜索内容包括了“one_job_bug/123”,则说明是要查某个料号（ID：123）的Bug信息
     def get_search_results(self, request, queryset, search_term):
@@ -415,31 +425,18 @@ class BugAdmin(admin.ModelAdmin):
     update_bug_info_button.style = 'color:black;'
     # </editor-fold>
 
-    # def changelist_view(self, request, extra_context=None):
-    #     if request.GET.get('per_page'):
-    #         self.list_per_page = int(request.GET.get('per_page'))
-    #     return super().changelist_view(request, extra_context=extra_context)
+
 
     def changelist_view(self, request, extra_context=None):
-        if request.GET.get('per_page'):
-            self.list_per_page = int(request.GET.get('per_page'))
+        self.list_per_page = int(request.GET.get('per_page', self.list_per_page))
         return super().changelist_view(request, extra_context=extra_context)
 
-    # def get_paginator(self, request, queryset, per_page, orphans=0, allow_empty_first_page=True):
-    #     # 使用自定义的 Paginator 类
-    #     return CustomPaginator(queryset, per_page, orphans=orphans, allow_empty_first_page=allow_empty_first_page)
 
     def get_paginator(self, request, queryset, per_page, orphans=0, allow_empty_first_page=True):
         per_page = int(request.GET.get('per_page', self.list_per_page))
         return super().get_paginator(request, queryset, per_page, orphans=orphans,
                                      allow_empty_first_page=allow_empty_first_page)
 
-
-# 自定义 Paginator 类，包含 per_page 参数
-class CustomPaginator(Paginator):
-    def __init__(self, object_list, per_page, orphans=0, allow_empty_first_page=True):
-        self.per_page = per_page
-        super().__init__(object_list, per_page, orphans=orphans, allow_empty_first_page=allow_empty_first_page)
 
 
 
