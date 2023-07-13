@@ -1,3 +1,5 @@
+import os
+
 from import_export import resources,fields
 from .models import JobForTest
 from django.core.files import File
@@ -19,7 +21,8 @@ class JobForTestResource(resources.ModelResource):
 
     def before_import_row(self, row, **kwargs):
         if not self.is_preview:  # 只在确认导入时执行附件上传逻辑,即非预览时才上传附件
-            file_path = row.get('file')
+            # file_path = row.get('file')
+            file_path = os.path.join(r'C:\cc\share\upload', row.get('file')).replace("\\", "/")
             print('file_path:', file_path)
             if file_path:
                 self.file_object = open(file_path, 'rb')
@@ -29,7 +32,8 @@ class JobForTestResource(resources.ModelResource):
             else:
                 row['file'] = None
 
-            standard_odb_path = row.get('standard_odb')
+            # standard_odb_path = row.get('standard_odb')
+            standard_odb_path = os.path.join(r'C:\cc\share\upload', row.get('standard_odb')).replace("\\", "/")
             print('standard_odb_path:', standard_odb_path)
             if standard_odb_path:
                 self.standard_odb_object = open(standard_odb_path, 'rb')

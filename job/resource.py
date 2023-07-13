@@ -1,3 +1,5 @@
+import os
+
 from import_export import resources,fields
 from .models import Job
 from import_export.widgets import ForeignKeyWidget
@@ -21,7 +23,8 @@ class JobResource(resources.ModelResource):
 
     def before_import_row(self, row, **kwargs):
         if not self.is_preview:  # 只在确认导入时执行附件上传逻辑,即非预览时才上传附件
-            file_path = row.get('file_compressed')
+            # print("row.get('file_compressed'):",row.get('file_compressed'))
+            file_path = os.path.join(r'C:\cc\share\upload',row.get('file_compressed')).replace("\\","/")
             print('file_path:', file_path)
 
 
