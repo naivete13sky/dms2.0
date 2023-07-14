@@ -91,7 +91,7 @@ class JobForTestAdmin(ImportExportModelAdmin,ExportActionMixin,CustomModelAdmin)
     exclude = ('publish',)
     # change_list_template = r'admin/eptest/JobForTest/change_list.html'
 
-
+    app_id = None#本类中的全局变量
 
 
 
@@ -102,10 +102,12 @@ class JobForTestAdmin(ImportExportModelAdmin,ExportActionMixin,CustomModelAdmin)
         # 如果查询的ID空，就返回所有。
         if self.query == "":
             print("空空空！")
-            GL.app_id = None
+            # GL.app_id = None
+            self.app_id = None
         # 如果查询的ID不为空。
         if self.query:
-            GL.app_id = self.query
+            # GL.app_id = self.query
+            self.app_id = self.query
         return super().get_queryset(request).prefetch_related('tags')
     def tag_list(self, obj):
         return ",".join(o.name for o in obj.tags.all())
@@ -242,9 +244,11 @@ class JobForTestAdmin(ImportExportModelAdmin,ExportActionMixin,CustomModelAdmin)
         queryset, use_distinct = super(JobForTestAdmin, self).get_search_results(request, queryset, search_term)
 
 
-        if GL.app_id:
+        # if GL.app_id:
+        if self.app_id:
             try:
-                search_id = int(GL.app_id)
+                # search_id = int(GL.app_id)
+                search_id = int(self.app_id)
             except Exception as e:
                 print("输入非常ID！",e)
             if search_id:
