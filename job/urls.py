@@ -7,7 +7,7 @@ from django.conf.urls.static import static
 from django.conf import settings
 app_name = 'job'
 
-
+#vue用
 router = routers.DefaultRouter()
 from .views import JobViewSet
 router.register(r'notes', JobViewSet, basename='example')

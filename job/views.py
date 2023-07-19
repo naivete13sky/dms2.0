@@ -371,5 +371,6 @@ class GetJobNameByID(View):
 
 # restful-api
 class JobViewSet(viewsets.ModelViewSet):
-    queryset = Job.objects.all()[:10]  # 选择前十条记录
+    queryset = Job.objects.all()[:20]  # 选择前十条记录
+    # queryset = Job.objects.all()
     serializer_class = JobSerializer
