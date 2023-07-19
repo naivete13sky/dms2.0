@@ -58,6 +58,7 @@ INSTALLED_APPS = [
     'zentao.apps.ZentaoConfig',
     'django.contrib.sites',
     'import_export',
+    'rest_framework',#vue用
 
 ]
 
@@ -69,6 +70,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'corsheaders.middleware.CorsMiddleware',#vue用
 ]
 
 ROOT_URLCONF = 'epdms.urls'
@@ -404,3 +406,28 @@ SIMPLEUI_CONFIG = {
 
 
 # <---------------------------------------------------simpleui--------------------------------------------------------->
+
+
+
+# vue
+
+# cc
+REST_FRAMEWORK = {
+    'DEFAULT_PERMISSION_CLASSES': [
+        'rest_framework.permissions.AllowAny',
+    ]
+}
+
+
+
+#在Django中使用django-cors-headers库来处理CORS
+# CORS_ORIGIN_ALLOW_ALL = True
+
+#上述配置将允许来自任何源的跨域请求。如果你只想允许特定的域，请将CORS_ORIGIN_ALLOW_ALL设置为False，并添加你想允许的域的列表，例如：
+CORS_ORIGIN_ALLOW_ALL = False
+CORS_ORIGIN_WHITELIST = [
+    'http://127.0.0.1:5173',
+    'http://example.com',
+    'http://localhost:3000',
+    'http://10.97.80.119:5173',
+]

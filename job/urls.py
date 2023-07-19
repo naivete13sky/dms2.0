@@ -1,9 +1,20 @@
 from django.contrib.auth.decorators import login_required
-from django.urls import path,re_path
+from django.urls import path, re_path, include
+from rest_framework import routers
+
 from . import views
 from django.conf.urls.static import static
 from django.conf import settings
 app_name = 'job'
+
+
+router = routers.DefaultRouter()
+from .views import JobViewSet
+router.register(r'notes', JobViewSet, basename='example')
+
+
+
+
 urlpatterns = [
 
     path('JobListView',login_required(views.JobListView.as_view()),name='JobListView'),#类视图，用来组普通用户展示料号列表的。
@@ -20,6 +31,8 @@ urlpatterns = [
     path('JobDeleteView/<int:pk>', views.JobDeleteView.as_view(),name='JobDeleteView'),#类视图，删除料号。
 
     path('GetJobNameByID/<int:pk>', views.GetJobNameByID.as_view(),name='GetJobNameByID'),#类视图。
+
+    path('api/', include(router.urls)),#restful-api
 
 
 ]

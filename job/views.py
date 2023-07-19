@@ -6,10 +6,12 @@ from django.urls import reverse_lazy
 from django.utils import timezone
 from django.views.generic import ListView, DetailView, UpdateView, CreateView, DeleteView
 from django.views.generic.base import View
-
+from rest_framework import viewsets
 from .forms import JobFormsReadOnly,JobForm
 from .models import Job,MyTag
 from account.models import QueryData, Customer
+from .serializers import JobSerializer
+
 
 
 class JobListView(ListView):
@@ -362,3 +364,12 @@ class GetJobNameByID(View):
     def post(self, request,pk):
         # 处理POST请求
         return HttpResponse('POST')
+
+
+
+
+
+# restful-api
+class JobViewSet(viewsets.ModelViewSet):
+    queryset = Job.objects.all()[:10]  # 选择前十条记录
+    serializer_class = JobSerializer
