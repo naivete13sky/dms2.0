@@ -1,3 +1,25 @@
+# -*- coding: utf-8 -*-
+# __author__="maple"
+"""
+              ┏┓      ┏┓
+            ┏┛┻━━━┛┻┓
+            ┃      ☃      ┃
+            ┃  ┳┛  ┗┳  ┃
+            ┃      ┻      ┃
+            ┗━┓      ┏━┛
+                ┃      ┗━━━┓
+                ┃  神兽保佑    ┣┓
+                ┃　永无BUG！   ┏┛
+                ┗┓┓┏━┳┓┏┛
+                  ┃┫┫  ┃┫┫
+                  ┗┻┛  ┗┻┛
+
+get_unuse_file是获取无用文件列表
+move_unuse_file是移动无用文件到指定文件夹
+一般只要运行一下就可以了。
+
+"""
+
 import os
 import pandas as pd
 from sqlalchemy import create_engine
