@@ -2,6 +2,8 @@ import os
 import pandas as pd
 from sqlalchemy import create_engine
 import psycopg2
+import shutil
+
 
 def get_unuse_file():
     pass
@@ -57,7 +59,28 @@ def get_unuse_file():
     return list_unuse_files
 
 
+def move_unuse_file(list_unuse_file):
+    pass
+    count = 0
+    for each in list_unuse_file:
+        pass
+        count = count + 1
+
+        current_file_path = os.path.join(r'C:\cc\python\epwork\epdms\media\files',each)
+        # 源文件的路径和名称
+        source_file = current_file_path
+        print('正在移动第' + str(count) + '个文件:',source_file )
+        # 目标目录的路径
+        destination_directory = r'C:\cc\else\temp'
+
+        # 使用shutil.move()函数移动文件
+        shutil.move(source_file, destination_directory)
+
+        # 打印成功移动的消息
+        print("文件移动成功！")
+
+
 if __name__ == '__main__':
     pass
-    cc = get_unuse_file()
-    print(cc)
+    list_unuse_file = get_unuse_file()
+    # move_unuse_file(list_unuse_file)
