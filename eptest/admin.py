@@ -286,7 +286,7 @@ class JobForTestAdmin(ImportExportModelAdmin,ExportActionMixin,CustomModelAdmin)
 class EpcamModuleAdmin(MPTTModelAdmin):
     list_display = ('name','lft','rght','tree_id','level','parent_id',)
     search_fields = ('name',)
-    list_per_page = 20
+    # list_per_page = 20
     # specify pixel amount for this ModelAdmin only:
     # default is 10 pixels
     mptt_level_indent = 20
