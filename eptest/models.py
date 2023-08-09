@@ -50,7 +50,7 @@ class JobForTest(models.Model):
                                        help_text='整理过的测试料号，包括：Gerber为rar压缩包；ODB++为tgz压缩包；DXF为单个文件；PCB为单个文件；', verbose_name="测试料号")
     file_type = models.CharField(max_length=10,
                                  choices=(('gerber274X', 'Gerber274X'),('gerber274D', 'Gerber274D'), ('dxf', 'DXF'),('dwg', 'DWG'), ('odb', 'ODB'),
-                                          ('pcb', 'PCB'), ('else', 'Else')),default='else',
+                                          ('ipc2581', 'IPC2581'),('pcb', 'PCB'), ('else', 'Else')),default='else',
                                  help_text='料号文件类型', verbose_name="料号文件类型")
 
 

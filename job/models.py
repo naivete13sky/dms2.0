@@ -47,7 +47,7 @@ class Job(models.Model):
                                        help_text='原始文件,rar压缩包', verbose_name="原始文件")
 
     has_file_type = MultiSelectField(choices=(('gerber274x', 'Gerber274X'),('gerber274d', 'Gerber274D'), ('dxf', 'DXF'),
-                                                ('dwg', 'DWG'), ('odb', 'ODB'), ('pcb', 'PCB')),
+                                                ('dwg', 'DWG'), ('odb', 'ODB'), ('ipc2581', 'IPC2581'), ('pcb', 'PCB')),
                                      blank=True,null=True, max_choices=20, max_length=200,
                                      verbose_name="包含文件类型")
 
