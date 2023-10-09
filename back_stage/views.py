@@ -121,7 +121,10 @@ class DashBoardView(TemplateView):
 
         #published比率，仪表盘
         print('JobForTest.objects.filter(status="published"):',JobForTest.objects.filter(status="published"))
-        job_published_ratio=round((len(JobForTest.objects.filter(status="published"))/len(JobForTest.objects.all()))*100)
+        if len(JobForTest.objects.all()) > 0:
+            job_published_ratio=round((len(JobForTest.objects.filter(status="published"))/len(JobForTest.objects.all()))*100)
+        else:
+            job_published_ratio = 0
         print("job_published_ratio:",job_published_ratio)
         context['job_published_ratio'] = job_published_ratio
 
