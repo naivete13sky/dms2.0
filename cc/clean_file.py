@@ -105,4 +105,4 @@ def move_unuse_file(list_unuse_file):
 if __name__ == '__main__':
     pass
     list_unuse_file = get_unuse_file()
-    # move_unuse_file(list_unuse_file)
+    move_unuse_file(list_unuse_file)
