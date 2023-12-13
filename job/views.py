@@ -11,7 +11,7 @@ from .forms import JobFormsReadOnly,JobForm
 from .models import Job,MyTag
 from account.models import QueryData, Customer
 from .serializers import JobSerializer
-
+from rest_framework.pagination import PageNumberPagination
 
 
 class JobListView(ListView):
@@ -374,3 +374,14 @@ class JobViewSet(viewsets.ModelViewSet):
     queryset = Job.objects.all()[:20]  # 选择前十条记录
     # queryset = Job.objects.all()
     serializer_class = JobSerializer
+
+
+class CustomPagination(PageNumberPagination):
+    page_size = 10
+    max_page_size = None
+
+
+class JobListViewSet(viewsets.ModelViewSet):
+    queryset = Job.objects.all().order_by('id')
+    serializer_class = JobSerializer
+    pagination_class = CustomPagination

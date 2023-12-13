@@ -9,9 +9,9 @@ app_name = 'job'
 
 #vue用
 router = routers.DefaultRouter()
-from .views import JobViewSet
+from .views import JobViewSet,JobListViewSet
 router.register(r'notes', JobViewSet, basename='example')
-
+router.register(r'jobs', JobListViewSet)
 
 
 
