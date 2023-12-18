@@ -8,8 +8,10 @@ from django.shortcuts import render, redirect
 from django.views.decorators.csrf import csrf_exempt
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_protect
+from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework import viewsets
 from rest_framework.pagination import PageNumberPagination
+from rest_framework import filters
 from .serializers import JobForTestSerializer
 from .models import EpcamModule
 from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
@@ -612,3 +614,8 @@ class JobForTestListViewSet(viewsets.ModelViewSet):
     queryset = JobForTest.objects.all().order_by('-id')
     serializer_class = JobForTestSerializer
     pagination_class = CustomPagination
+    # filter_backends = [filters.OrderingFilter]
+    filter_backends = [DjangoFilterBackend, filters.SearchFilter, filters.OrderingFilter]
+    search_fields = ['id', 'job_name', 'tags__name']  # 允许搜索的字段
+    filter_fields = ['test_usage_for_epcam_module','vs_result_g',
+                     'status','author','tags']  # 替换为你想要筛选的字段
