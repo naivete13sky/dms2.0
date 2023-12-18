@@ -1,9 +1,19 @@
 from django.contrib.auth.decorators import login_required
-from django.urls import path,re_path
+from django.urls import path, re_path, include
+from rest_framework import routers
+
 from . import views
 from django.conf.urls.static import static
 from django.conf import settings
 app_name = 'eptest'
+
+
+#vue用
+router = routers.DefaultRouter()
+from .views import JobForTestListViewSet
+router.register(r'jobForTests', JobForTestListViewSet, basename='example')
+
+
 urlpatterns = [
 
     path('epcam_module/', views.show_genres),
@@ -28,6 +38,8 @@ urlpatterns = [
     path('send_vs_g_local_result', views.send_vs_g_local_result,name='send_vs_g_local_result'),#开发时测试用的。
 
     path('view_vs_g/<int:job_id>/', views.view_vs_g,name='view_vs_g'),#查看G比图的列表
+
+    path('api/', include(router.urls)),#restful-api
 
 
     path('test', views.test,name='test'),#查看G比图的列表

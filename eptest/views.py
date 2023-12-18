@@ -8,6 +8,9 @@ from django.shortcuts import render, redirect
 from django.views.decorators.csrf import csrf_exempt
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_protect
+from rest_framework import viewsets
+from rest_framework.pagination import PageNumberPagination
+from .serializers import JobForTestSerializer
 from .models import EpcamModule
 from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
 from django.db.models import Q
@@ -599,3 +602,13 @@ def test(request):
     return render(request,'test.html')
 
 
+# restful-api
+class CustomPagination(PageNumberPagination):
+    page_size = 10
+    max_page_size = None
+
+
+class JobForTestListViewSet(viewsets.ModelViewSet):
+    queryset = JobForTest.objects.all().order_by('id')
+    serializer_class = JobForTestSerializer
+    pagination_class = CustomPagination
