@@ -382,6 +382,6 @@ class CustomPagination(PageNumberPagination):
 
 
 class JobListViewSet(viewsets.ModelViewSet):
-    queryset = Job.objects.all().order_by('id')
+    queryset = Job.objects.all().order_by('-id')
     serializer_class = JobSerializer
     pagination_class = CustomPagination

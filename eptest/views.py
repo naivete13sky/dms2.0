@@ -609,6 +609,6 @@ class CustomPagination(PageNumberPagination):
 
 
 class JobForTestListViewSet(viewsets.ModelViewSet):
-    queryset = JobForTest.objects.all().order_by('id')
+    queryset = JobForTest.objects.all().order_by('-id')
     serializer_class = JobForTestSerializer
     pagination_class = CustomPagination
