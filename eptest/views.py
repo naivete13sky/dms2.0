@@ -26,7 +26,7 @@ from .models import JobForTest,MyTagForEptest,Layer,Vs
 from account.models import QueryData, Customer
 from job.models import Job
 from cc.cc_method import CCMethod
-
+from .filters import JobForTestFilter
 
 
 
@@ -617,6 +617,7 @@ class JobForTestListViewSet(viewsets.ModelViewSet):
     pagination_class = CustomPagination
     # filter_backends = [filters.OrderingFilter]
     filter_backends = [DjangoFilterBackend, filters.SearchFilter, filters.OrderingFilter]
+    # filter_backends = [DjangoFilterBackend]
     search_fields = ['id', 'job_name', 'tags__name']  # 允许搜索的字段
-    filter_fields = ['test_usage_for_epcam_module','vs_result_g', 'status','author']  # 替换为你想要筛选的字段
-
+    # filter_fields = ['test_usage_for_epcam_module','vs_result_g', 'status','author']  # 替换为你想要筛选的字段
+    filterset_class = JobForTestFilter

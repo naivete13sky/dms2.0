@@ -60,6 +60,7 @@ INSTALLED_APPS = [
     'import_export',
     'rest_framework',#vue用
     'corsheaders',# 跨域
+    'django_filters',
 
 ]
 
