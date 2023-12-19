@@ -1,0 +1,19 @@
+from rest_framework import filters as drf_filters
+from django_filters import rest_framework as django_filters
+
+class JobForTestFilter(django_filters.FilterSet):
+    tags = django_filters.ModelChoiceFilter(queryset=MyTagForEptest.objects.all())
+
+    class Meta:
+        model = JobForTest
+        fields = ['test_usage_for_epcam_module', 'vs_result_g', 'status', 'author']
+
+class JobForTestListViewSet(viewsets.ModelViewSet):
+    queryset = JobForTest.objects.all().order_by('-id')
+    serializer_class = JobForTestSerializer
+    pagination_class = CustomPagination
+    # filter_backends = [filters.OrderingFilter]
+    filter_backends = [DjangoFilterBackend, drf_filters.SearchFilter, drf_filters.OrderingFilter]
+    search_fields = ['id', 'job_name', 'tags__name']  # 允许搜索的字段
+    # filter_fields = ['test_usage_for_epcam_module','vs_result_g', 'status','author','tags']  # 替换为你想要筛选的字段
+    filter_class = JobForTestFilter
