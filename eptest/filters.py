@@ -10,7 +10,7 @@ class JobForTestFilter(django_filters.FilterSet):
     class Meta:
         model = JobForTest
         # fields = '__all__'
-        fields = ['file_type','status','tags']
+        fields = ['tags','file_type','status','author','test_usage_for_epcam_module']
         # fields = ['file_type','status','tags__name']
 
         filter_overrides = {
