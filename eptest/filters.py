@@ -1,12 +1,21 @@
 # filters.py
 import django_filters
-from .models import JobForTest
+from .models import JobForTest, EpcamModule
 from django.db import models
 from taggit.managers import TaggableManager
 from django_filters import ModelMultipleChoiceFilter
 from django_filters import ModelChoiceFilter
+from django.contrib.auth.models import User  # 导入User模型
 
 class JobForTestFilter(django_filters.FilterSet):
+    author = django_filters.CharFilter(field_name='author__username', lookup_expr='icontains')  # 使用icontains过滤username
+    # test_usage_for_epcam_module = django_filters.CharFilter(field_name='test_usage_for_epcam_module__name',
+    #                                                         lookup_expr='icontains')
+    test_usage_for_epcam_module = ModelChoiceFilter(
+        field_name='test_usage_for_epcam_module',
+        queryset=EpcamModule.objects.all(),
+        to_field_name='name',  # 使用名称而不是ID显示
+    )
     class Meta:
         model = JobForTest
         # fields = '__all__'
